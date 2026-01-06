@@ -1,84 +1,129 @@
-import { Phone } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Twitter, Linkedin, Github } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="border-t border-border bg-muted/20">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
-          <div className="md:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg gradient-hero flex items-center justify-center">
-                <Phone className="w-4 h-4 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-semibold text-foreground">ZyraCall</span>
+    <footer className="relative border-t border-border/50 bg-muted/20">
+      {/* Main Footer */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 lg:gap-12">
+          {/* Brand Column */}
+          <div className="col-span-2">
+            <Link to="/" className="inline-block mb-6">
+              <img 
+                src={logo} 
+                alt="ZyraCall" 
+                className="h-8 w-auto"
+              />
             </Link>
-            <p className="text-sm text-muted-foreground">
-              Browser-based calling for the modern world. Call any phone number worldwide.
+            <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mb-6">
+              Browser-based calling for the modern world. Call any phone number 
+              worldwide without apps or SIM cards.
             </p>
+            {/* Social Links */}
+            <div className="flex items-center gap-4">
+              <a 
+                href="#" 
+                className="w-10 h-10 rounded-xl bg-muted/50 hover:bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Twitter"
+              >
+                <Twitter className="w-4 h-4" />
+              </a>
+              <a 
+                href="#" 
+                className="w-10 h-10 rounded-xl bg-muted/50 hover:bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
+              <a 
+                href="#" 
+                className="w-10 h-10 rounded-xl bg-muted/50 hover:bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="GitHub"
+              >
+                <Github className="w-4 h-4" />
+              </a>
+            </div>
           </div>
 
-          {/* Product */}
+          {/* Product Links */}
           <div>
             <h4 className="font-semibold text-foreground mb-4">Product</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/rates" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Rates
-                </Link>
-              </li>
-              <li>
-                <Link to="/signup" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Get Started
-                </Link>
-              </li>
+            <ul className="space-y-3">
+              <FooterLink to="/rates">Rates</FooterLink>
+              <FooterLink to="/how-it-works">How It Works</FooterLink>
+              <FooterLink to="/dashboard">Dashboard</FooterLink>
+              <FooterLink to="/signup">Get Started</FooterLink>
             </ul>
           </div>
 
-          {/* Company */}
+          {/* Compare Links */}
+          <div>
+            <h4 className="font-semibold text-foreground mb-4">Compare</h4>
+            <ul className="space-y-3">
+              <FooterLink to="/compare/zyracall-vs-skype">vs Skype</FooterLink>
+              <FooterLink to="/compare/zyracall-vs-google-voice">vs Google Voice</FooterLink>
+              <FooterLink to="/compare/zyracall-vs-rebtel">vs Rebtel</FooterLink>
+              <FooterLink to="/compare">All Comparisons</FooterLink>
+            </ul>
+          </div>
+
+          {/* Company Links */}
           <div>
             <h4 className="font-semibold text-foreground mb-4">Company</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Contact
-                </Link>
-              </li>
+            <ul className="space-y-3">
+              <FooterLink to="/about">About</FooterLink>
+              <FooterLink to="/contact">Contact</FooterLink>
+              <FooterLink to="#">Blog</FooterLink>
+              <FooterLink to="#">Careers</FooterLink>
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Legal Links */}
           <div>
             <h4 className="font-semibold text-foreground mb-4">Legal</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Terms of Service
-                </Link>
-              </li>
+            <ul className="space-y-3">
+              <FooterLink to="/privacy">Privacy Policy</FooterLink>
+              <FooterLink to="/terms">Terms of Service</FooterLink>
+              <FooterLink to="#">Cookie Policy</FooterLink>
+              <FooterLink to="#">GDPR</FooterLink>
             </ul>
           </div>
         </div>
+      </div>
 
-        <div className="border-t border-border mt-8 pt-8 text-center">
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} ZyraCall. All rights reserved.
-          </p>
+      {/* Bottom Bar */}
+      <div className="border-t border-border/50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground">
+              © {currentYear} ZyraCall. All rights reserved.
+            </p>
+            <div className="flex items-center gap-6 text-sm text-muted-foreground">
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                All systems operational
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
   );
 };
+
+const FooterLink = ({ to, children }: { to: string; children: React.ReactNode }) => (
+  <li>
+    <Link 
+      to={to} 
+      className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+    >
+      {children}
+    </Link>
+  </li>
+);
 
 export default Footer;

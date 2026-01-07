@@ -115,7 +115,12 @@ const Footer = () => {
   );
 };
 
-const FooterLink = ({ to, children }: { to: string; children: React.ReactNode }) => (
+interface FooterLinkProps {
+  to: string;
+  children: React.ReactNode;
+}
+
+const FooterLink = ({ to, children }: FooterLinkProps) => (
   <li>
     <Link 
       to={to} 

@@ -1,7 +1,12 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Phone, Delete, Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import CountryCodeSelector, { 
+  countries, 
+  detectCountryFromNumber, 
+  type Country 
+} from "./CountryCodeSelector";
 
 interface DialerProps {
   onCall: (number: string, recordCall: boolean) => void;
@@ -11,6 +16,9 @@ interface DialerProps {
 const Dialer = ({ onCall, disabled }: DialerProps) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [recordCall, setRecordCall] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState<Country>(
+    countries[0] // Default to US
+  );
 
   const keys = [
     { value: "1", sub: "" },
@@ -27,6 +35,19 @@ const Dialer = ({ onCall, disabled }: DialerProps) => {
     { value: "#", sub: "" },
   ];
 
+  // Auto-detect country when pasting a number with + prefix
+  useEffect(() => {
+    if (phoneNumber.startsWith("+")) {
+      const detected = detectCountryFromNumber(phoneNumber);
+      if (detected && detected.code !== selectedCountry.code) {
+        setSelectedCountry(detected);
+        // Remove the country code from the number
+        const numberWithoutCode = phoneNumber.slice(detected.dialCode.length);
+        setPhoneNumber(numberWithoutCode);
+      }
+    }
+  }, [phoneNumber, selectedCountry.code]);
+
   const handleKeyPress = useCallback((key: string) => {
     setPhoneNumber((prev) => prev + key);
   }, []);
@@ -40,8 +61,9 @@ const Dialer = ({ onCall, disabled }: DialerProps) => {
   }, []);
 
   const handleCall = () => {
+    const fullNumber = selectedCountry.dialCode + phoneNumber;
     if (phoneNumber.length >= 5) {
-      onCall(phoneNumber, recordCall);
+      onCall(fullNumber, recordCall);
     }
   };
 
@@ -49,29 +71,52 @@ const Dialer = ({ onCall, disabled }: DialerProps) => {
     try {
       const text = await navigator.clipboard.readText();
       const cleaned = text.replace(/[^\d+]/g, "");
+      
+      // Check if pasted number includes country code
+      if (cleaned.startsWith("+")) {
+        const detected = detectCountryFromNumber(cleaned);
+        if (detected) {
+          setSelectedCountry(detected);
+          setPhoneNumber(cleaned.slice(detected.dialCode.length));
+          return;
+        }
+      }
+      
       setPhoneNumber(cleaned);
     } catch (err) {
       // Clipboard access denied
     }
   };
 
+  const handleCountrySelect = useCallback((country: Country) => {
+    setSelectedCountry(country);
+  }, []);
+
+  const displayNumber = phoneNumber || "Enter number";
+
   return (
     <div className="w-full max-w-xs mx-auto">
-      {/* Phone Number Display */}
+      {/* Country Code Selector and Phone Number Display */}
       <div className="mb-6">
-        <div 
-          className="h-16 flex items-center justify-center px-4 rounded-xl bg-muted/50 border border-border cursor-text"
-          onClick={handlePaste}
-        >
-          <span className={cn(
-            "text-2xl font-medium tracking-wider",
-            phoneNumber ? "text-foreground" : "text-muted-foreground"
-          )}>
-            {phoneNumber || "Enter number"}
-          </span>
+        <div className="flex items-center gap-2">
+          <CountryCodeSelector
+            selectedCountry={selectedCountry}
+            onSelect={handleCountrySelect}
+          />
+          <div 
+            className="flex-1 h-12 flex items-center px-4 rounded-xl bg-muted/50 border border-border cursor-text"
+            onClick={handlePaste}
+          >
+            <span className={cn(
+              "text-xl font-medium tracking-wider truncate",
+              phoneNumber ? "text-foreground" : "text-muted-foreground"
+            )}>
+              {displayNumber}
+            </span>
+          </div>
         </div>
         <p className="text-xs text-muted-foreground text-center mt-2">
-          Click to paste from clipboard
+          Click number field to paste from clipboard
         </p>
       </div>
 

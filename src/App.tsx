@@ -19,6 +19,10 @@ import ZyraCallVsGoogleVoice from "./pages/compare/ZyraCallVsGoogleVoice";
 import ZyraCallVsRebtel from "./pages/compare/ZyraCallVsRebtel";
 import ZyraCallVsTalk360 from "./pages/compare/ZyraCallVsTalk360";
 import ZyraCallVsVonage from "./pages/compare/ZyraCallVsVonage";
+import SkypeAlternative from "./pages/alternatives/SkypeAlternative";
+import WhatsAppAlternative from "./pages/alternatives/WhatsAppAlternative";
+import ViberAlternative from "./pages/alternatives/ViberAlternative";
+import GoogleVoiceAlternative from "./pages/alternatives/GoogleVoiceAlternative";
 import HowItWorks from "./pages/HowItWorks";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -59,6 +63,12 @@ const App = () => (
             <Route path="/compare/zyracall-vs-rebtel" element={<ZyraCallVsRebtel />} />
             <Route path="/compare/zyracall-vs-talk360" element={<ZyraCallVsTalk360 />} />
             <Route path="/compare/zyracall-vs-vonage" element={<ZyraCallVsVonage />} />
+            
+            {/* Alternative Pages */}
+            <Route path="/alternatives/skype-alternative" element={<SkypeAlternative />} />
+            <Route path="/alternatives/whatsapp-calling-alternative" element={<WhatsAppAlternative />} />
+            <Route path="/alternatives/viber-out-alternative" element={<ViberAlternative />} />
+            <Route path="/alternatives/google-voice-alternative" element={<GoogleVoiceAlternative />} />
             
             {/* User Dashboard Routes */}
             <Route path="/dashboard" element={<Dashboard />} />

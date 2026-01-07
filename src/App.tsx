@@ -19,6 +19,7 @@ import ZyraCallVsGoogleVoice from "./pages/compare/ZyraCallVsGoogleVoice";
 import ZyraCallVsRebtel from "./pages/compare/ZyraCallVsRebtel";
 import ZyraCallVsTalk360 from "./pages/compare/ZyraCallVsTalk360";
 import ZyraCallVsVonage from "./pages/compare/ZyraCallVsVonage";
+import Alternatives from "./pages/Alternatives";
 import SkypeAlternative from "./pages/alternatives/SkypeAlternative";
 import WhatsAppAlternative from "./pages/alternatives/WhatsAppAlternative";
 import ViberAlternative from "./pages/alternatives/ViberAlternative";
@@ -28,6 +29,10 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import CookiePolicy from "./pages/CookiePolicy";
+import GDPR from "./pages/GDPR";
+import Blog from "./pages/Blog";
+import Careers from "./pages/Careers";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminCallLogs from "./pages/admin/AdminCallLogs";
@@ -55,6 +60,10 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/cookies" element={<CookiePolicy />} />
+            <Route path="/gdpr" element={<GDPR />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/careers" element={<Careers />} />
             
             {/* Comparison Pages */}
             <Route path="/compare" element={<Compare />} />
@@ -65,6 +74,7 @@ const App = () => (
             <Route path="/compare/zyracall-vs-vonage" element={<ZyraCallVsVonage />} />
             
             {/* Alternative Pages */}
+            <Route path="/alternatives" element={<Alternatives />} />
             <Route path="/alternatives/skype-alternative" element={<SkypeAlternative />} />
             <Route path="/alternatives/whatsapp-calling-alternative" element={<WhatsAppAlternative />} />
             <Route path="/alternatives/viber-out-alternative" element={<ViberAlternative />} />

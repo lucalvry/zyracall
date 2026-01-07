@@ -77,8 +77,8 @@ const Footer = () => {
             <ul className="space-y-3">
               <FooterLink to="/about">About</FooterLink>
               <FooterLink to="/contact">Contact</FooterLink>
-              <FooterLink to="#">Blog</FooterLink>
-              <FooterLink to="#">Careers</FooterLink>
+              <FooterLink to="/blog">Blog</FooterLink>
+              <FooterLink to="/careers">Careers</FooterLink>
             </ul>
           </div>
 
@@ -88,8 +88,8 @@ const Footer = () => {
             <ul className="space-y-3">
               <FooterLink to="/privacy">Privacy Policy</FooterLink>
               <FooterLink to="/terms">Terms of Service</FooterLink>
-              <FooterLink to="#">Cookie Policy</FooterLink>
-              <FooterLink to="#">GDPR</FooterLink>
+              <FooterLink to="/cookies">Cookie Policy</FooterLink>
+              <FooterLink to="/gdpr">GDPR</FooterLink>
             </ul>
           </div>
         </div>

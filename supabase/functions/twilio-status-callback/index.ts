@@ -45,7 +45,7 @@ serve(async (req) => {
     // Find the call log by Twilio call SID
     const { data: callLog, error: fetchError } = await supabase
       .from('call_logs')
-      .select('*, wallets!inner(id, balance, user_id)')
+      .select('*')
       .eq('twilio_call_sid', trackingCallSid)
       .single();
 
@@ -54,6 +54,13 @@ serve(async (req) => {
       // Return 200 to acknowledge the webhook even if we can't find the call
       return new Response('OK', { status: 200 });
     }
+
+    // Get the call rate for base cost calculation
+    const { data: rateData } = await supabase
+      .from('call_rates')
+      .select('base_cost_mobile, base_cost_landline')
+      .eq('country_code', callLog.destination_country_code)
+      .single();
 
     // Map Twilio status to our status
     const statusMap: Record<string, string> = {
@@ -71,19 +78,41 @@ serve(async (req) => {
     const mappedStatus = statusMap[callStatus] || callStatus;
     const isCallEnded = ['completed', 'busy', 'no-answer', 'canceled', 'failed'].includes(callStatus);
 
-    // Calculate cost if call is completed
+    // Calculate cost and profit if call is completed
     let cost = 0;
+    let providerCost = 0;
+    let profit = 0;
+
     if (isCallEnded && callDuration > 0) {
       // Calculate cost based on duration and rate
       const durationMinutes = Math.ceil(callDuration / 60);
       cost = durationMinutes * callLog.rate_per_minute;
+      
+      // Calculate provider cost (use mobile rate as default)
+      // In production, you'd determine mobile vs landline based on number type
+      const baseCost = Number(rateData?.base_cost_mobile) || 0;
+      providerCost = durationMinutes * baseCost;
+      
+      // Calculate profit
+      profit = cost - providerCost;
+      
+      console.log('Cost calculation:', {
+        durationMinutes,
+        customerRate: callLog.rate_per_minute,
+        baseCost,
+        cost,
+        providerCost,
+        profit
+      });
     }
 
     // Update call log
     const updateData: Record<string, unknown> = {
       status: mappedStatus,
       duration_seconds: callDuration,
-      cost: cost
+      cost: cost,
+      provider_cost: providerCost,
+      profit: profit
     };
 
     if (isCallEnded) {
@@ -102,7 +131,7 @@ serve(async (req) => {
     if (updateError) {
       console.error('Error updating call log:', updateError);
     } else {
-      console.log('Call log updated:', { id: callLog.id, status: mappedStatus, cost });
+      console.log('Call log updated:', { id: callLog.id, status: mappedStatus, cost, providerCost, profit });
     }
 
     // Deduct from wallet if call completed with cost

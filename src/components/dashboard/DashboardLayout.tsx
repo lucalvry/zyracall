@@ -13,6 +13,8 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/zyracall-logo.png";
+import NotificationCenter from "@/components/notifications/NotificationCenter";
 
 const navItems = [
   { icon: Phone, label: "Dialer", href: "/dashboard" },
@@ -29,16 +31,16 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen bg-background">
       {/* Mobile Header */}
-      <header className="lg:hidden sticky top-0 z-40 h-16 border-b border-border bg-background/95 backdrop-blur flex items-center px-4">
-        <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)}>
-          <Menu className="w-5 h-5" />
-        </Button>
-        <Link to="/dashboard" className="flex items-center gap-2 ml-3">
-          <div className="w-8 h-8 rounded-lg gradient-hero flex items-center justify-center">
-            <Phone className="w-4 h-4 text-primary-foreground" />
-          </div>
-          <span className="text-lg font-semibold text-foreground">ZyraCall</span>
-        </Link>
+      <header className="lg:hidden sticky top-0 z-40 h-16 border-b border-border bg-background/95 backdrop-blur flex items-center justify-between px-4">
+        <div className="flex items-center">
+          <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)}>
+            <Menu className="w-5 h-5" />
+          </Button>
+          <Link to="/dashboard" className="flex items-center gap-2 ml-3">
+            <img src={logo} alt="ZyraCall" className="h-8 w-auto" />
+          </Link>
+        </div>
+        <NotificationCenter />
       </header>
 
       {/* Mobile Sidebar Overlay */}
@@ -58,10 +60,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           {/* Logo */}
           <div className="h-16 flex items-center justify-between px-4 border-b border-sidebar-border">
             <Link to="/dashboard" className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-lg gradient-hero flex items-center justify-center">
-                <Phone className="w-4 h-4 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-semibold text-sidebar-foreground">ZyraCall</span>
+              <img src={logo} alt="ZyraCall" className="h-9 w-auto" />
             </Link>
             <Button 
               variant="ghost" 
@@ -118,7 +117,11 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Main Content */}
       <main className="lg:pl-64">
-        <div className="min-h-screen">
+        {/* Desktop Header */}
+        <header className="hidden lg:flex sticky top-0 z-30 h-16 border-b border-border bg-background/95 backdrop-blur items-center justify-end px-8">
+          <NotificationCenter />
+        </header>
+        <div className="min-h-[calc(100vh-4rem)]">
           {children}
         </div>
       </main>

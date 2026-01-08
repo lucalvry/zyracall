@@ -6,9 +6,12 @@ import {
   AlertTriangle,
   TrendingUp,
   TrendingDown,
-  Activity
+  Activity,
+  Loader2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface StatCardProps {
   title: string;
@@ -16,9 +19,10 @@ interface StatCardProps {
   change?: string;
   changeType?: "up" | "down" | "neutral";
   icon: React.ReactNode;
+  isLoading?: boolean;
 }
 
-const StatCard = ({ title, value, change, changeType = "neutral", icon }: StatCardProps) => (
+const StatCard = ({ title, value, change, changeType = "neutral", icon, isLoading }: StatCardProps) => (
   <div className="bg-card border border-border rounded-xl p-5 shadow-card">
     <div className="flex items-start justify-between mb-3">
       <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
@@ -37,25 +41,61 @@ const StatCard = ({ title, value, change, changeType = "neutral", icon }: StatCa
         </div>
       )}
     </div>
-    <p className="text-2xl font-bold text-foreground mb-1">{value}</p>
+    {isLoading ? (
+      <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+    ) : (
+      <p className="text-2xl font-bold text-foreground mb-1">{value}</p>
+    )}
     <p className="text-sm text-muted-foreground">{title}</p>
   </div>
 );
 
-interface AlertItem {
-  id: string;
-  type: "error" | "warning" | "info";
-  message: string;
-  time: string;
-}
-
-const mockAlerts: AlertItem[] = [
-  { id: "1", type: "error", message: "High call failure rate to Nigeria (+234)", time: "5 min ago" },
-  { id: "2", type: "warning", message: "Wallet sync delay detected", time: "12 min ago" },
-  { id: "3", type: "info", message: "Provider Telnyx rate update applied", time: "1 hour ago" },
-];
-
 const AdminDashboard = () => {
+  // Fetch dashboard stats
+  const { data: stats, isLoading } = useQuery({
+    queryKey: ["admin-dashboard-stats"],
+    queryFn: async () => {
+      // Get total users
+      const { count: totalUsers } = await supabase
+        .from("profiles")
+        .select("*", { count: "exact", head: true });
+
+      // Get today's calls
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const { data: todayCalls } = await supabase
+        .from("call_logs")
+        .select("id, cost, status")
+        .gte("started_at", today.toISOString());
+
+      const callsToday = todayCalls?.length || 0;
+      const revenueToday = todayCalls?.reduce((sum, c) => sum + Number(c.cost), 0) || 0;
+      const failedCalls = todayCalls?.filter(c => c.status === "failed").length || 0;
+
+      return {
+        totalUsers: totalUsers || 0,
+        callsToday,
+        revenueToday,
+        failedCalls,
+      };
+    },
+  });
+
+  // Fetch recent call logs for activity
+  const { data: recentCalls = [] } = useQuery({
+    queryKey: ["admin-recent-calls"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("call_logs")
+        .select("id, destination_country, status, started_at, cost")
+        .order("started_at", { ascending: false })
+        .limit(5);
+
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
   return (
     <AdminLayout>
       {/* Header */}
@@ -70,31 +110,27 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard
           title="Total Users"
-          value="1,247"
-          change="+12%"
-          changeType="up"
+          value={stats?.totalUsers.toLocaleString() || "0"}
           icon={<Users className="w-5 h-5" />}
+          isLoading={isLoading}
         />
         <StatCard
           title="Calls Today"
-          value="3,891"
-          change="+8%"
-          changeType="up"
+          value={stats?.callsToday.toLocaleString() || "0"}
           icon={<Phone className="w-5 h-5" />}
+          isLoading={isLoading}
         />
         <StatCard
           title="Revenue Today"
-          value="$2,847"
-          change="+15%"
-          changeType="up"
+          value={`$${stats?.revenueToday.toFixed(2) || "0.00"}`}
           icon={<DollarSign className="w-5 h-5" />}
+          isLoading={isLoading}
         />
         <StatCard
           title="Failed Calls"
-          value="23"
-          change="-5%"
-          changeType="down"
+          value={stats?.failedCalls.toString() || "0"}
           icon={<AlertTriangle className="w-5 h-5" />}
+          isLoading={isLoading}
         />
       </div>
 
@@ -102,62 +138,49 @@ const AdminDashboard = () => {
         {/* System Alerts */}
         <div className="bg-card border border-border rounded-xl p-5 shadow-card">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-foreground">System Alerts</h2>
+            <h2 className="font-semibold text-foreground">System Status</h2>
             <Activity className="w-5 h-5 text-muted-foreground" />
           </div>
           
           <div className="space-y-3">
-            {mockAlerts.map((alert) => (
-              <div 
-                key={alert.id}
-                className={cn(
-                  "flex items-start gap-3 p-3 rounded-lg",
-                  alert.type === "error" && "bg-destructive/10",
-                  alert.type === "warning" && "bg-warning/10",
-                  alert.type === "info" && "bg-primary/10"
-                )}
-              >
-                <AlertTriangle className={cn(
-                  "w-4 h-4 mt-0.5",
-                  alert.type === "error" && "text-destructive",
-                  alert.type === "warning" && "text-warning",
-                  alert.type === "info" && "text-primary"
-                )} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-foreground">{alert.message}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{alert.time}</p>
-                </div>
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-success/10">
+              <div className="w-2 h-2 rounded-full bg-success mt-1.5" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-foreground">All systems operational</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Twilio connected</p>
               </div>
-            ))}
+            </div>
           </div>
         </div>
 
         {/* Recent Activity */}
         <div className="bg-card border border-border rounded-xl p-5 shadow-card">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-foreground">Recent Activity</h2>
+            <h2 className="font-semibold text-foreground">Recent Calls</h2>
           </div>
           
           <div className="space-y-3">
-            {[
-              { action: "User suspended", detail: "user@example.com", time: "2 min ago", by: "admin@zyracall.com" },
-              { action: "Rate updated", detail: "Nigeria mobile +15%", time: "15 min ago", by: "admin@zyracall.com" },
-              { action: "Wallet credited", detail: "$50.00 to user#1234", time: "1 hour ago", by: "support@zyracall.com" },
-              { action: "Provider disabled", detail: "Vonage - maintenance", time: "2 hours ago", by: "admin@zyracall.com" },
-            ].map((activity, i) => (
-              <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
-                <div className="w-2 h-2 rounded-full bg-primary mt-1.5" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-foreground">
-                    <span className="font-medium">{activity.action}</span>
-                    <span className="text-muted-foreground"> — {activity.detail}</span>
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {activity.time} by {activity.by}
-                  </p>
+            {recentCalls.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No recent calls</p>
+            ) : (
+              recentCalls.map((call) => (
+                <div key={call.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
+                  <div className={cn(
+                    "w-2 h-2 rounded-full mt-1.5",
+                    call.status === "completed" ? "bg-success" : "bg-destructive"
+                  )} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm text-foreground">
+                      <span className="font-medium">Call to {call.destination_country}</span>
+                      <span className="text-muted-foreground"> — ${Number(call.cost).toFixed(2)}</span>
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {new Date(call.started_at).toLocaleString()}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>

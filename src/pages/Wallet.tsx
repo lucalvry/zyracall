@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +10,9 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
   Clock,
-  CheckCircle2
+  CheckCircle2,
+  Loader2,
+  AlertCircle
 } from "lucide-react";
 import {
   Dialog,
@@ -23,79 +26,87 @@ import {
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-
-interface Transaction {
-  id: string;
-  type: "topup" | "call";
-  amount: number;
-  date: string;
-  description: string;
-  status: "completed" | "pending";
-}
-
-// Mock data
-const mockTransactions: Transaction[] = [
-  {
-    id: "1",
-    type: "call",
-    amount: -0.42,
-    date: "2026-01-05 14:32",
-    description: "Call to +1 555 123 4567",
-    status: "completed",
-  },
-  {
-    id: "2",
-    type: "call",
-    amount: -0.18,
-    date: "2026-01-05 11:15",
-    description: "Call to +44 20 7946 0958",
-    status: "completed",
-  },
-  {
-    id: "3",
-    type: "topup",
-    amount: 20.00,
-    date: "2026-01-04 09:00",
-    description: "Wallet top-up via Stripe",
-    status: "completed",
-  },
-  {
-    id: "4",
-    type: "call",
-    amount: -0.89,
-    date: "2026-01-04 16:45",
-    description: "Call to +33 1 23 45 67 89",
-    status: "completed",
-  },
-  {
-    id: "5",
-    type: "topup",
-    amount: 10.00,
-    date: "2026-01-02 12:30",
-    description: "Wallet top-up via Stripe",
-    status: "completed",
-  },
-];
+import { useWallet, useTransactions, useCreateCheckoutSession } from "@/hooks/useWallet";
 
 const topUpAmounts = [5, 10, 20, 50];
 
 const WalletPage = () => {
-  const [balance] = useState(25.50);
-  const [transactions] = useState<Transaction[]>(mockTransactions);
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState(10);
   const [customAmount, setCustomAmount] = useState("");
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
 
-  const handleTopUp = () => {
+  const { data: wallet, isLoading: walletLoading, error: walletError } = useWallet();
+  const { data: transactions = [], isLoading: txLoading } = useTransactions();
+  const createCheckout = useCreateCheckoutSession();
+
+  // Handle success/cancel from Stripe redirect
+  useEffect(() => {
+    if (searchParams.get("success") === "true") {
+      toast({
+        title: "Payment successful!",
+        description: "Your wallet has been topped up.",
+      });
+    } else if (searchParams.get("canceled") === "true") {
+      toast({
+        title: "Payment canceled",
+        description: "Your wallet top-up was canceled.",
+        variant: "destructive",
+      });
+    }
+  }, [searchParams, toast]);
+
+  const handleTopUp = async () => {
     const amount = customAmount ? parseFloat(customAmount) : selectedAmount;
-    toast({
-      title: "Processing payment...",
-      description: `Adding $${amount.toFixed(2)} to your wallet`,
-    });
-    setIsTopUpOpen(false);
-    setCustomAmount("");
+    
+    if (amount < 5) {
+      toast({
+        title: "Minimum amount",
+        description: "Minimum top-up amount is $5",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const result = await createCheckout.mutateAsync(amount);
+      if (result.url) {
+        window.location.href = result.url;
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to create checkout session",
+        variant: "destructive",
+      });
+    }
   };
+
+  const balance = wallet?.balance ?? 0;
+
+  if (walletLoading) {
+    return (
+      <DashboardLayout>
+        <div className="p-6 lg:p-8 flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (walletError) {
+    return (
+      <DashboardLayout>
+        <div className="p-6 lg:p-8">
+          <div className="flex items-center gap-3 p-4 rounded-xl bg-destructive/10 border border-destructive/20">
+            <AlertCircle className="w-5 h-5 text-destructive" />
+            <p className="text-destructive">Failed to load wallet data. Please try again.</p>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -117,7 +128,7 @@ const WalletPage = () => {
             <div>
               <p className="text-primary-foreground/80 text-sm">Available Balance</p>
               <p className="text-3xl font-bold text-primary-foreground">
-                ${balance.toFixed(2)}
+                ${Number(balance).toFixed(2)}
               </p>
             </div>
           </div>
@@ -170,7 +181,7 @@ const WalletPage = () => {
                       type="number"
                       min="5"
                       step="0.01"
-                      placeholder="Enter amount"
+                      placeholder="Enter amount (min $5)"
                       value={customAmount}
                       onChange={(e) => setCustomAmount(e.target.value)}
                       className="pl-7"
@@ -192,8 +203,15 @@ const WalletPage = () => {
                 <Button variant="outline" onClick={() => setIsTopUpOpen(false)}>
                   Cancel
                 </Button>
-                <Button onClick={handleTopUp}>
-                  Pay ${customAmount || selectedAmount}
+                <Button onClick={handleTopUp} disabled={createCheckout.isPending}>
+                  {createCheckout.isPending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    `Pay $${customAmount || selectedAmount}`
+                  )}
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -206,52 +224,66 @@ const WalletPage = () => {
             Transaction History
           </h2>
 
-          <div className="space-y-2">
-            {transactions.map((tx) => (
-              <div
-                key={tx.id}
-                className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border"
-              >
-                {/* Icon */}
-                <div className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center",
-                  tx.type === "topup" 
-                    ? "bg-success/10 text-success"
-                    : "bg-muted text-muted-foreground"
-                )}>
-                  {tx.type === "topup" ? (
-                    <ArrowDownLeft className="w-5 h-5" />
-                  ) : (
-                    <ArrowUpRight className="w-5 h-5" />
-                  )}
-                </div>
+          {txLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            </div>
+          ) : transactions.length === 0 ? (
+            <div className="text-center py-12 text-muted-foreground">
+              <Wallet className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              <p>No transactions yet</p>
+              <p className="text-sm">Top up your wallet to get started</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {transactions.map((tx) => (
+                <div
+                  key={tx.id}
+                  className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border"
+                >
+                  {/* Icon */}
+                  <div className={cn(
+                    "w-10 h-10 rounded-full flex items-center justify-center",
+                    tx.type === "credit" 
+                      ? "bg-success/10 text-success"
+                      : "bg-muted text-muted-foreground"
+                  )}>
+                    {tx.type === "credit" ? (
+                      <ArrowDownLeft className="w-5 h-5" />
+                    ) : (
+                      <ArrowUpRight className="w-5 h-5" />
+                    )}
+                  </div>
 
-                {/* Details */}
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-foreground">{tx.description}</p>
-                  <p className="text-sm text-muted-foreground">{tx.date}</p>
-                </div>
+                  {/* Details */}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-foreground">{tx.description || "Transaction"}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {new Date(tx.created_at).toLocaleString()}
+                    </p>
+                  </div>
 
-                {/* Status */}
-                <div className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground">
-                  {tx.status === "completed" ? (
-                    <CheckCircle2 className="w-4 h-4 text-success" />
-                  ) : (
-                    <Clock className="w-4 h-4" />
-                  )}
-                  <span className="capitalize">{tx.status}</span>
-                </div>
+                  {/* Status */}
+                  <div className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground">
+                    {tx.status === "completed" ? (
+                      <CheckCircle2 className="w-4 h-4 text-success" />
+                    ) : (
+                      <Clock className="w-4 h-4" />
+                    )}
+                    <span className="capitalize">{tx.status}</span>
+                  </div>
 
-                {/* Amount */}
-                <p className={cn(
-                  "font-semibold",
-                  tx.amount > 0 ? "text-success" : "text-foreground"
-                )}>
-                  {tx.amount > 0 ? "+" : ""}${Math.abs(tx.amount).toFixed(2)}
-                </p>
-              </div>
-            ))}
-          </div>
+                  {/* Amount */}
+                  <p className={cn(
+                    "font-semibold",
+                    tx.type === "credit" ? "text-success" : "text-foreground"
+                  )}>
+                    {tx.type === "credit" ? "+" : "-"}${Math.abs(Number(tx.amount)).toFixed(2)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </DashboardLayout>

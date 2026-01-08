@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/zyracall-logo.png";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -39,6 +39,7 @@ const Header = () => {
           <nav className="hidden md:flex items-center gap-1">
             <NavLink to="/rates">Rates</NavLink>
             <NavLink to="/compare">Compare</NavLink>
+            <NavLink to="/alternatives">Alternatives</NavLink>
             <NavLink to="/how-it-works">How It Works</NavLink>
             <NavLink to="/about">About</NavLink>
           </nav>
@@ -78,6 +79,7 @@ const Header = () => {
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
               <MobileNavLink to="/rates" onClick={() => setIsMobileMenuOpen(false)}>Rates</MobileNavLink>
               <MobileNavLink to="/compare" onClick={() => setIsMobileMenuOpen(false)}>Compare</MobileNavLink>
+              <MobileNavLink to="/alternatives" onClick={() => setIsMobileMenuOpen(false)}>Alternatives</MobileNavLink>
               <MobileNavLink to="/how-it-works" onClick={() => setIsMobileMenuOpen(false)}>How It Works</MobileNavLink>
               <MobileNavLink to="/about" onClick={() => setIsMobileMenuOpen(false)}>About</MobileNavLink>
               <div className="h-px bg-border my-2" />

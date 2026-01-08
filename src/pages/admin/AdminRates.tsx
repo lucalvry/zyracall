@@ -10,15 +10,9 @@ import {
   Power,
   PowerOff,
   Save,
-  X
+  X,
+  Loader2
 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,100 +29,131 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-
-interface CountryRate {
-  id: string;
-  country: string;
-  code: string;
-  flag: string;
-  baseCostMobile: number;
-  baseCostLandline: number;
-  markupMobile: number;
-  markupLandline: number;
-  primaryProvider: string;
-  fallbackProvider: string;
-  enabled: boolean;
-}
-
-const mockCountryRates: CountryRate[] = [
-  { id: "1", country: "United States", code: "+1", flag: "🇺🇸", baseCostMobile: 0.015, baseCostLandline: 0.008, markupMobile: 33, markupLandline: 25, primaryProvider: "Twilio", fallbackProvider: "Telnyx", enabled: true },
-  { id: "2", country: "United Kingdom", code: "+44", flag: "🇬🇧", baseCostMobile: 0.022, baseCostLandline: 0.015, markupMobile: 36, markupLandline: 33, primaryProvider: "Telnyx", fallbackProvider: "Vonage", enabled: true },
-  { id: "3", country: "Germany", code: "+49", flag: "🇩🇪", baseCostMobile: 0.028, baseCostLandline: 0.014, markupMobile: 43, markupLandline: 43, primaryProvider: "Twilio", fallbackProvider: "Telnyx", enabled: true },
-  { id: "4", country: "France", code: "+33", flag: "🇫🇷", baseCostMobile: 0.028, baseCostLandline: 0.014, markupMobile: 43, markupLandline: 43, primaryProvider: "Vonage", fallbackProvider: "Twilio", enabled: true },
-  { id: "5", country: "Nigeria", code: "+234", flag: "🇳🇬", baseCostMobile: 0.12, baseCostLandline: 0.08, markupMobile: 50, markupLandline: 50, primaryProvider: "Twilio", fallbackProvider: "Telnyx", enabled: false },
-  { id: "6", country: "Japan", code: "+81", flag: "🇯🇵", baseCostMobile: 0.045, baseCostLandline: 0.03, markupMobile: 33, markupLandline: 33, primaryProvider: "Twilio", fallbackProvider: "Vonage", enabled: true },
-  { id: "7", country: "Australia", code: "+61", flag: "🇦🇺", baseCostMobile: 0.038, baseCostLandline: 0.022, markupMobile: 32, markupLandline: 36, primaryProvider: "Telnyx", fallbackProvider: "Twilio", enabled: true },
-  { id: "8", country: "India", code: "+91", flag: "🇮🇳", baseCostMobile: 0.015, baseCostLandline: 0.008, markupMobile: 33, markupLandline: 25, primaryProvider: "Twilio", fallbackProvider: "Telnyx", enabled: true },
-];
-
-const providers = ["Twilio", "Telnyx", "Vonage"];
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { getCountryFlag } from "@/hooks/useCallRates";
 
 const AdminRates = () => {
   const [search, setSearch] = useState("");
-  const [countryRates, setCountryRates] = useState<CountryRate[]>(mockCountryRates);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<CountryRate | null>(null);
+  const [selectedRate, setSelectedRate] = useState<any>(null);
   const [editForm, setEditForm] = useState({
-    markupMobile: 0,
-    markupLandline: 0,
-    primaryProvider: "",
-    fallbackProvider: "",
+    mobile_rate: 0,
+    landline_rate: 0,
   });
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  const filteredRates = countryRates.filter(
+  // Fetch rates from database
+  const { data: rates = [], isLoading } = useQuery({
+    queryKey: ["admin-rates"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("call_rates")
+        .select("*")
+        .order("country_name");
+
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
+  // Update rate mutation
+  const updateRateMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: string; updates: any }) => {
+      const { error } = await supabase
+        .from("call_rates")
+        .update(updates)
+        .eq("id", id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-rates"] });
+      toast({
+        title: "Rate updated",
+        description: `${selectedRate?.country_name} rates have been updated`,
+      });
+      setEditDialogOpen(false);
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Toggle enabled mutation
+  const toggleEnabledMutation = useMutation({
+    mutationFn: async ({ id, enabled }: { id: string; enabled: boolean }) => {
+      const { error } = await supabase
+        .from("call_rates")
+        .update({ is_active: enabled })
+        .eq("id", id);
+
+      if (error) throw error;
+    },
+    onSuccess: (_, { enabled }) => {
+      queryClient.invalidateQueries({ queryKey: ["admin-rates"] });
+      queryClient.invalidateQueries({ queryKey: ["call-rates"] });
+      toast({
+        title: enabled ? "Country enabled" : "Country disabled",
+        description: `Country has been ${enabled ? "enabled" : "disabled"}`,
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const filteredRates = rates.filter(
     (rate) =>
-      rate.country.toLowerCase().includes(search.toLowerCase()) ||
-      rate.code.includes(search)
+      rate.country_name.toLowerCase().includes(search.toLowerCase()) ||
+      rate.country_code.includes(search)
   );
 
-  const handleEdit = (country: CountryRate) => {
-    setSelectedCountry(country);
+  const handleEdit = (rate: any) => {
+    setSelectedRate(rate);
     setEditForm({
-      markupMobile: country.markupMobile,
-      markupLandline: country.markupLandline,
-      primaryProvider: country.primaryProvider,
-      fallbackProvider: country.fallbackProvider,
+      mobile_rate: rate.mobile_rate,
+      landline_rate: rate.landline_rate,
     });
     setEditDialogOpen(true);
   };
 
   const handleSave = () => {
-    if (!selectedCountry) return;
-    
-    setCountryRates(prev => prev.map(c => 
-      c.id === selectedCountry.id 
-        ? { ...c, ...editForm }
-        : c
-    ));
-    
-    toast({
-      title: "Rate updated",
-      description: `${selectedCountry.country} rates have been updated`,
-    });
-    
-    setEditDialogOpen(false);
-  };
-
-  const handleToggleEnabled = (id: string) => {
-    setCountryRates(prev => prev.map(c => 
-      c.id === id ? { ...c, enabled: !c.enabled } : c
-    ));
-    
-    const country = countryRates.find(c => c.id === id);
-    toast({
-      title: country?.enabled ? "Country disabled" : "Country enabled",
-      description: `${country?.country} has been ${country?.enabled ? "disabled" : "enabled"}`,
+    if (!selectedRate) return;
+    updateRateMutation.mutate({
+      id: selectedRate.id,
+      updates: editForm,
     });
   };
 
-  const calculateFinalRate = (baseCost: number, markup: number) => {
-    return baseCost * (1 + markup / 100);
+  const handleToggleEnabled = (rate: any) => {
+    toggleEnabledMutation.mutate({
+      id: rate.id,
+      enabled: !rate.is_active,
+    });
   };
+
+  if (isLoading) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>
@@ -137,7 +162,7 @@ const AdminRates = () => {
         <div>
           <h1 className="text-2xl font-bold text-foreground mb-1">Rates & Providers</h1>
           <p className="text-muted-foreground">
-            Manage per-country rates and provider configuration
+            Manage per-country calling rates
           </p>
         </div>
         <Button className="gap-2">
@@ -165,11 +190,8 @@ const AdminRates = () => {
               <tr>
                 <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">Country</th>
                 <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">Code</th>
-                <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">Base (Mobile)</th>
-                <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">Markup</th>
-                <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">Final Rate</th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">Primary</th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">Fallback</th>
+                <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">Mobile Rate</th>
+                <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">Landline Rate</th>
                 <th className="text-center px-4 py-3 text-sm font-medium text-muted-foreground">Status</th>
                 <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">Actions</th>
               </tr>
@@ -178,34 +200,25 @@ const AdminRates = () => {
               {filteredRates.map((rate) => (
                 <tr key={rate.id} className={cn(
                   "hover:bg-muted/30 transition-colors",
-                  !rate.enabled && "opacity-50"
+                  !rate.is_active && "opacity-50"
                 )}>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-xl">{rate.flag}</span>
-                      <span className="font-medium text-foreground">{rate.country}</span>
+                      <span className="text-xl">{getCountryFlag(rate.country_name)}</span>
+                      <span className="font-medium text-foreground">{rate.country_name}</span>
                     </div>
                   </td>
                   <td className="px-4 py-3 font-mono text-muted-foreground">
-                    {rate.code}
-                  </td>
-                  <td className="px-4 py-3 text-right font-mono text-muted-foreground">
-                    ${rate.baseCostMobile.toFixed(3)}
-                  </td>
-                  <td className="px-4 py-3 text-right font-mono text-foreground">
-                    +{rate.markupMobile}%
+                    +{rate.country_code}
                   </td>
                   <td className="px-4 py-3 text-right font-mono font-medium text-primary">
-                    ${calculateFinalRate(rate.baseCostMobile, rate.markupMobile).toFixed(2)}
+                    ${Number(rate.mobile_rate).toFixed(2)}/min
                   </td>
-                  <td className="px-4 py-3 text-sm text-foreground">
-                    {rate.primaryProvider}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-muted-foreground">
-                    {rate.fallbackProvider}
+                  <td className="px-4 py-3 text-right font-mono font-medium text-foreground">
+                    ${Number(rate.landline_rate).toFixed(2)}/min
                   </td>
                   <td className="px-4 py-3 text-center">
-                    {rate.enabled ? (
+                    {rate.is_active ? (
                       <Badge variant="outline" className="bg-success/10 text-success border-success/20">Active</Badge>
                     ) : (
                       <Badge variant="outline" className="bg-muted text-muted-foreground border-border">Disabled</Badge>
@@ -224,8 +237,8 @@ const AdminRates = () => {
                           Edit Rates
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => handleToggleEnabled(rate.id)}>
-                          {rate.enabled ? (
+                        <DropdownMenuItem onClick={() => handleToggleEnabled(rate)}>
+                          {rate.is_active ? (
                             <>
                               <PowerOff className="w-4 h-4 mr-2" />
                               Disable Country
@@ -252,95 +265,39 @@ const AdminRates = () => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <span className="text-2xl">{selectedCountry?.flag}</span>
-              Edit {selectedCountry?.country} Rates
+              <span className="text-2xl">{selectedRate && getCountryFlag(selectedRate.country_name)}</span>
+              Edit {selectedRate?.country_name} Rates
             </DialogTitle>
             <DialogDescription>
-              Adjust markup percentages and provider configuration
+              Adjust the per-minute calling rates
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="markupMobile">Mobile Markup (%)</Label>
+                <Label htmlFor="mobile_rate">Mobile Rate ($/min)</Label>
                 <Input
-                  id="markupMobile"
+                  id="mobile_rate"
                   type="number"
                   min="0"
-                  max="200"
-                  value={editForm.markupMobile}
-                  onChange={(e) => setEditForm(prev => ({ ...prev, markupMobile: parseInt(e.target.value) || 0 }))}
+                  step="0.01"
+                  value={editForm.mobile_rate}
+                  onChange={(e) => setEditForm(prev => ({ ...prev, mobile_rate: parseFloat(e.target.value) || 0 }))}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="markupLandline">Landline Markup (%)</Label>
+                <Label htmlFor="landline_rate">Landline Rate ($/min)</Label>
                 <Input
-                  id="markupLandline"
+                  id="landline_rate"
                   type="number"
                   min="0"
-                  max="200"
-                  value={editForm.markupLandline}
-                  onChange={(e) => setEditForm(prev => ({ ...prev, markupLandline: parseInt(e.target.value) || 0 }))}
+                  step="0.01"
+                  value={editForm.landline_rate}
+                  onChange={(e) => setEditForm(prev => ({ ...prev, landline_rate: parseFloat(e.target.value) || 0 }))}
                 />
               </div>
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Primary Provider</Label>
-                <Select 
-                  value={editForm.primaryProvider} 
-                  onValueChange={(v) => setEditForm(prev => ({ ...prev, primaryProvider: v }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {providers.map(p => (
-                      <SelectItem key={p} value={p}>{p}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Fallback Provider</Label>
-                <Select 
-                  value={editForm.fallbackProvider} 
-                  onValueChange={(v) => setEditForm(prev => ({ ...prev, fallbackProvider: v }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {providers.map(p => (
-                      <SelectItem key={p} value={p}>{p}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {/* Preview */}
-            {selectedCountry && (
-              <div className="p-4 rounded-lg bg-muted/50 border border-border">
-                <p className="text-sm text-muted-foreground mb-2">Final Rates Preview</p>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-muted-foreground">Mobile: </span>
-                    <span className="font-mono font-medium text-primary">
-                      ${calculateFinalRate(selectedCountry.baseCostMobile, editForm.markupMobile).toFixed(2)}/min
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Landline: </span>
-                    <span className="font-mono font-medium text-primary">
-                      ${calculateFinalRate(selectedCountry.baseCostLandline, editForm.markupLandline).toFixed(2)}/min
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
           <DialogFooter>
@@ -348,8 +305,12 @@ const AdminRates = () => {
               <X className="w-4 h-4 mr-2" />
               Cancel
             </Button>
-            <Button onClick={handleSave}>
-              <Save className="w-4 h-4 mr-2" />
+            <Button onClick={handleSave} disabled={updateRateMutation.isPending}>
+              {updateRateMutation.isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+              ) : (
+                <Save className="w-4 h-4 mr-2" />
+              )}
               Save Changes
             </Button>
           </DialogFooter>

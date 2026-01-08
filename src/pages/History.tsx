@@ -5,104 +5,36 @@ import { Input } from "@/components/ui/input";
 import { 
   Phone, 
   PhoneOutgoing,
-  Play,
-  Download,
   Search,
   Calendar,
   Mic,
   Clock,
-  DollarSign
+  DollarSign,
+  Loader2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface CallHistoryEntry {
-  id: string;
-  phoneNumber: string;
-  country: string;
-  date: string;
-  time: string;
-  duration: string;
-  cost: number;
-  hasRecording: boolean;
-  status: "completed" | "failed" | "no-answer";
-}
-
-// Mock data
-const mockHistory: CallHistoryEntry[] = [
-  {
-    id: "1",
-    phoneNumber: "+1 555 123 4567",
-    country: "United States",
-    date: "2026-01-05",
-    time: "14:32",
-    duration: "5:23",
-    cost: 0.42,
-    hasRecording: true,
-    status: "completed",
-  },
-  {
-    id: "2",
-    phoneNumber: "+44 20 7946 0958",
-    country: "United Kingdom",
-    date: "2026-01-05",
-    time: "11:15",
-    duration: "2:10",
-    cost: 0.18,
-    hasRecording: false,
-    status: "completed",
-  },
-  {
-    id: "3",
-    phoneNumber: "+49 30 123 4567",
-    country: "Germany",
-    date: "2026-01-04",
-    time: "16:45",
-    duration: "0:00",
-    cost: 0,
-    hasRecording: false,
-    status: "no-answer",
-  },
-  {
-    id: "4",
-    phoneNumber: "+33 1 23 45 67 89",
-    country: "France",
-    date: "2026-01-04",
-    time: "09:22",
-    duration: "8:45",
-    cost: 0.89,
-    hasRecording: true,
-    status: "completed",
-  },
-  {
-    id: "5",
-    phoneNumber: "+81 3 1234 5678",
-    country: "Japan",
-    date: "2026-01-03",
-    time: "22:10",
-    duration: "3:12",
-    cost: 0.35,
-    hasRecording: false,
-    status: "completed",
-  },
-];
+import { useCallHistory } from "@/hooks/useCallHistory";
+import AudioPlayer from "@/components/history/AudioPlayer";
 
 const History = () => {
   const [search, setSearch] = useState("");
-  const [history] = useState<CallHistoryEntry[]>(mockHistory);
+  const { data: callLogs = [], isLoading, error } = useCallHistory();
 
-  const filteredHistory = history.filter(
+  const filteredHistory = callLogs.filter(
     (entry) =>
-      entry.phoneNumber.includes(search) ||
-      entry.country.toLowerCase().includes(search.toLowerCase())
+      entry.destination_number.includes(search) ||
+      entry.destination_country.toLowerCase().includes(search.toLowerCase())
   );
 
+  // Group by date
   const groupedHistory = filteredHistory.reduce((acc, entry) => {
-    if (!acc[entry.date]) {
-      acc[entry.date] = [];
+    const date = new Date(entry.started_at).toISOString().split("T")[0];
+    if (!acc[date]) {
+      acc[date] = [];
     }
-    acc[entry.date].push(entry);
+    acc[date].push(entry);
     return acc;
-  }, {} as Record<string, CallHistoryEntry[]>);
+  }, {} as Record<string, typeof callLogs>);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -122,6 +54,42 @@ const History = () => {
       });
     }
   };
+
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const formatTime = (dateStr: string) => {
+    return new Date(dateStr).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="p-6 lg:p-8 flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <DashboardLayout>
+        <div className="p-6 lg:p-8">
+          <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/20">
+            <p className="text-destructive">Failed to load call history. Please try again.</p>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -175,7 +143,7 @@ const History = () => {
                     >
                       {/* Icon */}
                       <div className={cn(
-                        "w-10 h-10 rounded-full flex items-center justify-center",
+                        "w-10 h-10 rounded-full flex items-center justify-center shrink-0",
                         entry.status === "completed" 
                           ? "bg-success/10 text-success"
                           : entry.status === "no-answer"
@@ -188,42 +156,35 @@ const History = () => {
                       {/* Details */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <p className="font-medium text-foreground font-mono">
-                            {entry.phoneNumber}
+                          <p className="font-medium text-foreground font-mono truncate">
+                            {entry.destination_number}
                           </p>
-                          {entry.hasRecording && (
-                            <Mic className="w-3.5 h-3.5 text-primary" />
+                          {entry.recording_url && (
+                            <Mic className="w-3.5 h-3.5 text-primary shrink-0" />
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          {entry.country} • {entry.time}
+                        <p className="text-sm text-muted-foreground truncate">
+                          {entry.destination_country} • {formatTime(entry.started_at)}
                         </p>
                       </div>
 
                       {/* Metrics */}
-                      <div className="hidden sm:flex items-center gap-6 text-sm">
+                      <div className="hidden md:flex items-center gap-6 text-sm">
                         <div className="flex items-center gap-1.5 text-muted-foreground">
                           <Clock className="w-4 h-4" />
-                          <span>{entry.duration}</span>
+                          <span>{formatDuration(entry.duration_seconds)}</span>
                         </div>
                         <div className="flex items-center gap-1.5 text-muted-foreground">
                           <DollarSign className="w-4 h-4" />
-                          <span>${entry.cost.toFixed(2)}</span>
+                          <span>${Number(entry.cost).toFixed(2)}</span>
                         </div>
                       </div>
 
-                      {/* Actions */}
+                      {/* Audio Player / Actions */}
                       <div className="flex items-center gap-2">
-                        {entry.hasRecording && (
-                          <>
-                            <Button variant="ghost" size="iconSm">
-                              <Play className="w-4 h-4" />
-                            </Button>
-                            <Button variant="ghost" size="iconSm">
-                              <Download className="w-4 h-4" />
-                            </Button>
-                          </>
-                        )}
+                        {entry.recording_url ? (
+                          <AudioPlayer recordingPath={entry.recording_url} />
+                        ) : null}
                         <Button variant="call" size="sm">
                           <Phone className="w-4 h-4" />
                         </Button>

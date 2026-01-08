@@ -9,7 +9,7 @@ const Footer = () => {
     <footer className="relative border-t border-border/50 bg-muted/20">
       {/* Main Footer */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 lg:gap-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-8 lg:gap-12">
           {/* Brand Column */}
           <div className="col-span-2">
             <Link to="/" className="inline-block mb-6">
@@ -68,6 +68,17 @@ const Footer = () => {
               <FooterLink to="/compare/zyracall-vs-google-voice">vs Google Voice</FooterLink>
               <FooterLink to="/compare/zyracall-vs-rebtel">vs Rebtel</FooterLink>
               <FooterLink to="/compare">All Comparisons</FooterLink>
+            </ul>
+          </div>
+
+          {/* Alternatives Links */}
+          <div>
+            <h4 className="font-semibold text-foreground mb-4">Alternatives</h4>
+            <ul className="space-y-3">
+              <FooterLink to="/alternatives/skype-alternative">Skype Alternative</FooterLink>
+              <FooterLink to="/alternatives/whatsapp-calling-alternative">WhatsApp Alternative</FooterLink>
+              <FooterLink to="/alternatives/viber-out-alternative">Viber Alternative</FooterLink>
+              <FooterLink to="/alternatives">All Alternatives</FooterLink>
             </ul>
           </div>
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Phone, PhoneOff, DollarSign, Clock, Mic } from "lucide-react";
+import { Phone, PhoneOff, DollarSign, Clock, Mic, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ActiveCallProps {
@@ -8,6 +8,8 @@ interface ActiveCallProps {
   ratePerMinute: number;
   isRecording: boolean;
   onEndCall: () => void;
+  callStatus?: string;
+  duration?: number;
 }
 
 const ActiveCall = ({ 
@@ -15,31 +17,58 @@ const ActiveCall = ({
   countryName, 
   ratePerMinute, 
   isRecording,
-  onEndCall 
+  onEndCall,
+  callStatus,
+  duration: externalDuration
 }: ActiveCallProps) => {
-  const [duration, setDuration] = useState(0);
-  const [status, setStatus] = useState<"connecting" | "ringing" | "active">("connecting");
+  const [internalDuration, setInternalDuration] = useState(0);
+  const [internalStatus, setInternalStatus] = useState<"connecting" | "ringing" | "active">("connecting");
 
+  // Use external values if provided, otherwise use internal simulation
+  const isExternallyControlled = callStatus !== undefined;
+  const duration = externalDuration !== undefined ? externalDuration : internalDuration;
+
+  // Map external status to display text
+  const getDisplayStatus = () => {
+    if (callStatus) {
+      return callStatus;
+    }
+    if (internalStatus === "connecting") return "Connecting...";
+    if (internalStatus === "ringing") return "Ringing...";
+    return "In Call";
+  };
+
+  const isActive = isExternallyControlled 
+    ? callStatus === "In Progress" 
+    : internalStatus === "active";
+
+  const isConnecting = isExternallyControlled
+    ? callStatus === "Connecting..." || callStatus === "Ringing..."
+    : internalStatus !== "active";
+
+  // Internal simulation (fallback when not externally controlled)
   useEffect(() => {
-    // Simulate call connection
-    const connectTimer = setTimeout(() => setStatus("ringing"), 1500);
-    const activeTimer = setTimeout(() => setStatus("active"), 3500);
+    if (isExternallyControlled) return;
+
+    const connectTimer = setTimeout(() => setInternalStatus("ringing"), 1500);
+    const activeTimer = setTimeout(() => setInternalStatus("active"), 3500);
 
     return () => {
       clearTimeout(connectTimer);
       clearTimeout(activeTimer);
     };
-  }, []);
+  }, [isExternallyControlled]);
 
   useEffect(() => {
-    if (status !== "active") return;
+    if (isExternallyControlled) return;
+    if (internalStatus !== "active") return;
 
     const interval = setInterval(() => {
-      setDuration((prev) => prev + 1);
+      setInternalDuration((prev) => prev + 1);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [status]);
+  }, [internalStatus, isExternallyControlled]);
 
   const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -56,23 +85,25 @@ const ActiveCall = ({
         <div className="mb-8">
           <div className={`
             w-24 h-24 mx-auto rounded-full flex items-center justify-center mb-4
-            ${status === "active" 
+            ${isActive 
               ? "bg-call-active/20 animate-pulse-ring" 
               : "bg-primary/20"
             }
           `}>
             <div className={`
               w-16 h-16 rounded-full flex items-center justify-center
-              ${status === "active" ? "bg-call-active" : "gradient-hero"}
+              ${isActive ? "bg-call-active" : "gradient-hero"}
             `}>
-              <Phone className="w-8 h-8 text-primary-foreground" />
+              {isConnecting ? (
+                <Loader2 className="w-8 h-8 text-primary-foreground animate-spin" />
+              ) : (
+                <Phone className="w-8 h-8 text-primary-foreground" />
+              )}
             </div>
           </div>
 
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
-            {status === "connecting" && "Connecting..."}
-            {status === "ringing" && "Ringing..."}
-            {status === "active" && "In Call"}
+            {getDisplayStatus()}
           </p>
         </div>
 
@@ -80,8 +111,8 @@ const ActiveCall = ({
         <h2 className="text-2xl font-bold text-foreground mb-1">{phoneNumber}</h2>
         <p className="text-muted-foreground mb-8">{countryName}</p>
 
-        {/* Call metrics */}
-        {status === "active" && (
+        {/* Call metrics - show when active or when we have duration */}
+        {(isActive || duration > 0) && (
           <div className="grid grid-cols-2 gap-4 mb-8">
             <div className="p-4 rounded-xl bg-muted/50 border border-border">
               <div className="flex items-center justify-center gap-2 text-muted-foreground mb-1">

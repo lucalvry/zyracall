@@ -1,4 +1,4 @@
-import { Phone, Globe, CreditCard, Zap, ArrowRight, Check } from "lucide-react";
+import { Phone, Globe, Zap, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -99,77 +99,57 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Right Content - Dialer Preview */}
+          {/* Right Content - Compact Dialer Preview */}
           <div 
-            className="relative hidden lg:block animate-fade-in"
+            className="relative hidden lg:flex justify-center animate-fade-in"
             style={{ animationDelay: "0.5s" }}
           >
-            <div className="relative">
-              {/* Floating elements */}
-              <div className="absolute -top-8 -left-8 w-24 h-24 bg-accent/10 rounded-2xl blur-2xl animate-float" />
-              <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-primary/10 rounded-full blur-2xl animate-float" style={{ animationDelay: "2s" }} />
+            <div className="relative max-w-sm">
+              {/* Subtle glow */}
+              <div className="absolute inset-0 bg-accent/5 rounded-3xl blur-2xl scale-110" />
               
               {/* Dialer Card */}
-              <div className="relative bg-card border border-border/50 rounded-3xl shadow-2xl shadow-primary/5 p-8 backdrop-blur-sm">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-8">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Calling</p>
-                    <p className="text-2xl font-semibold text-foreground tracking-tight">+44 20 7946 0958</p>
+              <div className="relative bg-card border border-border/50 rounded-2xl shadow-xl p-6 backdrop-blur-sm">
+                {/* Active Call Header */}
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
+                    <Globe className="w-5 h-5 text-accent" />
                   </div>
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 text-accent text-sm">
-                    <Globe className="w-4 h-4" />
-                    <span>UK</span>
+                  <div className="flex-1">
+                    <p className="text-xs text-muted-foreground">Calling United Kingdom</p>
+                    <p className="text-lg font-semibold text-foreground tracking-tight">+44 20 7946 0958</p>
                   </div>
                 </div>
 
-                {/* Keypad Preview */}
-                <div className="grid grid-cols-3 gap-3 mb-8">
-                  {['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'].map((key) => (
+                {/* Mini Keypad - Just top row hint */}
+                <div className="grid grid-cols-3 gap-2 mb-5">
+                  {['1', '2', '3'].map((key) => (
                     <div 
                       key={key}
-                      className="aspect-square flex items-center justify-center rounded-xl bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
+                      className="h-11 flex items-center justify-center rounded-lg bg-muted/40 text-foreground font-medium"
                     >
-                      <span className="text-xl font-medium text-foreground">{key}</span>
+                      {key}
                     </div>
                   ))}
                 </div>
 
                 {/* Call Button */}
-                <button className="w-full h-14 rounded-2xl bg-accent hover:bg-accent/90 text-accent-foreground font-semibold flex items-center justify-center gap-2 transition-all shadow-lg shadow-accent/20">
-                  <Phone className="w-5 h-5" />
+                <button className="w-full h-12 rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground font-semibold flex items-center justify-center gap-2 transition-all shadow-md">
+                  <Phone className="w-4 h-4" />
                   Call Now
                 </button>
 
-                {/* Rate Display */}
-                <div className="mt-6 pt-6 border-t border-border/50 flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Rate to UK Mobile</span>
-                  <span className="font-medium text-foreground">$0.02/min</span>
-                </div>
+                {/* Rate */}
+                <p className="text-center text-xs text-muted-foreground mt-4">
+                  UK Mobile · <span className="text-foreground font-medium">$0.02/min</span>
+                </p>
               </div>
 
-              {/* Floating Stats Cards */}
-              <div className="absolute -left-12 top-1/4 bg-card border border-border/50 rounded-2xl p-4 shadow-xl animate-float" style={{ animationDelay: "1s" }}>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-                    <Zap className="w-5 h-5 text-accent" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Connected in</p>
-                    <p className="text-lg font-semibold text-foreground">2.3s</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute -right-8 bottom-1/4 bg-card border border-border/50 rounded-2xl p-4 shadow-xl animate-float" style={{ animationDelay: "3s" }}>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <CreditCard className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Balance</p>
-                    <p className="text-lg font-semibold text-foreground">$24.50</p>
-                  </div>
+              {/* Single floating stat */}
+              <div className="absolute -left-16 top-1/2 -translate-y-1/2 bg-card border border-border/50 rounded-xl p-3 shadow-lg animate-float">
+                <div className="flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-accent" />
+                  <span className="text-sm font-medium text-foreground">2.3s connect</span>
                 </div>
               </div>
             </div>

@@ -9,7 +9,7 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
   CreditCard,
-  ExternalLink
+  Loader2
 } from "lucide-react";
 import {
   Select,
@@ -20,41 +20,47 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-
-interface Transaction {
-  id: string;
-  userId: string;
-  userEmail: string;
-  type: "topup" | "call" | "refund" | "adjustment";
-  amount: number;
-  stripeRef?: string;
-  description: string;
-  status: "completed" | "pending" | "failed";
-  timestamp: string;
-}
-
-const mockTransactions: Transaction[] = [
-  { id: "txn_001", userId: "usr_001", userEmail: "john@company.com", type: "call", amount: -0.42, description: "Call to +1 555 123 4567", status: "completed", timestamp: "2026-01-05 14:32:15" },
-  { id: "txn_002", userId: "usr_002", userEmail: "sarah@startup.io", type: "topup", amount: 20.00, stripeRef: "pi_3Ox7abc123", description: "Wallet top-up via Stripe", status: "completed", timestamp: "2026-01-05 14:00:00" },
-  { id: "txn_003", userId: "usr_002", userEmail: "sarah@startup.io", type: "call", amount: -0.18, description: "Call to +44 20 7946 0958", status: "completed", timestamp: "2026-01-05 14:28:42" },
-  { id: "txn_004", userId: "usr_004", userEmail: "lisa@agency.co", type: "refund", amount: 5.00, stripeRef: "re_1Ox8xyz789", description: "Refund for failed calls", status: "completed", timestamp: "2026-01-05 13:00:00" },
-  { id: "txn_005", userId: "usr_006", userEmail: "david@consulting.com", type: "call", amount: -1.24, description: "Call to +33 1 23 45 67 89", status: "completed", timestamp: "2026-01-05 13:42:55" },
-  { id: "txn_006", userId: "usr_001", userEmail: "john@company.com", type: "topup", amount: 50.00, stripeRef: "pi_3Ox6def456", description: "Wallet top-up via Stripe", status: "completed", timestamp: "2026-01-04 10:15:00" },
-  { id: "txn_007", userId: "usr_003", userEmail: "mike@enterprise.com", type: "adjustment", amount: -15.00, description: "Admin adjustment: Chargeback", status: "completed", timestamp: "2026-01-04 09:00:00" },
-  { id: "txn_008", userId: "usr_004", userEmail: "lisa@agency.co", type: "topup", amount: 100.00, stripeRef: "pi_3Ox5ghi789", description: "Wallet top-up via Stripe", status: "pending", timestamp: "2026-01-05 15:00:00" },
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const AdminTransactions = () => {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [transactions] = useState<Transaction[]>(mockTransactions);
+
+  // Fetch transactions with user emails
+  const { data: transactions = [], isLoading } = useQuery({
+    queryKey: ["admin-transactions"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("transactions")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+
+      if (error) throw error;
+
+      // Fetch user emails for transactions
+      const userIds = [...new Set((data || []).map(t => t.user_id))];
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id, email")
+        .in("id", userIds);
+
+      const emailMap = new Map(profiles?.map(p => [p.id, p.email]) || []);
+
+      return (data || []).map(tx => ({
+        ...tx,
+        user_email: emailMap.get(tx.user_id) || "Unknown",
+      }));
+    },
+  });
 
   const filteredTransactions = transactions.filter((tx) => {
     const matchesSearch = 
-      tx.userEmail.toLowerCase().includes(search.toLowerCase()) ||
+      tx.user_email.toLowerCase().includes(search.toLowerCase()) ||
       tx.id.includes(search) ||
-      (tx.stripeRef && tx.stripeRef.includes(search));
+      (tx.stripe_payment_id && tx.stripe_payment_id.includes(search));
     
     const matchesType = typeFilter === "all" || tx.type === typeFilter;
     const matchesStatus = statusFilter === "all" || tx.status === statusFilter;
@@ -62,7 +68,7 @@ const AdminTransactions = () => {
     return matchesSearch && matchesType && matchesStatus;
   });
 
-  const getTypeIcon = (type: Transaction["type"]) => {
+  const getTypeIcon = (type: string) => {
     switch (type) {
       case "topup":
         return <ArrowDownLeft className="w-4 h-4 text-success" />;
@@ -72,10 +78,12 @@ const AdminTransactions = () => {
         return <ArrowDownLeft className="w-4 h-4 text-primary" />;
       case "adjustment":
         return <CreditCard className="w-4 h-4 text-warning" />;
+      default:
+        return <CreditCard className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
-  const getTypeBadge = (type: Transaction["type"]) => {
+  const getTypeBadge = (type: string) => {
     switch (type) {
       case "topup":
         return <Badge variant="outline" className="bg-success/10 text-success border-success/20">Top-up</Badge>;
@@ -85,10 +93,12 @@ const AdminTransactions = () => {
         return <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">Refund</Badge>;
       case "adjustment":
         return <Badge variant="outline" className="bg-warning/10 text-warning border-warning/20">Adjustment</Badge>;
+      default:
+        return <Badge variant="outline">{type}</Badge>;
     }
   };
 
-  const getStatusBadge = (status: Transaction["status"]) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case "completed":
         return <Badge variant="outline" className="bg-success/10 text-success border-success/20">Completed</Badge>;
@@ -96,11 +106,29 @@ const AdminTransactions = () => {
         return <Badge variant="outline" className="bg-warning/10 text-warning border-warning/20">Pending</Badge>;
       case "failed":
         return <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">Failed</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
     }
   };
 
-  const totalTopups = transactions.filter(t => t.type === "topup" && t.status === "completed").reduce((sum, t) => sum + t.amount, 0);
-  const totalCalls = Math.abs(transactions.filter(t => t.type === "call").reduce((sum, t) => sum + t.amount, 0));
+  const totalTopups = transactions
+    .filter(t => t.type === "topup" && t.status === "completed")
+    .reduce((sum, t) => sum + Number(t.amount), 0);
+  const totalCalls = Math.abs(
+    transactions
+      .filter(t => t.type === "call")
+      .reduce((sum, t) => sum + Number(t.amount), 0)
+  );
+
+  if (isLoading) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>
@@ -183,7 +211,6 @@ const AdminTransactions = () => {
                 <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">User</th>
                 <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">Type</th>
                 <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">Amount</th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">Stripe Ref</th>
                 <th className="text-center px-4 py-3 text-sm font-medium text-muted-foreground">Status</th>
                 <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">Time</th>
               </tr>
@@ -197,38 +224,28 @@ const AdminTransactions = () => {
                         {getTypeIcon(tx.type)}
                       </div>
                       <div>
-                        <p className="font-mono text-sm text-muted-foreground">{tx.id}</p>
-                        <p className="text-sm text-foreground">{tx.description}</p>
+                        <p className="font-mono text-sm text-muted-foreground">{tx.id.slice(0, 8)}...</p>
+                        <p className="text-sm text-foreground">{tx.description || "No description"}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm text-foreground">
-                    {tx.userEmail}
+                    {tx.user_email}
                   </td>
                   <td className="px-4 py-3">
                     {getTypeBadge(tx.type)}
                   </td>
                   <td className={cn(
                     "px-4 py-3 text-right font-mono font-medium",
-                    tx.amount > 0 ? "text-success" : "text-foreground"
+                    Number(tx.amount) > 0 ? "text-success" : "text-foreground"
                   )}>
-                    {tx.amount > 0 ? "+" : ""}${Math.abs(tx.amount).toFixed(2)}
-                  </td>
-                  <td className="px-4 py-3">
-                    {tx.stripeRef ? (
-                      <Button variant="ghost" size="sm" className="h-auto py-1 px-2 gap-1 font-mono text-xs">
-                        {tx.stripeRef}
-                        <ExternalLink className="w-3 h-3" />
-                      </Button>
-                    ) : (
-                      <span className="text-muted-foreground text-sm">—</span>
-                    )}
+                    {Number(tx.amount) > 0 ? "+" : ""}${Math.abs(Number(tx.amount)).toFixed(2)}
                   </td>
                   <td className="px-4 py-3 text-center">
                     {getStatusBadge(tx.status)}
                   </td>
                   <td className="px-4 py-3 text-sm text-muted-foreground">
-                    {tx.timestamp}
+                    {new Date(tx.created_at).toLocaleString()}
                   </td>
                 </tr>
               ))}

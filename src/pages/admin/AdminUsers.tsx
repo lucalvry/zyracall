@@ -8,7 +8,8 @@ import {
   Ban, 
   CreditCard,
   Eye,
-  Mail
+  Mail,
+  Loader2
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -30,81 +31,151 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
-interface User {
+interface UserWithWallet {
   id: string;
-  email: string;
-  name: string;
-  balance: number;
-  totalSpend: number;
-  status: "active" | "suspended" | "blocked";
-  signupDate: string;
-  lastActive: string;
+  email: string | null;
+  display_name: string | null;
+  created_at: string;
+  wallet_balance: number;
 }
-
-const mockUsers: User[] = [
-  { id: "usr_001", email: "john@company.com", name: "John Smith", balance: 45.20, totalSpend: 234.50, status: "active", signupDate: "2025-11-15", lastActive: "2026-01-05" },
-  { id: "usr_002", email: "sarah@startup.io", name: "Sarah Johnson", balance: 12.80, totalSpend: 89.30, status: "active", signupDate: "2025-12-01", lastActive: "2026-01-05" },
-  { id: "usr_003", email: "mike@enterprise.com", name: "Mike Chen", balance: 0.00, totalSpend: 567.90, status: "suspended", signupDate: "2025-10-20", lastActive: "2025-12-28" },
-  { id: "usr_004", email: "lisa@agency.co", name: "Lisa Wang", balance: 102.50, totalSpend: 1234.00, status: "active", signupDate: "2025-09-05", lastActive: "2026-01-04" },
-  { id: "usr_005", email: "fraudster@temp.com", name: "Unknown", balance: 0.00, totalSpend: 45.00, status: "blocked", signupDate: "2026-01-02", lastActive: "2026-01-02" },
-  { id: "usr_006", email: "david@consulting.com", name: "David Brown", balance: 28.90, totalSpend: 456.70, status: "active", signupDate: "2025-11-28", lastActive: "2026-01-05" },
-];
 
 const AdminUsers = () => {
   const [search, setSearch] = useState("");
-  const [users] = useState<User[]>(mockUsers);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserWithWallet | null>(null);
   const [walletDialogOpen, setWalletDialogOpen] = useState(false);
   const [walletAmount, setWalletAmount] = useState("");
   const [walletReason, setWalletReason] = useState("");
   const [walletAction, setWalletAction] = useState<"credit" | "debit">("credit");
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  // Fetch users with their wallet balances
+  const { data: users = [], isLoading } = useQuery({
+    queryKey: ["admin-users"],
+    queryFn: async () => {
+      // Fetch profiles
+      const { data: profiles, error: profilesError } = await supabase
+        .from("profiles")
+        .select("id, email, display_name, created_at")
+        .order("created_at", { ascending: false });
+
+      if (profilesError) throw profilesError;
+
+      // Fetch wallets
+      const { data: wallets, error: walletsError } = await supabase
+        .from("wallets")
+        .select("user_id, balance");
+
+      if (walletsError) throw walletsError;
+
+      // Combine data
+      const walletMap = new Map(wallets?.map(w => [w.user_id, w.balance]) || []);
+      
+      return (profiles || []).map(profile => ({
+        id: profile.id,
+        email: profile.email,
+        display_name: profile.display_name,
+        created_at: profile.created_at,
+        wallet_balance: walletMap.get(profile.id) || 0,
+      })) as UserWithWallet[];
+    },
+  });
+
+  // Wallet adjustment mutation
+  const walletMutation = useMutation({
+    mutationFn: async ({ userId, amount, type, reason }: { 
+      userId: string; 
+      amount: number; 
+      type: "credit" | "debit";
+      reason: string;
+    }) => {
+      // Get current wallet
+      const { data: wallet, error: walletError } = await supabase
+        .from("wallets")
+        .select("id, balance")
+        .eq("user_id", userId)
+        .single();
+
+      if (walletError) throw walletError;
+
+      const adjustedAmount = type === "credit" ? amount : -amount;
+      const newBalance = wallet.balance + adjustedAmount;
+
+      if (newBalance < 0) {
+        throw new Error("Insufficient balance for debit");
+      }
+
+      // Update wallet balance
+      const { error: updateError } = await supabase
+        .from("wallets")
+        .update({ balance: newBalance })
+        .eq("id", wallet.id);
+
+      if (updateError) throw updateError;
+
+      // Create transaction record
+      const { error: txError } = await supabase
+        .from("transactions")
+        .insert({
+          user_id: userId,
+          wallet_id: wallet.id,
+          amount: adjustedAmount,
+          type: "adjustment",
+          description: `Admin ${type}: ${reason}`,
+          status: "completed",
+        });
+
+      if (txError) throw txError;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+      toast({
+        title: `Wallet ${walletAction === "credit" ? "credited" : "debited"}`,
+        description: `$${walletAmount} ${walletAction === "credit" ? "added to" : "removed from"} ${selectedUser?.email}`,
+      });
+      setWalletDialogOpen(false);
+      setWalletAmount("");
+      setWalletReason("");
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   const filteredUsers = users.filter(
     (user) =>
-      user.email.toLowerCase().includes(search.toLowerCase()) ||
-      user.name.toLowerCase().includes(search.toLowerCase()) ||
+      (user.email?.toLowerCase() || "").includes(search.toLowerCase()) ||
+      (user.display_name?.toLowerCase() || "").includes(search.toLowerCase()) ||
       user.id.includes(search)
   );
 
   const handleWalletAction = () => {
     if (!selectedUser || !walletAmount || !walletReason) return;
     
-    toast({
-      title: `Wallet ${walletAction === "credit" ? "credited" : "debited"}`,
-      description: `$${walletAmount} ${walletAction === "credit" ? "added to" : "removed from"} ${selectedUser.email}`,
-    });
-    
-    setWalletDialogOpen(false);
-    setWalletAmount("");
-    setWalletReason("");
-  };
-
-  const handleSuspend = (user: User) => {
-    toast({
-      title: "User suspended",
-      description: `${user.email} has been suspended`,
+    walletMutation.mutate({
+      userId: selectedUser.id,
+      amount: parseFloat(walletAmount),
+      type: walletAction,
+      reason: walletReason,
     });
   };
 
-  const handleBlock = (user: User) => {
-    toast({
-      title: "User blocked",
-      description: `${user.email} has been blocked`,
-    });
-  };
-
-  const getStatusBadge = (status: User["status"]) => {
-    switch (status) {
-      case "active":
-        return <Badge variant="outline" className="bg-success/10 text-success border-success/20">Active</Badge>;
-      case "suspended":
-        return <Badge variant="outline" className="bg-warning/10 text-warning border-warning/20">Suspended</Badge>;
-      case "blocked":
-        return <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">Blocked</Badge>;
-    }
-  };
+  if (isLoading) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>
@@ -138,9 +209,7 @@ const AdminUsers = () => {
                 <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">User</th>
                 <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">ID</th>
                 <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">Balance</th>
-                <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">Total Spend</th>
-                <th className="text-center px-4 py-3 text-sm font-medium text-muted-foreground">Status</th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">Signup</th>
+                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">Joined</th>
                 <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">Actions</th>
               </tr>
             </thead>
@@ -149,27 +218,21 @@ const AdminUsers = () => {
                 <tr key={user.id} className="hover:bg-muted/30 transition-colors">
                   <td className="px-4 py-3">
                     <div>
-                      <p className="font-medium text-foreground">{user.name}</p>
-                      <p className="text-sm text-muted-foreground">{user.email}</p>
+                      <p className="font-medium text-foreground">{user.display_name || "No name"}</p>
+                      <p className="text-sm text-muted-foreground">{user.email || "No email"}</p>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm font-mono text-muted-foreground">
-                    {user.id}
+                    {user.id.slice(0, 8)}...
                   </td>
                   <td className={cn(
                     "px-4 py-3 text-right font-mono",
-                    user.balance > 0 ? "text-foreground" : "text-muted-foreground"
+                    user.wallet_balance > 0 ? "text-foreground" : "text-muted-foreground"
                   )}>
-                    ${user.balance.toFixed(2)}
-                  </td>
-                  <td className="px-4 py-3 text-right font-mono text-foreground">
-                    ${user.totalSpend.toFixed(2)}
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    {getStatusBadge(user.status)}
+                    ${user.wallet_balance.toFixed(2)}
                   </td>
                   <td className="px-4 py-3 text-sm text-muted-foreground">
-                    {user.signupDate}
+                    {new Date(user.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <DropdownMenu>
@@ -182,10 +245,6 @@ const AdminUsers = () => {
                         <DropdownMenuItem>
                           <Eye className="w-4 h-4 mr-2" />
                           View Details
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Mail className="w-4 h-4 mr-2" />
-                          Send Email
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem 
@@ -207,21 +266,6 @@ const AdminUsers = () => {
                         >
                           <CreditCard className="w-4 h-4 mr-2" />
                           Debit Wallet
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem 
-                          className="text-warning"
-                          onClick={() => handleSuspend(user)}
-                        >
-                          <Ban className="w-4 h-4 mr-2" />
-                          Suspend User
-                        </DropdownMenuItem>
-                        <DropdownMenuItem 
-                          className="text-destructive"
-                          onClick={() => handleBlock(user)}
-                        >
-                          <Ban className="w-4 h-4 mr-2" />
-                          Block User
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -284,9 +328,13 @@ const AdminUsers = () => {
             <Button 
               onClick={handleWalletAction}
               variant={walletAction === "credit" ? "default" : "destructive"}
-              disabled={!walletAmount || !walletReason}
+              disabled={!walletAmount || !walletReason || walletMutation.isPending}
             >
-              {walletAction === "credit" ? "Credit" : "Debit"} ${walletAmount || "0.00"}
+              {walletMutation.isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                `${walletAction === "credit" ? "Credit" : "Debit"} $${walletAmount || "0.00"}`
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

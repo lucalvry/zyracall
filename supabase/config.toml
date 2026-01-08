@@ -1,0 +1,22 @@
+project_id = "rixpasynhccgkoumpaan"
+
+[functions.create-checkout-session]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.twilio-token]
+verify_jwt = false
+
+[functions.twilio-voice]
+verify_jwt = false
+
+[functions.twilio-status-callback]
+verify_jwt = false
+
+[functions.twilio-recording-callback]
+verify_jwt = false
+
+[functions.send-notification]
+verify_jwt = false

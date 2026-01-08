@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
-import { Phone, Delete, Mic, MicOff } from "lucide-react";
+import { useState, useCallback, useEffect, useMemo } from "react";
+import { Phone, Delete, Mic, MicOff, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import CountryCodeSelector, { 
@@ -9,9 +9,32 @@ import CountryCodeSelector, {
 } from "./CountryCodeSelector";
 
 interface DialerProps {
-  onCall: (number: string, recordCall: boolean) => void;
+  onCall: (number: string, recordCall: boolean, countryCode: string) => void;
   disabled?: boolean;
 }
+
+// Phone number validation
+const validatePhoneNumber = (number: string, dialCode: string): { isValid: boolean; error?: string } => {
+  // Remove non-digits for validation
+  const digitsOnly = number.replace(/\D/g, '');
+  
+  if (digitsOnly.length < 5) {
+    return { isValid: false, error: 'Number too short' };
+  }
+  
+  if (digitsOnly.length > 15) {
+    return { isValid: false, error: 'Number too long' };
+  }
+  
+  // Check for valid E.164 format when combined with dial code
+  const fullNumber = dialCode + digitsOnly;
+  const e164Regex = /^\+[1-9]\d{6,14}$/;
+  if (!e164Regex.test(fullNumber)) {
+    return { isValid: false, error: 'Invalid format' };
+  }
+  
+  return { isValid: true };
+};
 
 const Dialer = ({ onCall, disabled }: DialerProps) => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -48,6 +71,12 @@ const Dialer = ({ onCall, disabled }: DialerProps) => {
     }
   }, [phoneNumber, selectedCountry.code]);
 
+  // Validate phone number
+  const validation = useMemo(() => 
+    validatePhoneNumber(phoneNumber, selectedCountry.dialCode),
+    [phoneNumber, selectedCountry.dialCode]
+  );
+
   const handleKeyPress = useCallback((key: string) => {
     setPhoneNumber((prev) => prev + key);
   }, []);
@@ -61,10 +90,10 @@ const Dialer = ({ onCall, disabled }: DialerProps) => {
   }, []);
 
   const handleCall = () => {
+    if (!validation.isValid) return;
+    
     const fullNumber = selectedCountry.dialCode + phoneNumber;
-    if (phoneNumber.length >= 5) {
-      onCall(fullNumber, recordCall);
-    }
+    onCall(fullNumber, recordCall, selectedCountry.code);
   };
 
   const handlePaste = async () => {
@@ -104,7 +133,10 @@ const Dialer = ({ onCall, disabled }: DialerProps) => {
             onSelect={handleCountrySelect}
           />
           <div 
-            className="flex-1 h-12 flex items-center px-4 rounded-xl bg-muted/50 border border-border cursor-text"
+            className={cn(
+              "flex-1 h-12 flex items-center px-4 rounded-xl bg-muted/50 border cursor-text transition-colors",
+              phoneNumber && !validation.isValid ? "border-destructive" : "border-border"
+            )}
             onClick={handlePaste}
           >
             <span className={cn(
@@ -115,6 +147,12 @@ const Dialer = ({ onCall, disabled }: DialerProps) => {
             </span>
           </div>
         </div>
+        {phoneNumber && !validation.isValid && (
+          <div className="flex items-center gap-1.5 mt-2 text-destructive">
+            <AlertCircle className="w-3.5 h-3.5" />
+            <span className="text-xs">{validation.error}</span>
+          </div>
+        )}
         <p className="text-xs text-muted-foreground text-center mt-2">
           Click number field to paste from clipboard
         </p>
@@ -171,7 +209,7 @@ const Dialer = ({ onCall, disabled }: DialerProps) => {
           variant="call"
           size="callBtn"
           onClick={handleCall}
-          disabled={disabled || phoneNumber.length < 5}
+          disabled={disabled || !validation.isValid}
           className="shadow-glow"
         >
           <Phone className="w-7 h-7" />

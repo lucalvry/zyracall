@@ -14,6 +14,8 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/zyracall-logo.png";
+import NotificationCenter from "@/components/notifications/NotificationCenter";
 
 const adminNavItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
@@ -30,16 +32,17 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen bg-muted/30">
       {/* Mobile Header */}
-      <header className="lg:hidden sticky top-0 z-40 h-14 border-b border-border bg-background flex items-center px-4">
-        <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)}>
-          <Menu className="w-5 h-5" />
-        </Button>
-        <div className="flex items-center gap-2 ml-3">
-          <div className="w-7 h-7 rounded bg-foreground flex items-center justify-center">
-            <Shield className="w-4 h-4 text-background" />
+      <header className="lg:hidden sticky top-0 z-40 h-14 border-b border-border bg-background flex items-center justify-between px-4">
+        <div className="flex items-center">
+          <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)}>
+            <Menu className="w-5 h-5" />
+          </Button>
+          <div className="flex items-center gap-2 ml-3">
+            <img src={logo} alt="ZyraCall" className="h-7 w-auto" />
+            <span className="font-semibold text-foreground">Admin</span>
           </div>
-          <span className="font-semibold text-foreground">ZyraCall Admin</span>
         </div>
+        <NotificationCenter />
       </header>
 
       {/* Mobile Sidebar Overlay */}
@@ -59,10 +62,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
           {/* Logo */}
           <div className="h-14 flex items-center justify-between px-4 border-b border-foreground/10">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded bg-primary flex items-center justify-center">
-                <Shield className="w-4 h-4 text-primary-foreground" />
-              </div>
-              <span className="font-semibold text-background">Admin Panel</span>
+              <img src={logo} alt="ZyraCall" className="h-8 w-auto" />
+              <span className="font-semibold text-background">Admin</span>
             </div>
             <Button 
               variant="ghost" 

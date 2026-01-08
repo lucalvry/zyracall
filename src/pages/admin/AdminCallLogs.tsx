@@ -8,7 +8,8 @@ import {
   Phone,
   Download,
   Eye,
-  Mic
+  Mic,
+  Loader2
 } from "lucide-react";
 import {
   Select,
@@ -19,52 +20,54 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-
-interface CallLog {
-  id: string;
-  userId: string;
-  userEmail: string;
-  destination: string;
-  country: string;
-  provider: string;
-  duration: string;
-  cost: number;
-  status: "completed" | "failed" | "no-answer" | "busy";
-  failureReason?: string;
-  hasRecording: boolean;
-  timestamp: string;
-}
-
-const mockCallLogs: CallLog[] = [
-  { id: "call_001", userId: "usr_001", userEmail: "john@company.com", destination: "+1 555 123 4567", country: "United States", provider: "Twilio", duration: "5:23", cost: 0.42, status: "completed", hasRecording: true, timestamp: "2026-01-05 14:32:15" },
-  { id: "call_002", userId: "usr_002", userEmail: "sarah@startup.io", destination: "+44 20 7946 0958", country: "United Kingdom", provider: "Telnyx", duration: "2:10", cost: 0.18, status: "completed", hasRecording: false, timestamp: "2026-01-05 14:28:42" },
-  { id: "call_003", userId: "usr_004", userEmail: "lisa@agency.co", destination: "+234 803 123 4567", country: "Nigeria", provider: "Twilio", duration: "0:00", cost: 0, status: "failed", failureReason: "Provider timeout", hasRecording: false, timestamp: "2026-01-05 14:15:08" },
-  { id: "call_004", userId: "usr_001", userEmail: "john@company.com", destination: "+49 30 123 4567", country: "Germany", provider: "Telnyx", duration: "0:45", cost: 0.08, status: "no-answer", hasRecording: false, timestamp: "2026-01-05 13:55:22" },
-  { id: "call_005", userId: "usr_006", userEmail: "david@consulting.com", destination: "+33 1 23 45 67 89", country: "France", provider: "Vonage", duration: "12:34", cost: 1.24, status: "completed", hasRecording: true, timestamp: "2026-01-05 13:42:55" },
-  { id: "call_006", userId: "usr_002", userEmail: "sarah@startup.io", destination: "+81 3 1234 5678", country: "Japan", provider: "Twilio", duration: "0:00", cost: 0, status: "busy", hasRecording: false, timestamp: "2026-01-05 12:30:18" },
-  { id: "call_007", userId: "usr_004", userEmail: "lisa@agency.co", destination: "+1 212 555 0199", country: "United States", provider: "Telnyx", duration: "8:15", cost: 0.68, status: "completed", hasRecording: true, timestamp: "2026-01-05 11:22:45" },
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const AdminCallLogs = () => {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [providerFilter, setProviderFilter] = useState<string>("all");
-  const [callLogs] = useState<CallLog[]>(mockCallLogs);
+
+  // Fetch call logs with user emails
+  const { data: callLogs = [], isLoading } = useQuery({
+    queryKey: ["admin-call-logs"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("call_logs")
+        .select("*")
+        .order("started_at", { ascending: false })
+        .limit(100);
+
+      if (error) throw error;
+
+      // Fetch user emails
+      const userIds = [...new Set((data || []).map(c => c.user_id))];
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id, email")
+        .in("id", userIds);
+
+      const emailMap = new Map(profiles?.map(p => [p.id, p.email]) || []);
+
+      return (data || []).map(log => ({
+        ...log,
+        user_email: emailMap.get(log.user_id) || "Unknown",
+      }));
+    },
+  });
 
   const filteredLogs = callLogs.filter((log) => {
     const matchesSearch = 
-      log.destination.includes(search) ||
-      log.userEmail.toLowerCase().includes(search.toLowerCase()) ||
-      log.country.toLowerCase().includes(search.toLowerCase()) ||
+      log.destination_number.includes(search) ||
+      log.user_email.toLowerCase().includes(search.toLowerCase()) ||
+      log.destination_country.toLowerCase().includes(search.toLowerCase()) ||
       log.id.includes(search);
     
     const matchesStatus = statusFilter === "all" || log.status === statusFilter;
-    const matchesProvider = providerFilter === "all" || log.provider === providerFilter;
     
-    return matchesSearch && matchesStatus && matchesProvider;
+    return matchesSearch && matchesStatus;
   });
 
-  const getStatusBadge = (status: CallLog["status"]) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case "completed":
         return <Badge variant="outline" className="bg-success/10 text-success border-success/20">Completed</Badge>;
@@ -74,8 +77,26 @@ const AdminCallLogs = () => {
         return <Badge variant="outline" className="bg-warning/10 text-warning border-warning/20">No Answer</Badge>;
       case "busy":
         return <Badge variant="outline" className="bg-muted text-muted-foreground border-border">Busy</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
     }
   };
+
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  if (isLoading) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>
@@ -118,18 +139,6 @@ const AdminCallLogs = () => {
             <SelectItem value="busy">Busy</SelectItem>
           </SelectContent>
         </Select>
-
-        <Select value={providerFilter} onValueChange={setProviderFilter}>
-          <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder="Provider" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Providers</SelectItem>
-            <SelectItem value="Twilio">Twilio</SelectItem>
-            <SelectItem value="Telnyx">Telnyx</SelectItem>
-            <SelectItem value="Vonage">Vonage</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
 
       {/* Call Logs Table */}
@@ -141,7 +150,6 @@ const AdminCallLogs = () => {
                 <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">Call ID</th>
                 <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">User</th>
                 <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">Destination</th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-muted-foreground">Provider</th>
                 <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">Duration</th>
                 <th className="text-right px-4 py-3 text-sm font-medium text-muted-foreground">Cost</th>
                 <th className="text-center px-4 py-3 text-sm font-medium text-muted-foreground">Status</th>
@@ -153,49 +161,41 @@ const AdminCallLogs = () => {
               {filteredLogs.map((log) => (
                 <tr key={log.id} className="hover:bg-muted/30 transition-colors">
                   <td className="px-4 py-3 text-sm font-mono text-muted-foreground">
-                    {log.id}
+                    {log.id.slice(0, 8)}...
                   </td>
                   <td className="px-4 py-3 text-sm text-foreground">
-                    {log.userEmail}
+                    {log.user_email}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
                       <Phone className="w-4 h-4 text-muted-foreground" />
                       <div>
-                        <p className="font-mono text-foreground">{log.destination}</p>
-                        <p className="text-xs text-muted-foreground">{log.country}</p>
+                        <p className="font-mono text-foreground">{log.destination_number}</p>
+                        <p className="text-xs text-muted-foreground">{log.destination_country}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-sm text-foreground">
-                    {log.provider}
-                  </td>
                   <td className="px-4 py-3 text-right font-mono text-foreground">
-                    {log.duration}
+                    {formatDuration(log.duration_seconds)}
                   </td>
                   <td className={cn(
                     "px-4 py-3 text-right font-mono",
-                    log.cost > 0 ? "text-foreground" : "text-muted-foreground"
+                    Number(log.cost) > 0 ? "text-foreground" : "text-muted-foreground"
                   )}>
-                    ${log.cost.toFixed(2)}
+                    ${Number(log.cost).toFixed(2)}
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <div className="flex flex-col items-center gap-1">
-                      {getStatusBadge(log.status)}
-                      {log.failureReason && (
-                        <span className="text-xs text-destructive">{log.failureReason}</span>
-                      )}
-                    </div>
+                    {getStatusBadge(log.status)}
                   </td>
                   <td className="px-4 py-3 text-sm text-muted-foreground">
-                    {log.timestamp}
+                    {new Date(log.started_at).toLocaleString()}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
                       <Button variant="ghost" size="iconSm">
                         <Eye className="w-4 h-4" />
                       </Button>
-                      {log.hasRecording && (
+                      {log.recording_url && (
                         <Button variant="ghost" size="iconSm">
                           <Mic className="w-4 h-4 text-primary" />
                         </Button>

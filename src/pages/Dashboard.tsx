@@ -9,8 +9,7 @@ import { useTwilioDevice, CallStatus } from "@/hooks/useTwilioDevice";
 import { useRealtimeWallet } from "@/hooks/useRealtimeWallet";
 import { useRealtimeCallLogs } from "@/hooks/useRealtimeCallLogs";
 import { useCallRates } from "@/hooks/useCallRates";
-import { useNotifications } from "@/hooks/useNotifications";
-import { Loader2, Phone, Bell } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Dashboard = () => {
@@ -25,16 +24,6 @@ const Dashboard = () => {
   const { toast } = useToast();
   const { data: wallet, isLoading: walletLoading } = useWallet();
   const { data: rates } = useCallRates();
-  const { createNotification } = useNotifications();
-
-  const handleTestNotification = useCallback(async () => {
-    await createNotification(
-      "test",
-      "Test Notification",
-      "This is a test notification to verify the system works! 🎉",
-      "/dashboard"
-    );
-  }, [createNotification]);
   
   // Twilio device hook
   const {
@@ -131,22 +120,11 @@ const Dashboard = () => {
     <DashboardLayout>
       <div className="p-6 lg:p-8">
         {/* Header */}
-        <div className="mb-8 flex items-start justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground mb-1">Make a call</h1>
-            <p className="text-muted-foreground">
-              Enter a phone number to start calling
-            </p>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleTestNotification}
-            className="gap-2"
-          >
-            <Bell className="h-4 w-4" />
-            Test Notification
-          </Button>
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-foreground mb-1">Make a call</h1>
+          <p className="text-muted-foreground">
+            Enter a phone number to start calling
+          </p>
         </div>
 
         {/* Twilio Status Indicator */}

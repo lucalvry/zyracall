@@ -23,6 +23,8 @@ export type Database = {
           duration_seconds: number
           ended_at: string | null
           id: string
+          profit: number
+          provider_cost: number
           rate_per_minute: number
           recording_url: string | null
           started_at: string
@@ -38,6 +40,8 @@ export type Database = {
           duration_seconds?: number
           ended_at?: string | null
           id?: string
+          profit?: number
+          provider_cost?: number
           rate_per_minute: number
           recording_url?: string | null
           started_at?: string
@@ -53,6 +57,8 @@ export type Database = {
           duration_seconds?: number
           ended_at?: string | null
           id?: string
+          profit?: number
+          provider_cost?: number
           rate_per_minute?: number
           recording_url?: string | null
           started_at?: string
@@ -64,36 +70,51 @@ export type Database = {
       }
       call_rates: {
         Row: {
+          base_cost_landline: number
+          base_cost_mobile: number
           country_code: string
           country_name: string
           created_at: string
           currency: string
+          fallback_provider: string | null
           id: string
           is_active: boolean
           landline_rate: number
+          markup_percentage: number
           mobile_rate: number
+          provider: string
           updated_at: string
         }
         Insert: {
+          base_cost_landline?: number
+          base_cost_mobile?: number
           country_code: string
           country_name: string
           created_at?: string
           currency?: string
+          fallback_provider?: string | null
           id?: string
           is_active?: boolean
           landline_rate: number
+          markup_percentage?: number
           mobile_rate: number
+          provider?: string
           updated_at?: string
         }
         Update: {
+          base_cost_landline?: number
+          base_cost_mobile?: number
           country_code?: string
           country_name?: string
           created_at?: string
           currency?: string
+          fallback_provider?: string | null
           id?: string
           is_active?: boolean
           landline_rate?: number
+          markup_percentage?: number
           mobile_rate?: number
+          provider?: string
           updated_at?: string
         }
         Relationships: []

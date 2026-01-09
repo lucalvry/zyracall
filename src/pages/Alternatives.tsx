@@ -186,6 +186,20 @@ const Alternatives = () => {
                   </Link>
                 ))}
               </div>
+
+              {/* Cross-link to Comparisons */}
+              <div className="mt-12 text-center">
+                <p className="text-muted-foreground mb-4">
+                  Want to see detailed side-by-side feature comparisons?
+                </p>
+                <Link 
+                  to="/compare" 
+                  className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
+                >
+                  View all service comparisons
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
           </section>
 

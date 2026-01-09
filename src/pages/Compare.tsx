@@ -147,6 +147,20 @@ const Compare = () => {
                   <CompetitorCard key={competitor.slug} {...competitor} />
                 ))}
               </div>
+
+              {/* Cross-link to Alternatives */}
+              <div className="mt-12 text-center">
+                <p className="text-muted-foreground mb-4">
+                  Looking for a complete replacement for your current calling app?
+                </p>
+                <Link 
+                  to="/alternatives" 
+                  className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
+                >
+                  View all calling app alternatives
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </div>
             </div>
           </section>
 

@@ -21,6 +21,7 @@ import ZyraCallVsGoogleVoice from "./pages/compare/ZyraCallVsGoogleVoice";
 import ZyraCallVsRebtel from "./pages/compare/ZyraCallVsRebtel";
 import ZyraCallVsTalk360 from "./pages/compare/ZyraCallVsTalk360";
 import ZyraCallVsVonage from "./pages/compare/ZyraCallVsVonage";
+import ZyraCallVsYadaPhone from "./pages/compare/ZyraCallVsYadaPhone";
 import Alternatives from "./pages/Alternatives";
 import SkypeAlternative from "./pages/alternatives/SkypeAlternative";
 import WhatsAppAlternative from "./pages/alternatives/WhatsAppAlternative";
@@ -87,6 +88,7 @@ const App = () => {
               <Route path="/compare/zyracall-vs-google-voice" element={<ZyraCallVsGoogleVoice />} />
               <Route path="/compare/zyracall-vs-rebtel" element={<ZyraCallVsRebtel />} />
               <Route path="/compare/zyracall-vs-talk360" element={<ZyraCallVsTalk360 />} />
+              <Route path="/compare/zyracall-vs-yadaphone" element={<ZyraCallVsYadaPhone />} />
               <Route path="/compare/zyracall-vs-vonage" element={<ZyraCallVsVonage />} />
               
               {/* Alternative Pages */}

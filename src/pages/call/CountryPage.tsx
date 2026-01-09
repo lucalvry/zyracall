@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import SEOHead, { organizationSchema } from "@/components/seo/SEOHead";
+import RelatedContent from "@/components/seo/RelatedContent";
 import { useCallRates, getCountryFlag } from "@/hooks/useCallRates";
 
 // Convert URL slug back to country name for matching
@@ -343,41 +344,61 @@ const CountryPage = () => {
                 </div>
               </section>
 
-              {/* Related Countries */}
-              {relatedCountries.length > 0 && (
-                <section className="py-12">
-                  <div className="container mx-auto px-4">
-                    <h2 className="text-2xl font-bold mb-6">
-                      Other Popular Destinations
-                    </h2>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {relatedCountries.map((r) => (
-                        <Link
-                          key={r.id}
-                          to={`/call/${toSlug(r.country_name)}`}
-                          className="group"
-                        >
-                          <Card className="hover:border-primary/50 transition-all">
-                            <CardContent className="p-4 flex items-center gap-3">
-                              <span className="text-2xl">
-                                {getCountryFlag(r.country_name)}
-                              </span>
-                              <div>
-                                <p className="font-medium text-sm group-hover:text-primary transition-colors">
-                                  {r.country_name}
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                  From ${Math.min(r.mobile_rate, r.landline_rate).toFixed(2)}/min
-                                </p>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </Link>
-                      ))}
+              {/* Related Countries & Resources */}
+              <section className="py-12">
+                <div className="container mx-auto px-4">
+                  <div className="grid lg:grid-cols-4 gap-8">
+                    {/* Related Countries */}
+                    {relatedCountries.length > 0 && (
+                      <div className="lg:col-span-3">
+                        <h2 className="text-2xl font-bold mb-6">
+                          Other Popular Destinations
+                        </h2>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          {relatedCountries.map((r) => (
+                            <Link
+                              key={r.id}
+                              to={`/call/${toSlug(r.country_name)}`}
+                              className="group"
+                            >
+                              <Card className="hover:border-primary/50 transition-all">
+                                <CardContent className="p-4 flex items-center gap-3">
+                                  <span className="text-2xl">
+                                    {getCountryFlag(r.country_name)}
+                                  </span>
+                                  <div>
+                                    <p className="font-medium text-sm group-hover:text-primary transition-colors">
+                                      {r.country_name}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                      From ${Math.min(r.mobile_rate, r.landline_rate).toFixed(2)}/min
+                                    </p>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Related Resources Sidebar */}
+                    <div className="lg:col-span-1">
+                      <RelatedContent
+                        comparisons={[
+                          { title: "vs Skype", href: "/compare/zyracall-vs-skype" },
+                          { title: "vs Google Voice", href: "/compare/zyracall-vs-google-voice" },
+                        ]}
+                        articles={[
+                          { title: "International Calling Guide", href: "/blog/international-calling-guide" },
+                          { title: "Save Money on Calls", href: "/blog/save-money-international-calls-2025" },
+                        ]}
+                        showRateCalculator={true}
+                      />
                     </div>
                   </div>
-                </section>
-              )}
+                </div>
+              </section>
             </>
           ) : null}
         </main>

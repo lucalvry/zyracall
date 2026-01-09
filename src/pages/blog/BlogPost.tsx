@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import SEOHead, { organizationSchema } from "@/components/seo/SEOHead";
+import RelatedContent from "@/components/seo/RelatedContent";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -328,8 +329,27 @@ const BlogPost = () => {
             </header>
 
             {/* Article Content */}
-            <div className="prose prose-lg dark:prose-invert max-w-none">
-              {post.content}
+            <div className="grid lg:grid-cols-4 gap-8">
+              <div className="lg:col-span-3 prose prose-lg dark:prose-invert max-w-none">
+                {post.content}
+              </div>
+
+              {/* Sidebar with Related Content */}
+              <aside className="lg:col-span-1">
+                <div className="lg:sticky lg:top-24">
+                  <RelatedContent
+                    countries={[
+                      { title: "Call India", href: "/call/india" },
+                      { title: "Call UK", href: "/call/uk" },
+                      { title: "Call Philippines", href: "/call/philippines" },
+                    ]}
+                    comparisons={[
+                      { title: "vs Skype", href: "/compare/zyracall-vs-skype" },
+                      { title: "vs Google Voice", href: "/compare/zyracall-vs-google-voice" },
+                    ]}
+                  />
+                </div>
+              </aside>
             </div>
 
             {/* Related Articles */}

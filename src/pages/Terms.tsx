@@ -1,14 +1,19 @@
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/seo/SEOHead";
 
 const Terms = () => {
   return (
     <>
-      <Helmet>
-        <title>Terms of Service - ZyraCall</title>
-        <meta name="description" content="ZyraCall terms of service. Read our terms and conditions for using the ZyraCall calling platform." />
-      </Helmet>
+      <SEOHead
+        title="Terms of Service - ZyraCall"
+        description="ZyraCall terms of service. Read our terms and conditions for using the ZyraCall calling platform."
+        canonicalUrl="https://zyracall.com/terms"
+        noIndex={true}
+        ogImageTitle="Terms of Service"
+        ogImageSubtitle="ZyraCall platform terms"
+        ogImageType="default"
+      />
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 pt-20">

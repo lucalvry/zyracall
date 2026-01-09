@@ -1,65 +1,85 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, X, Globe, Monitor, CreditCard, Shield, Zap, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
+import SEOHead, { generateAlternativeSchema } from "@/components/seo/SEOHead";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+
+const benefits = [
+  {
+    icon: Monitor,
+    title: "Pure Browser Experience",
+    description: "No app to download or sync. Open your browser and start calling instantly.",
+  },
+  {
+    icon: CreditCard,
+    title: "Transparent Pricing",
+    description: "Clear per-minute rates. No hidden fees, no Viber Out credits that expire.",
+  },
+  {
+    icon: Globe,
+    title: "200+ Countries",
+    description: "Competitive rates to call landlines and mobiles worldwide.",
+  },
+  {
+    icon: Shield,
+    title: "Secure Calls",
+    description: "Enterprise-grade encryption protects every conversation.",
+  },
+  {
+    icon: Zap,
+    title: "HD Quality",
+    description: "WebRTC technology ensures crystal-clear audio quality.",
+  },
+  {
+    icon: Clock,
+    title: "No Expiry",
+    description: "Your credit balance never expires. Use it when you need it.",
+  },
+];
+
+const comparisonPoints = [
+  { feature: "No app installation", zyra: true, viber: false },
+  { feature: "Browser-based calling", zyra: true, viber: false },
+  { feature: "Credits never expire", zyra: true, viber: false },
+  { feature: "No phone sync required", zyra: true, viber: false },
+  { feature: "Works on any device", zyra: true, viber: true },
+  { feature: "Call real numbers", zyra: true, viber: true },
+  { feature: "HD voice quality", zyra: true, viber: true },
+];
+
+const breadcrumbs = [
+  { name: "Home", url: "https://zyracall.com" },
+  { name: "Alternatives", url: "https://zyracall.com/alternatives" },
+  { name: "Viber Out Alternative", url: "https://zyracall.com/alternatives/viber-out-alternative" },
+];
 
 const ViberAlternative = () => {
-  const benefits = [
-    {
-      icon: Monitor,
-      title: "Pure Browser Experience",
-      description: "No app to download or sync. Open your browser and start calling instantly.",
-    },
-    {
-      icon: CreditCard,
-      title: "Transparent Pricing",
-      description: "Clear per-minute rates. No hidden fees, no Viber Out credits that expire.",
-    },
-    {
-      icon: Globe,
-      title: "200+ Countries",
-      description: "Competitive rates to call landlines and mobiles worldwide.",
-    },
-    {
-      icon: Shield,
-      title: "Secure Calls",
-      description: "Enterprise-grade encryption protects every conversation.",
-    },
-    {
-      icon: Zap,
-      title: "HD Quality",
-      description: "WebRTC technology ensures crystal-clear audio quality.",
-    },
-    {
-      icon: Clock,
-      title: "No Expiry",
-      description: "Your credit balance never expires. Use it when you need it.",
-    },
-  ];
-
-  const comparisonPoints = [
-    { feature: "No app installation", zyra: true, viber: false },
-    { feature: "Browser-based calling", zyra: true, viber: false },
-    { feature: "Credits never expire", zyra: true, viber: false },
-    { feature: "No phone sync required", zyra: true, viber: false },
-    { feature: "Works on any device", zyra: true, viber: true },
-    { feature: "Call real numbers", zyra: true, viber: true },
-    { feature: "HD voice quality", zyra: true, viber: true },
-  ];
-
   return (
     <>
-      <Helmet>
-        <title>Viber Out Alternative: Browser-Based International Calling | ZyraCall</title>
-        <meta 
-          name="description" 
-          content="Looking for a Viber Out alternative? ZyraCall offers browser-based calling to 200+ countries. No app needed, no credit expiry, transparent per-minute pricing." 
-        />
-        <meta name="keywords" content="Viber Out alternative, Viber alternative, browser calling, international calls, no app" />
-        <link rel="canonical" href="https://zyracall.com/alternatives/viber-out-alternative" />
-      </Helmet>
+      <SEOHead
+        title="Viber Out Alternative: Browser-Based International Calling | ZyraCall"
+        description="Looking for a Viber Out alternative? ZyraCall offers browser-based calling to 200+ countries. No app needed, no credit expiry, transparent per-minute pricing."
+        canonicalUrl="https://zyracall.com/alternatives/viber-out-alternative"
+        keywords="Viber Out alternative, Viber alternative, browser calling, international calls, no app, no credit expiry"
+        breadcrumbs={breadcrumbs}
+        ogImageTitle="Viber Out Alternative"
+        ogImageSubtitle="No app needed, credits never expire"
+        ogImageType="alternative"
+        structuredData={generateAlternativeSchema(
+          "Viber Out",
+          "https://zyracall.com/alternatives/viber-out-alternative",
+          "Browser-based international calling service as a Viber Out alternative"
+        )}
+      />
 
       <div className="min-h-screen bg-background">
         <Header />
@@ -68,29 +88,51 @@ const ViberAlternative = () => {
           {/* Hero */}
           <section className="pt-24 pb-16 lg:pt-32 lg:pb-24 bg-gradient-to-b from-primary/5 to-background">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="max-w-4xl mx-auto text-center">
-                <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-                  Viber Out Alternative
-                </span>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-                  Better Than{" "}
-                  <span className="text-primary">Viber Out</span>
-                  {" "}for International Calls
-                </h1>
-                <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                  Skip the app, skip the expiring credits. ZyraCall gives you instant browser-based 
-                  calling with transparent pricing and credits that never expire.
-                </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Button asChild size="xl" variant="hero">
-                    <Link to="/signup">
-                      Try ZyraCall Free
-                      <ArrowRight className="w-5 h-5" />
-                    </Link>
-                  </Button>
-                  <Button asChild size="xl" variant="heroOutline">
-                    <Link to="/rates">Compare Rates</Link>
-                  </Button>
+              <div className="max-w-4xl mx-auto">
+                <Breadcrumb className="mb-8">
+                  <BreadcrumbList>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link to="/">Home</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link to="/alternatives">Alternatives</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>Viber Out Alternative</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+                
+                <div className="text-center">
+                  <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+                    Viber Out Alternative
+                  </span>
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+                    Better Than{" "}
+                    <span className="text-primary">Viber Out</span>
+                    {" "}for International Calls
+                  </h1>
+                  <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+                    Skip the app, skip the expiring credits. ZyraCall gives you instant browser-based 
+                    calling with transparent pricing and credits that never expire.
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Button asChild size="xl" variant="hero">
+                      <Link to="/signup">
+                        Try ZyraCall Free
+                        <ArrowRight className="w-5 h-5" />
+                      </Link>
+                    </Button>
+                    <Button asChild size="xl" variant="heroOutline">
+                      <Link to="/rates">Compare Rates</Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -104,13 +146,13 @@ const ViberAlternative = () => {
               </h2>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
                 {benefits.map((benefit, index) => (
-                  <div key={index} className="bg-card border border-border rounded-2xl p-6">
+                  <article key={index} className="bg-card border border-border rounded-2xl p-6">
                     <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                       <benefit.icon className="w-6 h-6 text-primary" />
                     </div>
                     <h3 className="text-lg font-semibold mb-2">{benefit.title}</h3>
                     <p className="text-muted-foreground text-sm">{benefit.description}</p>
-                  </div>
+                  </article>
                 ))}
               </div>
             </div>

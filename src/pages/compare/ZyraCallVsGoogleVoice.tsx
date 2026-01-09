@@ -4,7 +4,15 @@ import ComparisonTable, { ComparisonFeature } from "@/components/compare/Compari
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Phone } from "lucide-react";
-import { Helmet } from "react-helmet-async";
+import SEOHead, { generateComparisonSchema } from "@/components/seo/SEOHead";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const features: ComparisonFeature[] = [
   { feature: "Browser-based (no download)", zyracall: true, competitor: true },
@@ -19,17 +27,31 @@ const features: ComparisonFeature[] = [
   { feature: "Voicemail transcription", zyracall: false, competitor: true },
 ];
 
+const breadcrumbs = [
+  { name: "Home", url: "https://zyracall.com" },
+  { name: "Compare", url: "https://zyracall.com/compare" },
+  { name: "ZyraCall vs Google Voice", url: "https://zyracall.com/compare/zyracall-vs-google-voice" },
+];
+
 const ZyraCallVsGoogleVoice = () => {
   return (
     <>
-      <Helmet>
-        <title>ZyraCall vs Google Voice: International Calling Comparison | 2024</title>
-        <meta 
-          name="description" 
-          content="Compare ZyraCall vs Google Voice for international calls. ZyraCall works globally with no US number required and offers transparent pay-as-you-go pricing." 
-        />
-        <link rel="canonical" href="https://zyracall.com/compare/zyracall-vs-google-voice" />
-      </Helmet>
+      <SEOHead
+        title="ZyraCall vs Google Voice: International Calling Comparison | 2026"
+        description="Compare ZyraCall vs Google Voice for international calls. ZyraCall works globally with no US number required and offers transparent pay-as-you-go pricing."
+        canonicalUrl="https://zyracall.com/compare/zyracall-vs-google-voice"
+        keywords="ZyraCall vs Google Voice, Google Voice alternative, international calling, global VoIP, no US number required"
+        ogImageTitle="ZyraCall vs Google Voice"
+        ogImageSubtitle="Global Calling Compared"
+        ogImageType="comparison"
+        breadcrumbs={breadcrumbs}
+        structuredData={generateComparisonSchema(
+          "Google Voice",
+          "https://zyracall.com/compare/zyracall-vs-google-voice",
+          "Browser-based international calling available worldwide",
+          "US-based calling service with SMS and voicemail"
+        )}
+      />
 
       <div className="min-h-screen flex flex-col">
         <Header />
@@ -39,13 +61,25 @@ const ZyraCallVsGoogleVoice = () => {
             <div className="absolute inset-0 gradient-mesh" />
             <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
               <div className="max-w-4xl mx-auto">
-                <nav className="text-sm text-muted-foreground mb-8">
-                  <Link to="/" className="hover:text-foreground">Home</Link>
-                  <span className="mx-2">/</span>
-                  <Link to="/compare" className="hover:text-foreground">Compare</Link>
-                  <span className="mx-2">/</span>
-                  <span className="text-foreground">ZyraCall vs Google Voice</span>
-                </nav>
+                <Breadcrumb className="mb-8">
+                  <BreadcrumbList>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link to="/">Home</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link to="/compare">Compare</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>ZyraCall vs Google Voice</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
 
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-4 mb-8">

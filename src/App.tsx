@@ -34,7 +34,11 @@ import Terms from "./pages/Terms";
 import CookiePolicy from "./pages/CookiePolicy";
 import GDPR from "./pages/GDPR";
 import Blog from "./pages/Blog";
+import InternationalCallingGuide from "./pages/blog/InternationalCallingGuide";
+import BlogPost from "./pages/blog/BlogPost";
 import Careers from "./pages/Careers";
+import CallHub from "./pages/CallHub";
+import CountryPage from "./pages/call/CountryPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminCallLogs from "./pages/admin/AdminCallLogs";
@@ -44,9 +48,9 @@ import AdminSettings from "./pages/admin/AdminSettings";
 import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
 
+const queryClient = new QueryClient();
+
 const App = () => {
-  const queryClient = new QueryClient();
-  
   return (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
@@ -69,7 +73,13 @@ const App = () => {
               <Route path="/cookies" element={<CookiePolicy />} />
               <Route path="/gdpr" element={<GDPR />} />
               <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/international-calling-guide" element={<InternationalCallingGuide />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/careers" element={<Careers />} />
+              
+              {/* Country Calling Guides */}
+              <Route path="/call" element={<CallHub />} />
+              <Route path="/call/:country" element={<CountryPage />} />
               
               {/* Comparison Pages */}
               <Route path="/compare" element={<Compare />} />

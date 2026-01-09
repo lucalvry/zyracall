@@ -4,7 +4,15 @@ import ComparisonTable, { ComparisonFeature } from "@/components/compare/Compari
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Phone } from "lucide-react";
-import { Helmet } from "react-helmet-async";
+import SEOHead, { generateComparisonSchema } from "@/components/seo/SEOHead";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const features: ComparisonFeature[] = [
   { feature: "Browser-based (no download)", zyracall: true, competitor: false },
@@ -19,17 +27,31 @@ const features: ComparisonFeature[] = [
   { feature: "Team messaging", zyracall: false, competitor: true },
 ];
 
+const breadcrumbs = [
+  { name: "Home", url: "https://zyracall.com" },
+  { name: "Compare", url: "https://zyracall.com/compare" },
+  { name: "ZyraCall vs Vonage", url: "https://zyracall.com/compare/zyracall-vs-vonage" },
+];
+
 const ZyraCallVsVonage = () => {
   return (
     <>
-      <Helmet>
-        <title>ZyraCall vs Vonage: Simple Calling vs Enterprise | 2024</title>
-        <meta 
-          name="description" 
-          content="Compare ZyraCall vs Vonage for international calls. ZyraCall offers simple browser-based calling for individuals while Vonage focuses on enterprise solutions." 
-        />
-        <link rel="canonical" href="https://zyracall.com/compare/zyracall-vs-vonage" />
-      </Helmet>
+      <SEOHead
+        title="ZyraCall vs Vonage: Simple Calling vs Enterprise | 2026"
+        description="Compare ZyraCall vs Vonage for international calls. ZyraCall offers simple browser-based calling for individuals while Vonage focuses on enterprise solutions."
+        canonicalUrl="https://zyracall.com/compare/zyracall-vs-vonage"
+        keywords="ZyraCall vs Vonage, Vonage alternative, simple VoIP, individual calling, browser calling"
+        ogImageTitle="ZyraCall vs Vonage"
+        ogImageSubtitle="Simple vs Enterprise"
+        ogImageType="comparison"
+        breadcrumbs={breadcrumbs}
+        structuredData={generateComparisonSchema(
+          "Vonage",
+          "https://zyracall.com/compare/zyracall-vs-vonage",
+          "Simple browser-based calling for individuals and small businesses",
+          "Enterprise communications platform with video and messaging"
+        )}
+      />
 
       <div className="min-h-screen flex flex-col">
         <Header />
@@ -39,13 +61,25 @@ const ZyraCallVsVonage = () => {
             <div className="absolute inset-0 gradient-mesh" />
             <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
               <div className="max-w-4xl mx-auto">
-                <nav className="text-sm text-muted-foreground mb-8">
-                  <Link to="/" className="hover:text-foreground">Home</Link>
-                  <span className="mx-2">/</span>
-                  <Link to="/compare" className="hover:text-foreground">Compare</Link>
-                  <span className="mx-2">/</span>
-                  <span className="text-foreground">ZyraCall vs Vonage</span>
-                </nav>
+                <Breadcrumb className="mb-8">
+                  <BreadcrumbList>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link to="/">Home</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link to="/compare">Compare</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>ZyraCall vs Vonage</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
 
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-4 mb-8">

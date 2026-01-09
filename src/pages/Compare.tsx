@@ -1,7 +1,16 @@
+import { Link } from "react-router-dom";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import CompetitorCard from "@/components/compare/CompetitorCard";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/seo/SEOHead";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const competitors = [
   {
@@ -36,21 +45,80 @@ const competitors = [
   },
 ];
 
+const generateCompareSchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "Compare ZyraCall - See How We Stack Up",
+  description: "Compare ZyraCall with Skype, Google Voice, Rebtel, and other international calling services.",
+  url: "https://zyracall.com/compare",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: competitors.map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: `ZyraCall vs ${c.name}`,
+      url: `https://zyracall.com/compare/zyracall-vs-${c.slug}`,
+    })),
+  },
+});
+
+const generateBreadcrumbSchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://zyracall.com",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Compare",
+      item: "https://zyracall.com/compare",
+    },
+  ],
+});
+
 const Compare = () => {
   return (
     <>
-      <Helmet>
-        <title>Compare ZyraCall - See How We Stack Up | ZyraCall</title>
-        <meta 
-          name="description" 
-          content="Compare ZyraCall with Skype, Google Voice, Rebtel, and other international calling services. See why ZyraCall offers the best value for browser-based global calling." 
-        />
-        <link rel="canonical" href="https://zyracall.com/compare" />
-      </Helmet>
+      <SEOHead
+        title="Compare ZyraCall - See How We Stack Up | ZyraCall"
+        description="Compare ZyraCall with Skype, Google Voice, Rebtel, and other international calling services. See why ZyraCall offers the best value for browser-based global calling."
+        canonicalUrl="https://zyracall.com/compare"
+        keywords="ZyraCall vs Skype, ZyraCall vs Google Voice, compare calling apps, international calling comparison, best calling app"
+        ogImageTitle="Compare ZyraCall"
+        ogImageSubtitle="See How We Stack Up Against the Competition"
+        ogImageType="comparison"
+        breadcrumbs={[
+          { name: "Home", url: "https://zyracall.com" },
+          { name: "Compare", url: "https://zyracall.com/compare" },
+        ]}
+        structuredData={generateCompareSchema()}
+      />
 
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 pt-20">
+          {/* Breadcrumb Navigation */}
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to="/">Home</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Compare</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+
           {/* Hero */}
           <section className="relative py-16 lg:py-24 overflow-hidden">
             <div className="absolute inset-0 gradient-mesh" />
@@ -59,7 +127,7 @@ const Compare = () => {
                 <span className="inline-block text-accent font-medium text-sm tracking-wide uppercase mb-4">
                   Comparisons
                 </span>
-                <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6 tracking-tight">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight">
                   How ZyraCall compares to{" "}
                   <span className="gradient-text-accent">the competition</span>
                 </h1>

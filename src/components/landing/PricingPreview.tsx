@@ -1,15 +1,7 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
-const rates = [
-  { country: "United States", flag: "🇺🇸", landline: "$0.01", mobile: "$0.02" },
-  { country: "United Kingdom", flag: "🇬🇧", landline: "$0.01", mobile: "$0.02" },
-  { country: "India", flag: "🇮🇳", landline: "$0.02", mobile: "$0.02" },
-  { country: "Nigeria", flag: "🇳🇬", landline: "$0.08", mobile: "$0.10" },
-  { country: "Philippines", flag: "🇵🇭", landline: "$0.05", mobile: "$0.08" },
-  { country: "Germany", flag: "🇩🇪", landline: "$0.01", mobile: "$0.02" },
-];
+import RateCalculator from "@/components/rates/RateCalculator";
 
 const PricingPreview = () => {
   return (
@@ -20,7 +12,7 @@ const PricingPreview = () => {
       
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="inline-block text-accent font-medium text-sm tracking-wide uppercase mb-4">
             Transparent Pricing
           </span>
@@ -33,42 +25,12 @@ const PricingPreview = () => {
           </p>
         </div>
 
-        {/* Rates Table */}
-        <div className="max-w-3xl mx-auto mb-12">
-          <div className="bg-card border border-border/50 rounded-2xl shadow-card overflow-hidden">
-            {/* Table Header */}
-            <div className="grid grid-cols-4 gap-4 px-6 py-4 bg-muted/50 border-b border-border/50 text-sm font-medium text-muted-foreground">
-              <div className="col-span-2">Country</div>
-              <div className="text-right">Landline</div>
-              <div className="text-right">Mobile</div>
-            </div>
-
-            {/* Table Rows */}
-            {rates.map((rate, index) => (
-              <div 
-                key={rate.country}
-                className={`grid grid-cols-4 gap-4 px-6 py-4 items-center hover:bg-muted/30 transition-colors ${
-                  index !== rates.length - 1 ? "border-b border-border/30" : ""
-                }`}
-              >
-                <div className="col-span-2 flex items-center gap-3">
-                  <span className="text-2xl">{rate.flag}</span>
-                  <span className="font-medium text-foreground">{rate.country}</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-foreground font-medium">{rate.landline}</span>
-                  <span className="text-muted-foreground text-sm">/min</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-foreground font-medium">{rate.mobile}</span>
-                  <span className="text-muted-foreground text-sm">/min</span>
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* Rate Calculator */}
+        <div className="max-w-lg mx-auto mb-12">
+          <RateCalculator />
         </div>
 
-        {/* CTA */}
+        {/* Secondary CTA */}
         <div className="text-center">
           <Button 
             variant="outline"
@@ -77,7 +39,7 @@ const PricingPreview = () => {
             asChild
           >
             <Link to="/rates">
-              View All Rates
+              View All Country Rates
               <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
             </Link>
           </Button>

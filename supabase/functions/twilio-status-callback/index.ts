@@ -56,11 +56,32 @@ serve(async (req) => {
     }
 
     // Get the call rate for base cost calculation
-    const { data: rateData } = await supabase
+    // First try by country name (most reliable), then fall back to dial code
+    let rateData = null;
+    
+    const { data: rateByName } = await supabase
       .from('call_rates')
       .select('base_cost_mobile, base_cost_landline')
-      .eq('country_code', callLog.destination_country_code)
-      .single();
+      .eq('country_name', callLog.destination_country)
+      .maybeSingle();
+    
+    if (rateByName) {
+      rateData = rateByName;
+    } else {
+      // Fall back to dial code lookup
+      const { data: rateByCode } = await supabase
+        .from('call_rates')
+        .select('base_cost_mobile, base_cost_landline')
+        .eq('country_code', callLog.destination_country_code)
+        .maybeSingle();
+      rateData = rateByCode;
+    }
+    
+    console.log('Rate lookup result:', { 
+      country: callLog.destination_country, 
+      dialCode: callLog.destination_country_code,
+      rateData 
+    });
 
     // Map Twilio status to our status
     const statusMap: Record<string, string> = {

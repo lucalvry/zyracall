@@ -94,15 +94,38 @@ export const useRateByCountry = (countryCode: string) => {
         .eq("country_code", countryCode)
         .eq("is_active", true)
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (error) {
-        if (error.code === "PGRST116") return null;
         throw error;
       }
 
-      return data as CallRate;
+      return data as CallRate | null;
     },
     enabled: !!countryCode,
+  });
+};
+
+export const useRateByCountryName = (countryName: string) => {
+  return useQuery({
+    queryKey: ["call-rate-name", countryName],
+    queryFn: async (): Promise<CallRate | null> => {
+      if (!countryName) return null;
+
+      const { data, error } = await supabase
+        .from("call_rates")
+        .select("*")
+        .eq("country_name", countryName)
+        .eq("is_active", true)
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        throw error;
+      }
+
+      return data as CallRate | null;
+    },
+    enabled: !!countryName,
   });
 };

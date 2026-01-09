@@ -1,37 +1,54 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Phone, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Phone, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/zyracall-logo.png";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const { signIn, signInWithGoogle, user } = useAuth();
+  const { signIn, signInWithGoogle, user, isLoading } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect if already logged in
+  // Redirect if already logged in (only after auth state is resolved)
   useEffect(() => {
-    if (user) {
-      navigate("/dashboard", { replace: true });
-    }
-  }, [user, navigate]);
+    const checkAuth = async () => {
+      if (!isLoading && user) {
+        // Double-check with Supabase that session is valid
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          navigate("/dashboard", { replace: true });
+        }
+      }
+    };
+    checkAuth();
+  }, [user, isLoading, navigate]);
+
+  // Show loading while auth state is resolving
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsSubmitting(true);
     
     const { error } = await signIn(email, password);
     
-    setIsLoading(false);
+    setIsSubmitting(false);
     
     if (error) {
       toast({
@@ -160,8 +177,8 @@ const Login = () => {
               </Link>
             </div>
 
-            <Button type="submit" size="lg" className="w-full" disabled={isLoading}>
-              {isLoading ? "Logging in..." : "Log in"}
+            <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "Logging in..." : "Log in"}
             </Button>
           </form>
 

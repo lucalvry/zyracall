@@ -1,9 +1,17 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { ArrowRight, Globe, Phone, Monitor, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
+import SEOHead from "@/components/seo/SEOHead";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const alternatives = [
   {
@@ -40,25 +48,83 @@ const alternatives = [
   },
 ];
 
+const generateAlternativesSchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "Best Calling App Alternatives",
+  description: "Looking for alternatives to Skype, WhatsApp, Viber, or Google Voice? ZyraCall offers browser-based international calling.",
+  url: "https://zyracall.com/alternatives",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: alternatives.map((a, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: `${a.name} Alternative`,
+      url: `https://zyracall.com/alternatives/${a.slug}`,
+    })),
+  },
+});
+
+const generateBreadcrumbSchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://zyracall.com",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Alternatives",
+      item: "https://zyracall.com/alternatives",
+    },
+  ],
+});
+
 const Alternatives = () => {
   return (
     <>
-      <Helmet>
-        <title>Best Calling App Alternatives | ZyraCall</title>
-        <meta 
-          name="description" 
-          content="Looking for alternatives to Skype, WhatsApp, Viber, or Google Voice? ZyraCall offers browser-based international calling with no app downloads and pay-as-you-go pricing." 
-        />
-        <meta name="keywords" content="Skype alternative, WhatsApp alternative, Viber alternative, Google Voice alternative, international calling" />
-        <link rel="canonical" href="https://zyracall.com/alternatives" />
-      </Helmet>
+      <SEOHead
+        title="Best Calling App Alternatives | ZyraCall"
+        description="Looking for alternatives to Skype, WhatsApp, Viber, or Google Voice? ZyraCall offers browser-based international calling with no app downloads and pay-as-you-go pricing."
+        canonicalUrl="https://zyracall.com/alternatives"
+        keywords="Skype alternative, WhatsApp alternative, Viber alternative, Google Voice alternative, international calling"
+        ogImageTitle="Best Calling App Alternatives"
+        ogImageSubtitle="Browser-Based International Calling"
+        ogImageType="alternative"
+        breadcrumbs={[
+          { name: "Home", url: "https://zyracall.com" },
+          { name: "Alternatives", url: "https://zyracall.com/alternatives" },
+        ]}
+        structuredData={generateAlternativesSchema()}
+      />
 
       <div className="min-h-screen bg-background">
         <Header />
         
         <main>
+          {/* Breadcrumb Navigation */}
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to="/">Home</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Alternatives</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+
           {/* Hero Section */}
-          <section className="pt-24 pb-16 lg:pt-32 lg:pb-20 bg-gradient-to-b from-primary/5 to-background">
+          <section className="pt-8 pb-16 lg:pt-12 lg:pb-20 bg-gradient-to-b from-primary/5 to-background">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
               <div className="max-w-4xl mx-auto text-center">
                 <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">

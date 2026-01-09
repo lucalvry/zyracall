@@ -14,7 +14,13 @@ import {
   Loader2,
   TrendingUp,
   TrendingDown,
-  DollarSign
+  DollarSign,
+  RefreshCw,
+  Clock,
+  Globe,
+  ChevronDown,
+  ChevronUp,
+  Zap
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -31,6 +37,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
@@ -40,12 +53,23 @@ import { cn } from "@/lib/utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getCountryFlag } from "@/hooks/useCallRates";
+import { 
+  useRegionalSettings, 
+  useUpdateRegionalSetting,
+  useApplyRegionalMarkups,
+  useRegionStats,
+  regionIcons,
+  regionColors 
+} from "@/hooks/useRegionalSettings";
+import { format } from "date-fns";
 
 const AdminRates = () => {
   const [search, setSearch] = useState("");
+  const [regionFilter, setRegionFilter] = useState<string>("all");
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedRate, setSelectedRate] = useState<any>(null);
   const [autoCalcEnabled, setAutoCalcEnabled] = useState(true);
+  const [showRegionalSettings, setShowRegionalSettings] = useState(false);
   const [editForm, setEditForm] = useState({
     base_cost_mobile: 0,
     base_cost_landline: 0,
@@ -57,6 +81,12 @@ const AdminRates = () => {
   });
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  
+  // Regional settings hooks
+  const { data: regionalSettings = [] } = useRegionalSettings();
+  const { data: regionStats = {} } = useRegionStats();
+  const updateRegionalSetting = useUpdateRegionalSetting();
+  const applyRegionalMarkups = useApplyRegionalMarkups();
 
   // Fetch rates from database
   const { data: rates = [], isLoading } = useQuery({
@@ -172,9 +202,12 @@ const AdminRates = () => {
   });
 
   const filteredRates = rates.filter(
-    (rate) =>
-      rate.country_name.toLowerCase().includes(search.toLowerCase()) ||
-      rate.country_code.includes(search)
+    (rate) => {
+      const matchesSearch = rate.country_name.toLowerCase().includes(search.toLowerCase()) ||
+        rate.country_code.includes(search);
+      const matchesRegion = regionFilter === "all" || (rate as any).region === regionFilter;
+      return matchesSearch && matchesRegion;
+    }
   );
 
   // Calculate stats
@@ -192,8 +225,52 @@ const AdminRates = () => {
       return margin < 15;
     }).length;
     
-    return { totalCountries, avgMarkup, lowMarginCount };
+    // Get last sync time
+    const syncedRates = rates.filter(r => (r as any).last_synced_at);
+    const lastSyncedAt = syncedRates.length > 0 
+      ? syncedRates.reduce((latest, r) => {
+          const syncTime = new Date((r as any).last_synced_at);
+          return syncTime > latest ? syncTime : latest;
+        }, new Date(0))
+      : null;
+    
+    return { totalCountries, avgMarkup, lowMarginCount, lastSyncedAt };
   }, [rates]);
+
+  // Sync Twilio rates mutation
+  const syncRatesMutation = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.functions.invoke('sync-twilio-rates');
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      return data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["admin-rates"] });
+      
+      // Check if sync actually failed (0 synced, all failed)
+      if (data.synced === 0 && data.failed > 0) {
+        const errorPreview = data.errors?.slice(0, 3).join('; ') || 'Unknown error';
+        toast({
+          title: "Sync failed",
+          description: `Failed to sync ${data.failed} countries. ${errorPreview}`,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Rates synced successfully",
+          description: `Synced ${data.synced} countries from Twilio${data.failed > 0 ? ` (${data.failed} failed)` : ''}`,
+        });
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: "Sync failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleEdit = (rate: any) => {
     setSelectedRate(rate);
@@ -246,18 +323,41 @@ const AdminRates = () => {
   return (
     <AdminLayout>
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-foreground mb-1">Rates & Providers</h1>
           <p className="text-muted-foreground">
             Manage per-country calling rates and profit margins
           </p>
         </div>
-        <Button className="gap-2">
-          <Plus className="w-4 h-4" />
-          Add Country
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            className="gap-2"
+            onClick={() => syncRatesMutation.mutate()}
+            disabled={syncRatesMutation.isPending}
+          >
+            {syncRatesMutation.isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <RefreshCw className="w-4 h-4" />
+            )}
+            Sync Twilio Rates
+          </Button>
+          <Button className="gap-2">
+            <Plus className="w-4 h-4" />
+            Add Country
+          </Button>
+        </div>
       </div>
+
+      {/* Last Synced Info */}
+      {stats.lastSyncedAt && (
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+          <Clock className="w-4 h-4" />
+          <span>Last synced: {format(stats.lastSyncedAt, "MMM d, yyyy 'at' h:mm a")}</span>
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -298,15 +398,96 @@ const AdminRates = () => {
         </div>
       </div>
 
-      {/* Search */}
-      <div className="relative mb-6 max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        <Input
-          placeholder="Search by country or code..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="pl-10"
-        />
+      {/* Regional Markup Settings */}
+      <div className="bg-card border border-border rounded-xl p-4 mb-6">
+        <button
+          onClick={() => setShowRegionalSettings(!showRegionalSettings)}
+          className="flex items-center justify-between w-full"
+        >
+          <div className="flex items-center gap-2">
+            <Globe className="w-5 h-5 text-primary" />
+            <span className="font-semibold text-foreground">Regional Markup Settings</span>
+            <Badge variant="outline" className="ml-2">{regionalSettings.length} regions</Badge>
+          </div>
+          {showRegionalSettings ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+        </button>
+        
+        {showRegionalSettings && (
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {regionalSettings.map((setting) => (
+              <div 
+                key={setting.id}
+                className={cn("p-3 rounded-lg border", regionColors[setting.region] || regionColors["Other"])}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium">
+                    {regionIcons[setting.region]} {setting.region}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {regionStats[setting.region]?.active || 0} countries
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Slider
+                    value={[setting.default_markup_percentage]}
+                    onValueChange={(value) => {
+                      updateRegionalSetting.mutate({
+                        id: setting.id,
+                        default_markup_percentage: value[0],
+                      });
+                    }}
+                    min={0}
+                    max={100}
+                    step={5}
+                    className="flex-1"
+                  />
+                  <span className="text-sm font-bold w-10 text-right">{setting.default_markup_percentage}%</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        
+        {showRegionalSettings && (
+          <div className="mt-4 flex justify-end">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => applyRegionalMarkups.mutate(undefined)}
+              disabled={applyRegionalMarkups.isPending}
+              className="gap-2"
+            >
+              {applyRegionalMarkups.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
+              Apply Regional Markups to All Countries
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {/* Search & Filter */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Search by country or code..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        <Select value={regionFilter} onValueChange={setRegionFilter}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by region" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Regions</SelectItem>
+            {regionalSettings.map((setting) => (
+              <SelectItem key={setting.region} value={setting.region}>
+                {regionIcons[setting.region]} {setting.region}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Rates Table */}

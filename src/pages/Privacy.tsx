@@ -1,14 +1,19 @@
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/seo/SEOHead";
 
 const Privacy = () => {
   return (
     <>
-      <Helmet>
-        <title>Privacy Policy - ZyraCall</title>
-        <meta name="description" content="ZyraCall privacy policy. Learn how we protect your data and privacy." />
-      </Helmet>
+      <SEOHead
+        title="Privacy Policy - ZyraCall"
+        description="ZyraCall privacy policy. Learn how we protect your data and privacy when using our international calling service."
+        canonicalUrl="https://zyracall.com/privacy"
+        noIndex={true}
+        ogImageTitle="Privacy Policy"
+        ogImageSubtitle="Your data protection matters"
+        ogImageType="default"
+      />
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 pt-20">

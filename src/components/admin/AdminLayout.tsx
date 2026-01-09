@@ -11,11 +11,12 @@ import {
   X,
   Shield
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/zyracall-logo.png";
 import NotificationCenter from "@/components/notifications/NotificationCenter";
+import { useAuth } from "@/contexts/AuthContext";
 
 const adminNavItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
@@ -28,10 +29,20 @@ const adminNavItems = [
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
+
+  const handleExitAdmin = async () => {
+    try {
+      await signOut();
+    } finally {
+      setSidebarOpen(false);
+      navigate("/", { replace: true });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-muted/30">
-      {/* Mobile Header */}
       <header className="lg:hidden sticky top-0 z-40 h-14 border-b border-border bg-background flex items-center justify-between px-4">
         <div className="flex items-center">
           <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(true)}>
@@ -108,7 +119,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
               Settings
             </Link>
             <button
-              onClick={() => window.location.href = "/"}
+              onClick={handleExitAdmin}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-background/70 hover:text-background hover:bg-foreground/10 transition-colors"
             >
               <LogOut className="w-5 h-5" />

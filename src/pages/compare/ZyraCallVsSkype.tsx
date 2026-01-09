@@ -4,7 +4,15 @@ import ComparisonTable, { ComparisonFeature } from "@/components/compare/Compari
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Phone } from "lucide-react";
-import { Helmet } from "react-helmet-async";
+import SEOHead, { generateComparisonSchema } from "@/components/seo/SEOHead";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const features: ComparisonFeature[] = [
   { feature: "Browser-based (no download)", zyracall: true, competitor: false },
@@ -19,25 +27,31 @@ const features: ComparisonFeature[] = [
   { feature: "Works on any device with browser", zyracall: true, competitor: false },
 ];
 
+const breadcrumbs = [
+  { name: "Home", url: "https://zyracall.com" },
+  { name: "Compare", url: "https://zyracall.com/compare" },
+  { name: "ZyraCall vs Skype", url: "https://zyracall.com/compare/zyracall-vs-skype" },
+];
+
 const ZyraCallVsSkype = () => {
   return (
     <>
-      <Helmet>
-        <title>ZyraCall vs Skype: Best Alternative for International Calling | 2024</title>
-        <meta 
-          name="description" 
-          content="Compare ZyraCall vs Skype for international calls. ZyraCall offers browser-based calling with no downloads, transparent pricing, and real-time cost display." 
-        />
-        <link rel="canonical" href="https://zyracall.com/compare/zyracall-vs-skype" />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            "headline": "ZyraCall vs Skype: Complete Comparison for International Calling",
-            "description": "Compare ZyraCall and Skype for international phone calls. See features, pricing, and which service is best for your needs.",
-          })}
-        </script>
-      </Helmet>
+      <SEOHead
+        title="ZyraCall vs Skype: Best Alternative for International Calling | 2026"
+        description="Compare ZyraCall vs Skype for international calls. ZyraCall offers browser-based calling with no downloads, transparent pricing, and real-time cost display."
+        canonicalUrl="https://zyracall.com/compare/zyracall-vs-skype"
+        keywords="ZyraCall vs Skype, Skype alternative, browser calling, international calls comparison, VoIP comparison"
+        ogImageTitle="ZyraCall vs Skype"
+        ogImageSubtitle="Which is Better for International Calling?"
+        ogImageType="comparison"
+        breadcrumbs={breadcrumbs}
+        structuredData={generateComparisonSchema(
+          "Skype",
+          "https://zyracall.com/compare/zyracall-vs-skype",
+          "Browser-based international calling with pay-as-you-go pricing",
+          "Communication platform with calling, video, and messaging"
+        )}
+      />
 
       <div className="min-h-screen flex flex-col">
         <Header />
@@ -48,13 +62,25 @@ const ZyraCallVsSkype = () => {
             <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
               <div className="max-w-4xl mx-auto">
                 {/* Breadcrumb */}
-                <nav className="text-sm text-muted-foreground mb-8">
-                  <Link to="/" className="hover:text-foreground">Home</Link>
-                  <span className="mx-2">/</span>
-                  <Link to="/compare" className="hover:text-foreground">Compare</Link>
-                  <span className="mx-2">/</span>
-                  <span className="text-foreground">ZyraCall vs Skype</span>
-                </nav>
+                <Breadcrumb className="mb-8">
+                  <BreadcrumbList>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link to="/">Home</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link to="/compare">Compare</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>ZyraCall vs Skype</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
 
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-4 mb-8">

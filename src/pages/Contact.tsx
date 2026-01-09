@@ -3,15 +3,19 @@ import Footer from "@/components/landing/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/seo/SEOHead";
 
 const Contact = () => {
   return (
     <>
-      <Helmet>
-        <title>Contact ZyraCall - Get in Touch</title>
-        <meta name="description" content="Contact ZyraCall for support, sales inquiries, or partnership opportunities." />
-      </Helmet>
+      <SEOHead
+        title="Contact ZyraCall - Get in Touch"
+        description="Contact ZyraCall for support, sales inquiries, or partnership opportunities. We're here to help with your international calling needs."
+        canonicalUrl="https://zyracall.com/contact"
+        ogImageTitle="Contact Us"
+        ogImageSubtitle="We're here to help"
+        ogImageType="default"
+      />
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 pt-20">

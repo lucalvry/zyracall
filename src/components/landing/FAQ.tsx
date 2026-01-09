@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const faqs = [
+export const faqs = [
   {
     question: "Do I need to download any software or app?",
     answer: "No. ZyraCall works entirely in your web browser. Just sign up, add credit, and start calling. No downloads, no installations, no plugins required.",
@@ -40,9 +40,22 @@ const faqs = [
   },
 ];
 
+export const generateFAQSchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer
+    }
+  }))
+});
+
 const FAQ = () => {
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden" id="faq">
+    <section className="relative py-24 lg:py-32 overflow-hidden" id="faq" aria-labelledby="faq-heading">
       {/* Background */}
       <div className="absolute inset-0 bg-background" />
       
@@ -52,7 +65,7 @@ const FAQ = () => {
           <span className="inline-block text-accent font-medium text-sm tracking-wide uppercase mb-4">
             FAQ
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6 tracking-tight">
+          <h2 id="faq-heading" className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6 tracking-tight">
             Frequently asked questions
           </h2>
           <p className="text-lg text-muted-foreground">
@@ -61,19 +74,27 @@ const FAQ = () => {
         </div>
 
         {/* FAQ Accordion */}
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto" itemScope itemType="https://schema.org/FAQPage">
           <Accordion type="single" collapsible className="space-y-4">
             {faqs.map((faq, index) => (
               <AccordionItem 
                 key={index} 
                 value={`item-${index}`}
                 className="bg-card border border-border/50 rounded-xl px-6 shadow-xs data-[state=open]:shadow-card transition-shadow"
+                itemScope
+                itemProp="mainEntity"
+                itemType="https://schema.org/Question"
               >
                 <AccordionTrigger className="text-left font-medium text-foreground hover:no-underline py-5">
-                  {faq.question}
+                  <span itemProp="name">{faq.question}</span>
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground pb-5">
-                  {faq.answer}
+                <AccordionContent 
+                  className="text-muted-foreground pb-5"
+                  itemScope
+                  itemProp="acceptedAnswer"
+                  itemType="https://schema.org/Answer"
+                >
+                  <span itemProp="text">{faq.answer}</span>
                 </AccordionContent>
               </AccordionItem>
             ))}

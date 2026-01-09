@@ -1,9 +1,9 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { ArrowRight, Globe, Heart, Rocket, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
+import SEOHead from "@/components/seo/SEOHead";
 
 const values = [
   {
@@ -31,13 +31,14 @@ const values = [
 const Careers = () => {
   return (
     <>
-      <Helmet>
-        <title>Careers at ZyraCall | Join Our Team</title>
-        <meta 
-          name="description" 
-          content="Join the ZyraCall team and help us revolutionize international calling. We're building the future of browser-based communication." 
-        />
-      </Helmet>
+      <SEOHead
+        title="Careers at ZyraCall | Join Our Team"
+        description="Join the ZyraCall team and help us revolutionize international calling. We're building the future of browser-based communication."
+        canonicalUrl="https://zyracall.com/careers"
+        ogImageTitle="Join Our Team"
+        ogImageSubtitle="Build the future of calling"
+        ogImageType="default"
+      />
 
       <div className="min-h-screen bg-background">
         <Header />

@@ -55,18 +55,25 @@ const Dashboard = () => {
     }
   }, [twilioReady, twilioInitializing, initializeDevice]);
 
-  const getRateForCountry = useCallback((countryCode: string): { rate: number; countryName: string } => {
-    const countryRate = rates?.find(r => r.country_code === countryCode);
+  const getRateForCountry = useCallback((dialCode: string, countryName: string): { rate: number; countryName: string } => {
+    // First try to match by country name (most reliable for shared dial codes like +1)
+    let countryRate = rates?.find(r => r.country_name === countryName);
+    
+    // Fall back to dial code match if name doesn't match
+    if (!countryRate) {
+      countryRate = rates?.find(r => r.country_code === dialCode);
+    }
+    
     if (countryRate) {
       return { 
         rate: Number(countryRate.mobile_rate), 
         countryName: countryRate.country_name 
       };
     }
-    return { rate: 0.05, countryName: 'Unknown' }; // Default rate
+    return { rate: 0.05, countryName: countryName || 'Unknown' }; // Default rate
   }, [rates]);
 
-  const handleCall = useCallback(async (phoneNumber: string, recordCall: boolean, countryCode: string) => {
+  const handleCall = useCallback(async (phoneNumber: string, recordCall: boolean, dialCode: string, countryName: string) => {
     if (balance <= 0) {
       toast({
         title: "Insufficient balance",
@@ -76,12 +83,12 @@ const Dashboard = () => {
       return;
     }
 
-    const { rate, countryName } = getRateForCountry(countryCode);
+    const { rate, countryName: resolvedCountryName } = getRateForCountry(dialCode, countryName);
 
     setCallDetails({ 
       phoneNumber, 
-      countryCode,
-      countryName,
+      countryCode: dialCode,
+      countryName: resolvedCountryName,
       ratePerMinute: rate,
       isRecording: recordCall 
     });
@@ -89,8 +96,8 @@ const Dashboard = () => {
     // Make the actual Twilio call
     await makeCall({
       phoneNumber,
-      countryCode,
-      countryName,
+      countryCode: dialCode,
+      countryName: resolvedCountryName,
       ratePerMinute: rate,
       recordCall
     });
@@ -171,7 +178,16 @@ const Dashboard = () => {
           <div className="bg-card border border-border rounded-2xl p-8 shadow-card">
             <Dialer 
               onCall={handleCall} 
-              disabled={balance <= 0 || !twilioReady || isInCall} 
+              disabled={balance <= 0 || !twilioReady || isInCall}
+              disabledReason={
+                balance <= 0 
+                  ? "Add funds to enable calling" 
+                  : !twilioReady 
+                    ? "Connecting to call service..." 
+                    : isInCall 
+                      ? "Call in progress" 
+                      : undefined
+              }
             />
           </div>
         </div>

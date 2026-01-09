@@ -80,9 +80,14 @@ export type Database = {
           id: string
           is_active: boolean
           landline_rate: number
+          last_synced_at: string | null
           markup_percentage: number
           mobile_rate: number
           provider: string
+          region: string | null
+          sync_source: string | null
+          twilio_base_price_landline: number | null
+          twilio_base_price_mobile: number | null
           updated_at: string
         }
         Insert: {
@@ -96,9 +101,14 @@ export type Database = {
           id?: string
           is_active?: boolean
           landline_rate: number
+          last_synced_at?: string | null
           markup_percentage?: number
           mobile_rate: number
           provider?: string
+          region?: string | null
+          sync_source?: string | null
+          twilio_base_price_landline?: number | null
+          twilio_base_price_mobile?: number | null
           updated_at?: string
         }
         Update: {
@@ -112,9 +122,14 @@ export type Database = {
           id?: string
           is_active?: boolean
           landline_rate?: number
+          last_synced_at?: string | null
           markup_percentage?: number
           mobile_rate?: number
           provider?: string
+          region?: string | null
+          sync_source?: string | null
+          twilio_base_price_landline?: number | null
+          twilio_base_price_mobile?: number | null
           updated_at?: string
         }
         Relationships: []
@@ -217,6 +232,33 @@ export type Database = {
           email?: string | null
           id?: string
           phone_number?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      regional_markup_settings: {
+        Row: {
+          created_at: string
+          default_markup_percentage: number
+          id: string
+          is_active: boolean
+          region: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          default_markup_percentage?: number
+          id?: string
+          is_active?: boolean
+          region: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          default_markup_percentage?: number
+          id?: string
+          is_active?: boolean
+          region?: string
           updated_at?: string
         }
         Relationships: []

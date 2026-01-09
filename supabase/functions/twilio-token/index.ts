@@ -6,24 +6,36 @@ const corsHeaders = {
 };
 
 // Twilio Access Token generation using JWT
-function base64url(input: string): string {
-  return btoa(input)
+function base64urlEncode(data: Uint8Array | string): string {
+  let binary: string;
+  if (typeof data === 'string') {
+    binary = btoa(data);
+  } else {
+    // Handle Uint8Array properly for signature
+    let binaryStr = '';
+    for (let i = 0; i < data.length; i++) {
+      binaryStr += String.fromCharCode(data[i]);
+    }
+    binary = btoa(binaryStr);
+  }
+  return binary
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
     .replace(/=+$/, '');
 }
 
-async function createHmacSignature(key: ArrayBuffer, data: string): Promise<string> {
+async function createHmacSignature(secret: string, data: string): Promise<string> {
   const encoder = new TextEncoder();
+  const keyData = encoder.encode(secret);
   const cryptoKey = await crypto.subtle.importKey(
     'raw',
-    key,
+    keyData,
     { name: 'HMAC', hash: 'SHA-256' },
     false,
     ['sign']
   );
   const signature = await crypto.subtle.sign('HMAC', cryptoKey, encoder.encode(data));
-  return base64url(String.fromCharCode(...new Uint8Array(signature)));
+  return base64urlEncode(new Uint8Array(signature));
 }
 
 async function generateTwilioAccessToken(
@@ -63,13 +75,11 @@ async function generateTwilioAccessToken(
     grants: grants
   };
 
-  const headerB64 = base64url(JSON.stringify(header));
-  const payloadB64 = base64url(JSON.stringify(payload));
+  const headerB64 = base64urlEncode(JSON.stringify(header));
+  const payloadB64 = base64urlEncode(JSON.stringify(payload));
   const signatureInput = `${headerB64}.${payloadB64}`;
   
-  const encoder = new TextEncoder();
-  const keyBuffer = encoder.encode(apiKeySecret).buffer as ArrayBuffer;
-  const signature = await createHmacSignature(keyBuffer, signatureInput);
+  const signature = await createHmacSignature(apiKeySecret, signatureInput);
   
   return `${signatureInput}.${signature}`;
 }

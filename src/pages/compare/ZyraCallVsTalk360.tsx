@@ -4,7 +4,15 @@ import ComparisonTable, { ComparisonFeature } from "@/components/compare/Compari
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Phone } from "lucide-react";
-import { Helmet } from "react-helmet-async";
+import SEOHead, { generateComparisonSchema } from "@/components/seo/SEOHead";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const features: ComparisonFeature[] = [
   { feature: "Browser-based (no download)", zyracall: true, competitor: false },
@@ -19,17 +27,31 @@ const features: ComparisonFeature[] = [
   { feature: "No phone number needed", zyracall: true, competitor: false },
 ];
 
+const breadcrumbs = [
+  { name: "Home", url: "https://zyracall.com" },
+  { name: "Compare", url: "https://zyracall.com/compare" },
+  { name: "ZyraCall vs Talk360", url: "https://zyracall.com/compare/zyracall-vs-talk360" },
+];
+
 const ZyraCallVsTalk360 = () => {
   return (
     <>
-      <Helmet>
-        <title>ZyraCall vs Talk360: International Calling Apps Compared | 2024</title>
-        <meta 
-          name="description" 
-          content="Compare ZyraCall vs Talk360 for international calls. ZyraCall offers browser-based calling with no downloads and transparent pay-as-you-go pricing." 
-        />
-        <link rel="canonical" href="https://zyracall.com/compare/zyracall-vs-talk360" />
-      </Helmet>
+      <SEOHead
+        title="ZyraCall vs Talk360: International Calling Apps Compared | 2026"
+        description="Compare ZyraCall vs Talk360 for international calls. ZyraCall offers browser-based calling with no downloads and transparent pay-as-you-go pricing."
+        canonicalUrl="https://zyracall.com/compare/zyracall-vs-talk360"
+        keywords="ZyraCall vs Talk360, Talk360 alternative, browser calling, international calls comparison"
+        ogImageTitle="ZyraCall vs Talk360"
+        ogImageSubtitle="Which is Better?"
+        ogImageType="comparison"
+        breadcrumbs={breadcrumbs}
+        structuredData={generateComparisonSchema(
+          "Talk360",
+          "https://zyracall.com/compare/zyracall-vs-talk360",
+          "Browser-based international calling with transparent pricing",
+          "Mobile app for international calling"
+        )}
+      />
 
       <div className="min-h-screen flex flex-col">
         <Header />
@@ -39,13 +61,25 @@ const ZyraCallVsTalk360 = () => {
             <div className="absolute inset-0 gradient-mesh" />
             <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
               <div className="max-w-4xl mx-auto">
-                <nav className="text-sm text-muted-foreground mb-8">
-                  <Link to="/" className="hover:text-foreground">Home</Link>
-                  <span className="mx-2">/</span>
-                  <Link to="/compare" className="hover:text-foreground">Compare</Link>
-                  <span className="mx-2">/</span>
-                  <span className="text-foreground">ZyraCall vs Talk360</span>
-                </nav>
+                <Breadcrumb className="mb-8">
+                  <BreadcrumbList>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link to="/">Home</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link to="/compare">Compare</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>ZyraCall vs Talk360</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
 
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-4 mb-8">

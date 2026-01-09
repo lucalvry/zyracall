@@ -2,6 +2,12 @@ import { useState, useCallback, useEffect, useMemo } from "react";
 import { Phone, Delete, Mic, MicOff, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import CountryCodeSelector, { 
   countries, 
   detectCountryFromNumber, 
@@ -9,8 +15,9 @@ import CountryCodeSelector, {
 } from "./CountryCodeSelector";
 
 interface DialerProps {
-  onCall: (number: string, recordCall: boolean, countryCode: string) => void;
+  onCall: (number: string, recordCall: boolean, dialCode: string, countryName: string) => void;
   disabled?: boolean;
+  disabledReason?: string;
 }
 
 // Phone number validation
@@ -36,7 +43,7 @@ const validatePhoneNumber = (number: string, dialCode: string): { isValid: boole
   return { isValid: true };
 };
 
-const Dialer = ({ onCall, disabled }: DialerProps) => {
+const Dialer = ({ onCall, disabled, disabledReason }: DialerProps) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [recordCall, setRecordCall] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<Country>(
@@ -93,7 +100,9 @@ const Dialer = ({ onCall, disabled }: DialerProps) => {
     if (!validation.isValid) return;
     
     const fullNumber = selectedCountry.dialCode + phoneNumber;
-    onCall(fullNumber, recordCall, selectedCountry.code);
+    // Pass normalized dial code (digits only, no +) and country name
+    const normalizedDialCode = selectedCountry.dialCode.replace(/^\+/, '');
+    onCall(fullNumber, recordCall, normalizedDialCode, selectedCountry.name);
   };
 
   const handlePaste = async () => {
@@ -205,15 +214,28 @@ const Dialer = ({ onCall, disabled }: DialerProps) => {
           <Delete className="w-5 h-5" />
         </Button>
         
-        <Button
-          variant="call"
-          size="callBtn"
-          onClick={handleCall}
-          disabled={disabled || !validation.isValid}
-          className="shadow-glow"
-        >
-          <Phone className="w-7 h-7" />
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="inline-flex">
+                <Button
+                  variant="call"
+                  size="callBtn"
+                  onClick={handleCall}
+                  disabled={disabled || !validation.isValid}
+                  className="shadow-glow"
+                >
+                  <Phone className="w-7 h-7" />
+                </Button>
+              </span>
+            </TooltipTrigger>
+            {(disabled || !validation.isValid) && (
+              <TooltipContent>
+                <p>{disabledReason || validation.error || "Cannot make call"}</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
         
         <div className="w-12" /> {/* Spacer for centering */}
       </div>

@@ -208,13 +208,21 @@ const ToolsHub = () => {
                 Try ZyraCall for crystal-clear calls to any phone number worldwide. 
                 No app downloads, no subscriptions—just affordable calling from your browser.
               </p>
-              <Link 
-                to="/signup"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-accent text-accent-foreground font-medium hover:bg-accent/90 transition-colors"
-              >
-                Get Started Free
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <Link 
+                  to="/signup"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-accent text-accent-foreground font-medium hover:bg-accent/90 transition-colors"
+                >
+                  Start Calling Free
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+                <Link 
+                  to="/tools/2fa-finder"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-border hover:bg-muted/50 transition-colors text-foreground font-medium"
+                >
+                  Looking for Verification Numbers?
+                </Link>
+              </div>
             </div>
           </div>
         </section>

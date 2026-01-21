@@ -56,6 +56,7 @@ import AdminTransactions from "./pages/admin/AdminTransactions";
 import AdminRates from "./pages/admin/AdminRates";
 import AdminSettings from "./pages/admin/AdminSettings";
 import Admin2FAFeedback from "./pages/admin/Admin2FAFeedback";
+import AdminMobileInterest from "./pages/admin/AdminMobileInterest";
 import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
 import TwoFAFinder from "./pages/tools/TwoFAFinder";
@@ -145,6 +146,7 @@ const App = () => {
               <Route path="/admin/rates" element={<ProtectedRoute><AdminRates /></ProtectedRoute>} />
               <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
               <Route path="/admin/2fa-feedback" element={<ProtectedRoute><Admin2FAFeedback /></ProtectedRoute>} />
+              <Route path="/admin/mobile-interest" element={<ProtectedRoute><AdminMobileInterest /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

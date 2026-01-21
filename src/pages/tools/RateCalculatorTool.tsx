@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCallRates, useRatesLastUpdated } from "@/hooks/useCallRates";
 import SavingsEstimator from "@/components/rate-calculator/SavingsEstimator";
+import MobileNumberInterest from "@/components/intent-capture/MobileNumberInterest";
 import { 
   Calculator, 
   Phone, 
@@ -565,6 +566,16 @@ const RateCalculatorTool = () => {
                     </div>
                   </CardContent>
                 </Card>
+
+                {/* Mobile Number Interest - compact version */}
+                {selectedCountry && (
+                  <MobileNumberInterest 
+                    source="rate-calculator"
+                    prefilledCountry={selectedCountry}
+                    contextMessage="We're exploring mobile-based calling options for frequent international callers."
+                    compact
+                  />
+                )}
 
                 {/* Monthly Savings Estimator */}
                 <SavingsEstimator rates={rates} />

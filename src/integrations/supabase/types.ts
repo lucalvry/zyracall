@@ -134,6 +134,42 @@ export type Database = {
         }
         Relationships: []
       }
+      mobile_number_interest: {
+        Row: {
+          country_code: string
+          created_at: string
+          email: string | null
+          id: string
+          ip_hash: string | null
+          platform: string | null
+          source_tool: string
+          use_case: string
+          user_id: string | null
+        }
+        Insert: {
+          country_code: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          ip_hash?: string | null
+          platform?: string | null
+          source_tool: string
+          use_case: string
+          user_id?: string | null
+        }
+        Update: {
+          country_code?: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          ip_hash?: string | null
+          platform?: string | null
+          source_tool?: string
+          use_case?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       notification_preferences: {
         Row: {
           call_summary_emails: boolean

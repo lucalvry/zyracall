@@ -9,7 +9,8 @@ import {
   LogOut,
   Menu,
   X,
-  Shield
+  Shield,
+  Smartphone
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ const adminNavItems = [
   { icon: Wallet, label: "Transactions", href: "/admin/transactions" },
   { icon: Globe, label: "Rates & Providers", href: "/admin/rates" },
   { icon: Shield, label: "2FA Feedback", href: "/admin/2fa-feedback" },
+  { icon: Smartphone, label: "Mobile Interest", href: "/admin/mobile-interest" },
 ];
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {

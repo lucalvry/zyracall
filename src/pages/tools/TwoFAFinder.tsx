@@ -7,6 +7,7 @@ import PageHero from "@/components/common/PageHero";
 import PlatformCard from "@/components/2fa/PlatformCard";
 import CountryFilter from "@/components/2fa/CountryFilter";
 import ZyraCallCTA from "@/components/2fa/ZyraCallCTA";
+import MobileNumberInterest from "@/components/intent-capture/MobileNumberInterest";
 import { platforms, PlatformCategory, categoryLabels, getAllCountries } from "@/data/2fa-platforms";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -209,6 +210,20 @@ const TwoFAFinder = () => {
             </div>
           </div>
         </section>
+
+        {/* Intent Capture - Only show after results */}
+        {filteredPlatforms.length > 0 && (
+          <section className="pb-8">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="max-w-4xl mx-auto">
+                <MobileNumberInterest 
+                  source="2fa-finder"
+                  contextMessage="Many users struggle with blocked virtual numbers. We're building compliant mobile options for high-risk verification."
+                />
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* CTA */}
         <section className="pb-16">

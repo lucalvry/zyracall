@@ -82,6 +82,24 @@ export const useCallRates = (search?: string) => {
   });
 };
 
+export const useRatesLastUpdated = () => {
+  return useQuery({
+    queryKey: ["rates-last-updated"],
+    queryFn: async (): Promise<string | null> => {
+      const { data, error } = await supabase
+        .from("call_rates")
+        .select("last_synced_at")
+        .not("last_synced_at", "is", null)
+        .order("last_synced_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (error) throw error;
+      return data?.last_synced_at || null;
+    },
+  });
+};
+
 export const useRateByCountry = (countryCode: string) => {
   return useQuery({
     queryKey: ["call-rate", countryCode],

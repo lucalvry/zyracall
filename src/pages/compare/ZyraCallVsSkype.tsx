@@ -1,6 +1,7 @@
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import ComparisonTable, { ComparisonFeature } from "@/components/compare/ComparisonTable";
+import RelatedContent from "@/components/seo/RelatedContent";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Phone } from "lucide-react";
@@ -188,34 +189,24 @@ const ZyraCallVsSkype = () => {
             </div>
           </section>
 
-          {/* Related Comparisons */}
-          <section className="py-16 bg-muted/30">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="max-w-4xl mx-auto">
-                <h2 className="text-xl font-bold text-foreground mb-6">Other Comparisons</h2>
-                <div className="flex flex-wrap gap-3">
-                  <Link 
-                    to="/compare/zyracall-vs-google-voice" 
-                    className="px-4 py-2 bg-card border border-border/50 rounded-lg text-sm hover:border-accent transition-colors"
-                  >
-                    ZyraCall vs Google Voice
-                  </Link>
-                  <Link 
-                    to="/compare/zyracall-vs-rebtel" 
-                    className="px-4 py-2 bg-card border border-border/50 rounded-lg text-sm hover:border-accent transition-colors"
-                  >
-                    ZyraCall vs Rebtel
-                  </Link>
-                  <Link 
-                    to="/compare/zyracall-vs-vonage" 
-                    className="px-4 py-2 bg-card border border-border/50 rounded-lg text-sm hover:border-accent transition-colors"
-                  >
-                    ZyraCall vs Vonage
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </section>
+          {/* Related Content */}
+          <RelatedContent
+            variant="footer"
+            comparisons={[
+              { title: "vs Google Voice", href: "/compare/zyracall-vs-google-voice" },
+              { title: "vs Rebtel", href: "/compare/zyracall-vs-rebtel" },
+              { title: "vs Vonage", href: "/compare/zyracall-vs-vonage" },
+            ]}
+            countries={[
+              { title: "Call India", href: "/call/india" },
+              { title: "Call Nigeria", href: "/call/nigeria" },
+              { title: "Call Philippines", href: "/call/philippines" },
+            ]}
+            articles={[
+              { title: "International Calling Guide", href: "/blog/international-calling-guide" },
+              { title: "Save Money on Calls", href: "/blog/save-money-international-calls-2025" },
+            ]}
+          />
         </main>
         <Footer />
       </div>

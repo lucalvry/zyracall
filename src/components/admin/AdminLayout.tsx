@@ -18,12 +18,16 @@ import logo from "@/assets/zyracall-logo.png";
 import NotificationCenter from "@/components/notifications/NotificationCenter";
 import { useAuth } from "@/contexts/AuthContext";
 
+import { TrendingUp } from "lucide-react";
+
 const adminNavItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
+  { icon: TrendingUp, label: "Profitability", href: "/admin/profitability" },
   { icon: Users, label: "Users", href: "/admin/users" },
   { icon: Phone, label: "Call Logs", href: "/admin/calls" },
   { icon: Wallet, label: "Transactions", href: "/admin/transactions" },
   { icon: Globe, label: "Rates & Providers", href: "/admin/rates" },
+  { icon: Shield, label: "2FA Feedback", href: "/admin/2fa-feedback" },
 ];
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {

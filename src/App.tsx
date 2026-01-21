@@ -36,18 +36,33 @@ import CookiePolicy from "./pages/CookiePolicy";
 import GDPR from "./pages/GDPR";
 import Blog from "./pages/Blog";
 import InternationalCallingGuide from "./pages/blog/InternationalCallingGuide";
+import SaveMoneyCalls from "./pages/blog/SaveMoneyCalls";
+import BrowserCallingFuture from "./pages/blog/BrowserCallingFuture";
+import ExpatCallingGuide from "./pages/blog/ExpatCallingGuide";
+import MobileVsLandline from "./pages/blog/MobileVsLandline";
+import VoIPQuality from "./pages/blog/VoIPQuality";
+import WiFiVsVoIP from "./pages/blog/WiFiVsVoIP";
+import FreeInternationalCalling from "./pages/blog/FreeInternationalCalling";
+import BusinessInternationalCalling from "./pages/blog/BusinessInternationalCalling";
 import BlogPost from "./pages/blog/BlogPost";
 import Careers from "./pages/Careers";
 import CallHub from "./pages/CallHub";
 import CountryPage from "./pages/call/CountryPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminProfitability from "./pages/admin/AdminProfitability";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminCallLogs from "./pages/admin/AdminCallLogs";
 import AdminTransactions from "./pages/admin/AdminTransactions";
 import AdminRates from "./pages/admin/AdminRates";
 import AdminSettings from "./pages/admin/AdminSettings";
+import Admin2FAFeedback from "./pages/admin/Admin2FAFeedback";
 import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
+import TwoFAFinder from "./pages/tools/TwoFAFinder";
+import TwoFAPlatformPage from "./pages/tools/TwoFAPlatformPage";
+import ToolsHub from "./pages/tools/ToolsHub";
+import RateCalculatorTool from "./pages/tools/RateCalculatorTool";
+import WebRTCTester from "./pages/tools/WebRTCTester";
 
 const queryClient = new QueryClient();
 
@@ -75,8 +90,23 @@ const App = () => {
               <Route path="/gdpr" element={<GDPR />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/international-calling-guide" element={<InternationalCallingGuide />} />
+              <Route path="/blog/save-money-international-calls-2025" element={<SaveMoneyCalls />} />
+              <Route path="/blog/browser-based-calling-future" element={<BrowserCallingFuture />} />
+              <Route path="/blog/expat-calling-family-guide" element={<ExpatCallingGuide />} />
+              <Route path="/blog/mobile-vs-landline-rates" element={<MobileVsLandline />} />
+              <Route path="/blog/voip-quality-guide" element={<VoIPQuality />} />
+              <Route path="/blog/wifi-calling-vs-voip" element={<WiFiVsVoIP />} />
+              <Route path="/blog/free-international-calling" element={<FreeInternationalCalling />} />
+              <Route path="/blog/business-international-calling" element={<BusinessInternationalCalling />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/careers" element={<Careers />} />
+              
+              {/* Free Tools */}
+              <Route path="/tools" element={<ToolsHub />} />
+              <Route path="/tools/2fa-finder" element={<TwoFAFinder />} />
+              <Route path="/tools/2fa-finder/:platform" element={<TwoFAPlatformPage />} />
+              <Route path="/tools/rate-calculator" element={<RateCalculatorTool />} />
+              <Route path="/tools/webrtc-tester" element={<WebRTCTester />} />
               
               {/* Country Calling Guides */}
               <Route path="/call" element={<CallHub />} />
@@ -108,11 +138,13 @@ const App = () => {
               
               {/* Admin Routes - Protected */}
               <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+              <Route path="/admin/profitability" element={<ProtectedRoute><AdminProfitability /></ProtectedRoute>} />
               <Route path="/admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
               <Route path="/admin/calls" element={<ProtectedRoute><AdminCallLogs /></ProtectedRoute>} />
               <Route path="/admin/transactions" element={<ProtectedRoute><AdminTransactions /></ProtectedRoute>} />
               <Route path="/admin/rates" element={<ProtectedRoute><AdminRates /></ProtectedRoute>} />
               <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
+              <Route path="/admin/2fa-feedback" element={<ProtectedRoute><Admin2FAFeedback /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

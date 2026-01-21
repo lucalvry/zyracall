@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/breadcrumb";
 
 // Categories for filtering
-const categories = ["All", "Guides", "Tips & Tricks", "Technology", "Education"];
+const categories = ["All", "Guides", "Tips & Tricks", "Technology", "Education", "Business"];
 
 // Blog posts with ISO dates for proper semantic markup
 const blogPosts = [
@@ -44,25 +44,69 @@ const blogPosts = [
   },
   {
     id: 3,
-    title: "Staying Connected with Family Abroad: A Complete Guide",
+    title: "WiFi Calling vs VoIP: What's the Difference?",
+    excerpt: "Understand the key differences between WiFi calling and VoIP services, and learn which is best for international calls.",
+    category: "Technology",
+    author: "ZyraCall Team",
+    date: "January 10, 2025",
+    dateISO: "2025-01-10",
+    readTime: "5 min read",
+    slug: "wifi-calling-vs-voip",
+  },
+  {
+    id: 4,
+    title: "Free International Calling: What Really Works?",
+    excerpt: "An honest review of 'free' international calling options—what works, what doesn't, and when paid services are worth it.",
+    category: "Education",
+    author: "ZyraCall Team",
+    date: "January 12, 2025",
+    dateISO: "2025-01-12",
+    readTime: "6 min read",
+    slug: "free-international-calling",
+  },
+  {
+    id: 5,
+    title: "Business International Calling: A Complete Guide",
+    excerpt: "How small and medium businesses can cut international calling costs by 70-90% while maintaining professional quality.",
+    category: "Business",
+    author: "ZyraCall Team",
+    date: "January 14, 2025",
+    dateISO: "2025-01-14",
+    readTime: "7 min read",
+    slug: "business-international-calling",
+  },
+  {
+    id: 6,
+    title: "Staying Connected with Family Abroad",
     excerpt: "Tips and tools for maintaining strong connections with loved ones across borders and time zones.",
     category: "Guides",
     author: "ZyraCall Team",
     date: "December 28, 2024",
     dateISO: "2024-12-28",
     readTime: "7 min read",
-    slug: "staying-connected-family-abroad",
+    slug: "expat-calling-family-guide",
   },
   {
-    id: 4,
-    title: "Understanding International Calling Rates: What You Need to Know",
-    excerpt: "A breakdown of how international calling rates work and how to find the best deals.",
+    id: 7,
+    title: "Mobile vs Landline: Which is Cheaper?",
+    excerpt: "Understanding the price difference can save you 20-50% on your international calls.",
     category: "Education",
     author: "ZyraCall Team",
     date: "December 20, 2024",
     dateISO: "2024-12-20",
+    readTime: "5 min read",
+    slug: "mobile-vs-landline-rates",
+  },
+  {
+    id: 8,
+    title: "Understanding VoIP Quality",
+    excerpt: "What makes some VoIP calls sound great while others are choppy? Learn the factors that affect call quality.",
+    category: "Technology",
+    author: "ZyraCall Team",
+    date: "December 15, 2024",
+    dateISO: "2024-12-15",
     readTime: "6 min read",
-    slug: "understanding-international-calling-rates",
+    slug: "voip-quality-guide",
   },
 ];
 

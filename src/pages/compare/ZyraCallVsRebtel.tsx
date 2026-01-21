@@ -1,6 +1,7 @@
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import ComparisonTable, { ComparisonFeature } from "@/components/compare/ComparisonTable";
+import RelatedContent from "@/components/seo/RelatedContent";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Phone } from "lucide-react";
@@ -186,6 +187,22 @@ const ZyraCallVsRebtel = () => {
               </div>
             </div>
           </section>
+
+          <RelatedContent
+            variant="footer"
+            comparisons={[
+              { title: "vs Skype", href: "/compare/zyracall-vs-skype" },
+              { title: "vs Google Voice", href: "/compare/zyracall-vs-google-voice" },
+              { title: "vs Talk360", href: "/compare/zyracall-vs-talk360" },
+            ]}
+            countries={[
+              { title: "Call India", href: "/call/india" },
+              { title: "Call Nigeria", href: "/call/nigeria" },
+            ]}
+            articles={[
+              { title: "Save Money on Calls", href: "/blog/save-money-international-calls-2025" },
+            ]}
+          />
         </main>
         <Footer />
       </div>

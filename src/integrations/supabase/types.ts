@@ -206,6 +206,111 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_bookmarks: {
+        Row: {
+          country_code: string | null
+          created_at: string | null
+          id: string
+          notify_on_change: boolean | null
+          platform_id: string
+          user_id: string
+        }
+        Insert: {
+          country_code?: string | null
+          created_at?: string | null
+          id?: string
+          notify_on_change?: boolean | null
+          platform_id: string
+          user_id: string
+        }
+        Update: {
+          country_code?: string | null
+          created_at?: string | null
+          id?: string
+          notify_on_change?: boolean | null
+          platform_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      platform_compatibility_scores: {
+        Row: {
+          country_code: string
+          created_at: string | null
+          id: string
+          last_calculated: string | null
+          number_type: string
+          platform_id: string
+          success_rate: number
+          total_reports: number
+          updated_at: string | null
+        }
+        Insert: {
+          country_code: string
+          created_at?: string | null
+          id?: string
+          last_calculated?: string | null
+          number_type: string
+          platform_id: string
+          success_rate?: number
+          total_reports?: number
+          updated_at?: string | null
+        }
+        Update: {
+          country_code?: string
+          created_at?: string | null
+          id?: string
+          last_calculated?: string | null
+          number_type?: string
+          platform_id?: string
+          success_rate?: number
+          total_reports?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      platform_feedback: {
+        Row: {
+          comment: string | null
+          country_code: string
+          created_at: string | null
+          id: string
+          ip_hash: string | null
+          number_type: string
+          platform_id: string
+          status: string | null
+          user_id: string | null
+          verified: boolean | null
+          worked: boolean
+        }
+        Insert: {
+          comment?: string | null
+          country_code: string
+          created_at?: string | null
+          id?: string
+          ip_hash?: string | null
+          number_type: string
+          platform_id: string
+          status?: string | null
+          user_id?: string | null
+          verified?: boolean | null
+          worked: boolean
+        }
+        Update: {
+          comment?: string | null
+          country_code?: string
+          created_at?: string | null
+          id?: string
+          ip_hash?: string | null
+          number_type?: string
+          platform_id?: string
+          status?: string | null
+          user_id?: string | null
+          verified?: boolean | null
+          worked?: boolean
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

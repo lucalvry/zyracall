@@ -50,15 +50,17 @@ const RateCalculator = ({ showCTA = true, className = "" }: RateCalculatorProps)
               <SelectValue placeholder="Select a country" />
             </SelectTrigger>
             <SelectContent className="max-h-64">
-              {rates.map((rate) => (
-                <SelectItem key={rate.id} value={rate.country_name}>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xl">{getCountryFlag(rate.country_name)}</span>
-                    <span>{rate.country_name}</span>
-                    <span className="text-muted-foreground text-sm">+{rate.country_code}</span>
-                  </div>
-                </SelectItem>
-              ))}
+              {rates
+                .filter((rate) => rate.country_name && rate.country_name.trim() !== "" && rate.country_code && rate.country_code.trim() !== "")
+                .map((rate) => (
+                  <SelectItem key={rate.id} value={rate.country_name}>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">{getCountryFlag(rate.country_name)}</span>
+                      <span>{rate.country_name}</span>
+                      <span className="text-muted-foreground text-sm">+{rate.country_code}</span>
+                    </div>
+                  </SelectItem>
+                ))}
             </SelectContent>
           </Select>
         )}

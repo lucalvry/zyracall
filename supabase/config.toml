@@ -26,3 +26,6 @@ verify_jwt = false
 
 [functions.og-image]
 verify_jwt = false
+
+[functions.twofa-compatibility-alert]
+verify_jwt = false

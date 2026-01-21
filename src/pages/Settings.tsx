@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,15 +9,19 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { useNotificationPreferences } from "@/hooks/useNotificationPreferences";
-import { User, Bell, Shield, Trash2 } from "lucide-react";
+import { usePlatformBookmarks } from "@/hooks/usePlatformBookmarks";
+import { platforms } from "@/data/2fa-platforms";
+import { User, Bell, Shield, Trash2, Bookmark, ExternalLink, X } from "lucide-react";
 
 const Settings = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const { preferences, isLoading, isSaving, savePreferences } = useNotificationPreferences();
+  const { bookmarks, isLoading: bookmarksLoading, removeBookmark, toggleNotification, refetch } = usePlatformBookmarks();
   
   const [displayName, setDisplayName] = useState(user?.user_metadata?.display_name || "");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -26,17 +31,6 @@ const Settings = () => {
     toast({
       title: "Profile updated",
       description: "Your profile settings have been saved.",
-    });
-  };
-
-  const handleSaveNotifications = () => {
-    savePreferences({
-      email_notifications: preferences.email_notifications,
-      sms_notifications: preferences.sms_notifications,
-      push_notifications: preferences.push_notifications,
-      call_summary_emails: preferences.call_summary_emails,
-      marketing_emails: preferences.marketing_emails,
-      low_balance_alert_threshold: preferences.low_balance_alert_threshold,
     });
   };
 
@@ -59,6 +53,16 @@ const Settings = () => {
 
   const updatePreference = (key: keyof typeof preferences, value: boolean | number) => {
     savePreferences({ [key]: value });
+  };
+
+  const getPlatformName = (platformId: string) => {
+    const platform = platforms.find(p => p.id === platformId);
+    return platform?.name || platformId;
+  };
+
+  const getPlatformIcon = (platformId: string) => {
+    const platform = platforms.find(p => p.id === platformId);
+    return platform?.icon || "🔐";
   };
 
   return (
@@ -131,6 +135,88 @@ const Settings = () => {
               </div>
 
               <Button onClick={handleSaveProfile}>Save Changes</Button>
+            </CardContent>
+          </Card>
+
+          {/* 2FA Bookmarks Section */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Bookmark className="w-5 h-5 text-primary" />
+                <CardTitle>2FA Bookmarks</CardTitle>
+              </div>
+              <CardDescription>Platforms you're tracking for 2FA compatibility updates</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {bookmarksLoading ? (
+                <div className="py-8 text-center text-muted-foreground">
+                  Loading bookmarks...
+                </div>
+              ) : bookmarks.length === 0 ? (
+                <div className="py-8 text-center">
+                  <Bookmark className="w-12 h-12 mx-auto text-muted-foreground/50 mb-3" />
+                  <p className="text-muted-foreground mb-4">
+                    No bookmarked platforms yet
+                  </p>
+                  <Button variant="outline" asChild>
+                    <Link to="/tools/2fa-finder">
+                      Browse 2FA Finder
+                      <ExternalLink className="w-4 h-4 ml-2" />
+                    </Link>
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {bookmarks.map((bookmark) => (
+                    <div 
+                      key={bookmark.id}
+                      className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">{getPlatformIcon(bookmark.platformId)}</span>
+                        <div>
+                          <div className="font-medium">{getPlatformName(bookmark.platformId)}</div>
+                          {bookmark.countryCode && (
+                            <div className="text-sm text-muted-foreground">
+                              Country: {bookmark.countryCode}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
+                          <Label htmlFor={`notify-${bookmark.id}`} className="text-sm text-muted-foreground">
+                            Email alerts
+                          </Label>
+                          <Switch
+                            id={`notify-${bookmark.id}`}
+                            checked={bookmark.notifyOnChange}
+                            onCheckedChange={(checked) => 
+                              toggleNotification(bookmark.id, checked)
+                            }
+                          />
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-muted-foreground hover:text-destructive"
+                          onClick={() => removeBookmark(bookmark.platformId, bookmark.countryCode)}
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="pt-3 text-center">
+                    <Button variant="outline" size="sm" asChild>
+                      <Link to="/tools/2fa-finder">
+                        Add More Bookmarks
+                        <ExternalLink className="w-4 h-4 ml-2" />
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 

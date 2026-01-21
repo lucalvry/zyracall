@@ -1,6 +1,7 @@
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import ComparisonTable, { ComparisonFeature } from "@/components/compare/ComparisonTable";
+import RelatedContent from "@/components/seo/RelatedContent";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Phone } from "lucide-react";
@@ -176,6 +177,21 @@ const ZyraCallVsVonage = () => {
               </div>
             </div>
           </section>
+
+          <RelatedContent
+            variant="footer"
+            comparisons={[
+              { title: "vs Skype", href: "/compare/zyracall-vs-skype" },
+              { title: "vs Google Voice", href: "/compare/zyracall-vs-google-voice" },
+            ]}
+            countries={[
+              { title: "Call UK", href: "/call/united-kingdom" },
+              { title: "Call India", href: "/call/india" },
+            ]}
+            articles={[
+              { title: "Browser-Based Calling", href: "/blog/browser-based-calling-future" },
+            ]}
+          />
         </main>
         <Footer />
       </div>

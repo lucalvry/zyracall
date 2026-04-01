@@ -109,6 +109,7 @@ const App = () => {
               <Route path="/tools/2fa-finder/:platform" element={<TwoFAPlatformPage />} />
               <Route path="/tools/rate-calculator" element={<RateCalculatorTool />} />
               <Route path="/tools/webrtc-tester" element={<WebRTCTester />} />
+              <Route path="/tools/connectivity-ping" element={<ConnectivityPing />} />
               
               {/* Country Calling Guides */}
               <Route path="/call" element={<CallHub />} />

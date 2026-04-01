@@ -36,7 +36,7 @@ export const useTwilioDevice = (): UseTwilioDeviceReturn => {
   const [error, setError] = useState<string | null>(null);
   const [callDuration, setCallDuration] = useState(0);
   
-  const durationIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const durationIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const callStartTimeRef = useRef<Date | null>(null);
 
   // Start duration timer when call is in progress

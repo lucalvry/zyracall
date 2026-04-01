@@ -46,6 +46,15 @@ const tools: Tool[] = [
     badge: "New",
   },
   {
+    id: "connectivity-ping",
+    name: "Global Connectivity Ping",
+    description: "Test if your network can handle international calls. Get a reliability score and actionable recommendations.",
+    icon: Globe,
+    href: "/tools/connectivity-ping",
+    isActive: true,
+    badge: "New",
+  },
+  {
     id: "country-codes",
     name: "Country Code Lookup",
     description: "Find international dialing codes, area codes, and mobile prefixes for any country.",

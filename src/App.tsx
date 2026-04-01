@@ -64,6 +64,7 @@ import TwoFAPlatformPage from "./pages/tools/TwoFAPlatformPage";
 import ToolsHub from "./pages/tools/ToolsHub";
 import RateCalculatorTool from "./pages/tools/RateCalculatorTool";
 import WebRTCTester from "./pages/tools/WebRTCTester";
+import ConnectivityPing from "./pages/tools/ConnectivityPing";
 
 const queryClient = new QueryClient();
 
@@ -108,6 +109,7 @@ const App = () => {
               <Route path="/tools/2fa-finder/:platform" element={<TwoFAPlatformPage />} />
               <Route path="/tools/rate-calculator" element={<RateCalculatorTool />} />
               <Route path="/tools/webrtc-tester" element={<WebRTCTester />} />
+              <Route path="/tools/connectivity-ping" element={<ConnectivityPing />} />
               
               {/* Country Calling Guides */}
               <Route path="/call" element={<CallHub />} />

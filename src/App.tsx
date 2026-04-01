@@ -64,6 +64,7 @@ import TwoFAPlatformPage from "./pages/tools/TwoFAPlatformPage";
 import ToolsHub from "./pages/tools/ToolsHub";
 import RateCalculatorTool from "./pages/tools/RateCalculatorTool";
 import WebRTCTester from "./pages/tools/WebRTCTester";
+import ConnectivityPing from "./pages/tools/ConnectivityPing";
 
 const queryClient = new QueryClient();
 

@@ -300,44 +300,67 @@ const CountryPage = () => {
                 </div>
               </section>
 
-              {/* FAQ Section */}
-              <section className="py-12 bg-muted/30">
+              {/* FAQ Section — Q&A Format with speakable snippets */}
+              <section className="py-12 bg-muted/30" itemScope itemType="https://schema.org/FAQPage">
                 <div className="container mx-auto px-4">
                   <h2 className="text-2xl font-bold mb-6">
-                    Frequently Asked Questions
+                    Frequently Asked Questions About Calling {rate.country_name}
                   </h2>
                   <div className="space-y-4 max-w-3xl">
-                    <Card>
+                    <Card itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
                       <CardContent className="p-6">
-                        <h3 className="font-semibold mb-2">
-                          How much does it cost to call {rate.country_name}?
+                        <h3 className="font-semibold mb-2" itemProp="name">
+                          How much does it cost to call {rate.country_name} from a browser?
                         </h3>
-                        <p className="text-muted-foreground">
-                          Calling {rate.country_name} costs ${rate.mobile_rate}/min for mobile phones 
-                          and ${rate.landline_rate}/min for landlines. No connection fees or hidden charges.
-                        </p>
+                        <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
+                          <p className="text-muted-foreground" itemProp="text" data-speakable="true">
+                            Calling {rate.country_name} with ZyraCall costs ${rate.mobile_rate}/min for mobile phones 
+                            and ${rate.landline_rate}/min for landlines. There are no connection fees, no hidden charges, 
+                            and no monthly subscriptions. You pay only for the minutes you use.
+                          </p>
+                        </div>
                       </CardContent>
                     </Card>
-                    <Card>
+                    <Card itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
                       <CardContent className="p-6">
-                        <h3 className="font-semibold mb-2">
-                          Can I call {rate.country_name} from my browser?
+                        <h3 className="font-semibold mb-2" itemProp="name">
+                          Can I call {rate.country_name} mobile and landline numbers?
                         </h3>
-                        <p className="text-muted-foreground">
-                          Yes! With ZyraCall, you can call {rate.country_name} directly from your browser. 
-                          No app downloads or SIM cards required. Just sign up and start calling.
-                        </p>
+                        <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
+                          <p className="text-muted-foreground" itemProp="text" data-speakable="true">
+                            Yes. ZyraCall supports calls to both mobile and landline numbers in {rate.country_name}. 
+                            Mobile rates are ${rate.mobile_rate}/min and landline rates are ${rate.landline_rate}/min. 
+                            Dial any number directly from your browser with no app downloads required.
+                          </p>
+                        </div>
                       </CardContent>
                     </Card>
-                    <Card>
+                    <Card itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
                       <CardContent className="p-6">
-                        <h3 className="font-semibold mb-2">
-                          What's the country code for {rate.country_name}?
+                        <h3 className="font-semibold mb-2" itemProp="name">
+                          What calling code does {rate.country_name} use?
                         </h3>
-                        <p className="text-muted-foreground">
-                          The country code for {rate.country_name} is +{rate.country_code}. 
-                          When calling, enter the full number including the country code.
-                        </p>
+                        <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
+                          <p className="text-muted-foreground" itemProp="text" data-speakable="true">
+                            The international calling code for {rate.country_name} is +{rate.country_code}. 
+                            When calling with ZyraCall, enter the full number including the country code. 
+                            Our dialer automatically formats the number for you.
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    <Card itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
+                      <CardContent className="p-6">
+                        <h3 className="font-semibold mb-2" itemProp="name">
+                          What is the best time to call {rate.country_name}?
+                        </h3>
+                        <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
+                          <p className="text-muted-foreground" itemProp="text" data-speakable="true">
+                            The best time to call {rate.country_name} is during {info.bestTime} ({info.timezone}). 
+                            ZyraCall works 24/7, so you can place calls anytime. Rates remain the same regardless 
+                            of the time you call.
+                          </p>
+                        </div>
                       </CardContent>
                     </Card>
                   </div>

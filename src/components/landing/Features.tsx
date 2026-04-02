@@ -42,23 +42,25 @@ const features = [
 
 const Features = () => {
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden" id="features">
+    <section className="relative py-24 lg:py-32 overflow-hidden" id="features" itemScope itemType="https://schema.org/WebApplication">
       {/* Background */}
       <div className="absolute inset-0 bg-muted/30" />
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-accent/5 rounded-full blur-3xl" />
       
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* Section Header — Q&A Format */}
         <div className="text-center max-w-3xl mx-auto mb-16 lg:mb-20">
           <span className="inline-block text-accent font-medium text-sm tracking-wide uppercase mb-4">
             Features
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6 tracking-tight">
-            Everything you need for{" "}
-            <span className="gradient-text-accent">global calling</span>
+            What features does ZyraCall offer for{" "}
+            <span className="gradient-text-accent">international calling?</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Professional-grade calling tools designed for reliability, transparency, and ease of use.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto" data-speakable="true">
+            ZyraCall provides real-time cost tracking, encrypted VoIP calls, optional call recording, 
+            complete call history, a pay-as-you-go wallet, and transparent per-minute rates to over 
+            200 countries — all from your web browser with no app downloads required.
           </p>
         </div>
 

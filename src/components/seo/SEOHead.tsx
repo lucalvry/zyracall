@@ -148,6 +148,42 @@ export const generateAlternativeSchema = (
   }
 });
 
+// Helper to generate speakable schema for AI/voice assistant citation
+export const generateSpeakableSchema = (
+  pageUrl: string,
+  pageName: string
+) => ({
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: pageName,
+  url: pageUrl,
+  speakable: {
+    "@type": "SpeakableSpecification",
+    cssSelector: ["[data-speakable]", "h1", "h2"]
+  }
+});
+
+// Helper to generate HowTo schema
+export const generateHowToSchema = (
+  name: string,
+  description: string,
+  steps: { name: string; text: string; url?: string }[],
+  totalTime?: string
+) => ({
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name,
+  description,
+  ...(totalTime && { totalTime }),
+  step: steps.map((step, index) => ({
+    "@type": "HowToStep",
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+    ...(step.url && { url: step.url }),
+  })),
+});
+
 const SEOHead = ({
   title,
   description,

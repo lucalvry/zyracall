@@ -203,33 +203,53 @@ const Alternatives = () => {
             </div>
           </section>
 
-          {/* Why ZyraCall Section */}
+          {/* Q&A Knowledge Sections */}
           <section className="py-16 lg:py-24 bg-muted/30">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="max-w-3xl mx-auto text-center">
-                <h2 className="text-3xl font-bold mb-6">
-                  Why People Choose ZyraCall
-                </h2>
-                <div className="grid sm:grid-cols-3 gap-6 mb-12">
-                  <div className="bg-card border border-border rounded-xl p-6">
+              <div className="max-w-3xl mx-auto space-y-12">
+                <article>
+                  <h2 className="text-2xl font-bold mb-4">What are the best alternatives to traditional calling apps?</h2>
+                  <p className="text-muted-foreground" data-speakable="true">
+                    The best alternatives to traditional calling apps like Skype and WhatsApp are browser-based 
+                    VoIP services that require no downloads. ZyraCall lets you call any phone number — including 
+                    landlines and mobiles — in over 200 countries directly from your browser with pay-as-you-go 
+                    pricing and no monthly subscriptions.
+                  </p>
+                </article>
+                <article>
+                  <h2 className="text-2xl font-bold mb-4">Why switch from Skype or WhatsApp to a browser-based calling service?</h2>
+                  <p className="text-muted-foreground" data-speakable="true">
+                    Browser-based calling eliminates app downloads, account restrictions, and platform lock-in. 
+                    Unlike WhatsApp (which only calls other WhatsApp users) or Skype (which requires desktop 
+                    software), ZyraCall works instantly in any modern browser and calls real phone numbers 
+                    worldwide with transparent per-minute rates.
+                  </p>
+                </article>
+
+                {/* Stats */}
+                <div className="grid sm:grid-cols-3 gap-6">
+                  <div className="bg-card border border-border rounded-xl p-6 text-center">
                     <div className="text-3xl font-bold text-primary mb-2">200+</div>
                     <p className="text-muted-foreground text-sm">Countries covered</p>
                   </div>
-                  <div className="bg-card border border-border rounded-xl p-6">
+                  <div className="bg-card border border-border rounded-xl p-6 text-center">
                     <div className="text-3xl font-bold text-primary mb-2">$0</div>
                     <p className="text-muted-foreground text-sm">Monthly fees</p>
                   </div>
-                  <div className="bg-card border border-border rounded-xl p-6">
+                  <div className="bg-card border border-border rounded-xl p-6 text-center">
                     <div className="text-3xl font-bold text-primary mb-2">0</div>
                     <p className="text-muted-foreground text-sm">Apps to download</p>
                   </div>
                 </div>
-                <Button asChild size="xl" variant="hero">
-                  <Link to="/signup">
-                    Try ZyraCall Free
-                    <ArrowRight className="w-5 h-5" />
-                  </Link>
-                </Button>
+
+                <div className="text-center">
+                  <Button asChild size="xl" variant="hero">
+                    <Link to="/signup">
+                      Try ZyraCall Free
+                      <ArrowRight className="w-5 h-5" />
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </section>

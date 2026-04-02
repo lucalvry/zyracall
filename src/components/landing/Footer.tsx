@@ -6,10 +6,10 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative border-t border-border/50 bg-muted/20">
+    <footer className="relative border-t border-border/50 bg-muted/20" itemScope itemType="https://schema.org/WPFooter">
       {/* Main Footer */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-8 lg:gap-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-8 lg:gap-10">
           {/* Brand Column */}
           <div className="col-span-2">
             <Link to="/" className="inline-block mb-6">
@@ -17,6 +17,7 @@ const Footer = () => {
                 src={logo} 
                 alt="ZyraCall" 
                 className="h-8 w-auto"
+                loading="lazy"
               />
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mb-6">
@@ -59,13 +60,26 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* Top Destinations */}
+          <div>
+            <h4 className="font-semibold text-foreground mb-4">Top Destinations</h4>
+            <ul className="space-y-3">
+              <FooterLink to="/call/india">Call India</FooterLink>
+              <FooterLink to="/call/nigeria">Call Nigeria</FooterLink>
+              <FooterLink to="/call/philippines">Call Philippines</FooterLink>
+              <FooterLink to="/call/mexico">Call Mexico</FooterLink>
+              <FooterLink to="/call/united-kingdom">Call UK</FooterLink>
+            </ul>
+          </div>
+
           {/* Tools Links */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Tools</h4>
+            <h4 className="font-semibold text-foreground mb-4">Free Tools</h4>
             <ul className="space-y-3">
               <FooterLink to="/tools/2fa-finder">2FA Finder</FooterLink>
               <FooterLink to="/tools/rate-calculator">Rate Calculator</FooterLink>
               <FooterLink to="/tools/webrtc-tester">WebRTC Tester</FooterLink>
+              <FooterLink to="/tools/connectivity-ping">Connectivity Ping</FooterLink>
               <FooterLink to="/tools">All Tools</FooterLink>
             </ul>
           </div>

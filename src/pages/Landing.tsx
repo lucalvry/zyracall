@@ -7,7 +7,7 @@ import TrustSection from "@/components/landing/TrustSection";
 import FAQ, { generateFAQSchema } from "@/components/landing/FAQ";
 import CTA from "@/components/landing/CTA";
 import Footer from "@/components/landing/Footer";
-import SEOHead, { organizationSchema, websiteSchema } from "@/components/seo/SEOHead";
+import SEOHead, { organizationSchema, websiteSchema, generateSpeakableSchema } from "@/components/seo/SEOHead";
 
 const Landing = () => {
   return (
@@ -20,7 +20,12 @@ const Landing = () => {
         ogImageTitle="ZyraCall"
         ogImageSubtitle="International calls from your browser"
         ogImageType="default"
-        structuredData={[organizationSchema, websiteSchema, generateFAQSchema()]}
+        structuredData={[
+          organizationSchema,
+          websiteSchema,
+          generateFAQSchema(),
+          generateSpeakableSchema("https://zyracall.com", "ZyraCall - Browser-Based International Calling"),
+        ]}
       />
       <div className="min-h-screen flex flex-col">
         <Header />

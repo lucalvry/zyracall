@@ -19,7 +19,7 @@ const trustItems = [
   {
     icon: <CreditCard className="w-6 h-6" />,
     title: "Secure Payments",
-    description: "PCI-compliant payment processing",
+    description: "PCI-compliant payment processing via Stripe",
   },
 ];
 
@@ -32,6 +32,18 @@ const TrustSection = () => {
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-accent/10 rounded-full blur-3xl" />
       
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Q&A Heading */}
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground mb-4">
+            Why should you trust ZyraCall for international calls?
+          </h2>
+          <p className="text-primary-foreground/80 max-w-2xl mx-auto" data-speakable="true">
+            ZyraCall protects every call with 256-bit encryption, processes payments through 
+            PCI-compliant Stripe, never sells user data, and maintains reliable VoIP 
+            infrastructure across 200+ countries for consistent call quality.
+          </p>
+        </div>
+
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {trustItems.map((item) => (
             <div key={item.title} className="text-center">

@@ -13,6 +13,10 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
 
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://rixpasynhccgkoumpaan.supabase.co" crossorigin />
+    <link rel="dns-prefetch" href="https://rixpasynhccgkoumpaan.supabase.co" />
+
     <!-- Open Graph -->
     <meta property="og:title" content="ZyraCall - Browser-Based Global Calling" />
     <meta property="og:description" content="Call any phone number worldwide directly from your browser. No apps, no SIM cards, transparent pay-as-you-go pricing." />
@@ -47,27 +51,45 @@
     }
     </script>
 
-    <!-- Structured Data - WebApplication -->
+    <!-- Structured Data - SoftwareApplication -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
+      "@type": "SoftwareApplication",
       "name": "ZyraCall",
       "applicationCategory": "CommunicationApplication",
       "operatingSystem": "Web Browser",
+      "browserRequirements": "Requires a modern web browser with WebRTC support (Chrome, Firefox, Safari, Edge)",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD",
-        "description": "Pay-as-you-go international calling"
+        "description": "Free to sign up. Pay-as-you-go international calling from $0.01 per minute."
       },
       "featureList": [
-        "Browser-based calling",
-        "200+ countries supported",
-        "No app installation required",
-        "Real-time cost display",
-        "Call recording",
-        "Pay-as-you-go pricing"
+        "Browser-based international calling to 200+ countries",
+        "Real-time cost display during calls",
+        "HD VoIP call quality with WebRTC",
+        "Call recording with secure storage",
+        "Pay-as-you-go pricing with no subscriptions",
+        "No app installation required"
+      ],
+      "about": [
+        {
+          "@type": "Thing",
+          "name": "Voice over IP",
+          "sameAs": "https://en.wikipedia.org/wiki/Voice_over_IP"
+        },
+        {
+          "@type": "Thing",
+          "name": "International calling",
+          "sameAs": "https://en.wikipedia.org/wiki/International_call"
+        },
+        {
+          "@type": "Thing",
+          "name": "WebRTC",
+          "sameAs": "https://en.wikipedia.org/wiki/WebRTC"
+        }
       ]
     }
     </script>

@@ -1,4 +1,4 @@
-import { ArrowRight, Phone } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import RateCalculator from "@/components/rates/RateCalculator";
@@ -11,17 +11,20 @@ const PricingPreview = () => {
       <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -translate-x-1/2" />
       
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* Section Header — Q&A Format */}
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="inline-block text-accent font-medium text-sm tracking-wide uppercase mb-4">
             Transparent Pricing
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6 tracking-tight">
-            Simple, per-minute rates.{" "}
-            <span className="gradient-text-accent">No hidden fees.</span>
+            How much does it cost to call{" "}
+            <span className="gradient-text-accent">internationally with ZyraCall?</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Pay only for what you use. Check rates for any country before you call.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto" data-speakable="true">
+            ZyraCall uses simple pay-as-you-go pricing starting from $0.01 per minute. 
+            There are no monthly fees, no subscriptions, and no hidden charges. You only 
+            pay for the minutes you use, and you can check exact rates for any country 
+            before placing a call.
           </p>
         </div>
 

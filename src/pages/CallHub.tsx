@@ -242,6 +242,42 @@ const CallHub = () => {
             </div>
           </section>
 
+          {/* Q&A Knowledge Sections */}
+          <section className="py-16">
+            <div className="container mx-auto px-4">
+              <div className="max-w-3xl mx-auto space-y-12">
+                <article>
+                  <h2 className="text-2xl font-bold mb-4">What countries can I call from my browser?</h2>
+                  <p className="text-muted-foreground" data-speakable="true">
+                    ZyraCall supports browser-based VoIP calls to over 200 countries and territories 
+                    worldwide, including mobile and landline numbers. Popular destinations include India, 
+                    Nigeria, Philippines, Mexico, the United Kingdom, Pakistan, and Canada. You can search 
+                    for any country above to see exact per-minute rates.
+                  </p>
+                </article>
+                <article>
+                  <h2 className="text-2xl font-bold mb-4">How do international calling rates work?</h2>
+                  <p className="text-muted-foreground" data-speakable="true">
+                    ZyraCall uses pay-as-you-go per-minute pricing with no monthly fees or subscriptions. 
+                    Rates vary by destination country and whether you're calling a mobile or landline number. 
+                    You can check the exact rate before placing any call using our{" "}
+                    <Link to="/tools/rate-calculator" className="text-primary hover:underline">rate calculator</Link>.
+                  </p>
+                </article>
+                <article>
+                  <h2 className="text-2xl font-bold mb-4">What is VoIP and how does ZyraCall use it?</h2>
+                  <p className="text-muted-foreground" data-speakable="true">
+                    VoIP (Voice over Internet Protocol) transmits voice calls over the internet instead of 
+                    traditional phone lines. ZyraCall uses WebRTC-based VoIP technology built into modern 
+                    browsers, allowing you to call any phone number worldwide without downloading apps or 
+                    using SIM cards. Learn more about{" "}
+                    <Link to="/how-it-works" className="text-primary hover:underline">how browser calling works</Link>.
+                  </p>
+                </article>
+              </div>
+            </div>
+          </section>
+
           {/* CTA Section */}
           <section className="py-16">
             <div className="container mx-auto px-4">

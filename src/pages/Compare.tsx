@@ -218,71 +218,93 @@ const Compare = () => {
             </div>
           </section>
 
-          {/* How We Compare - Methodology Section */}
+          {/* Q&A Knowledge Sections */}
           <section className="py-16 lg:py-24 bg-muted/30">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="max-w-4xl mx-auto">
-                <div className="flex items-center gap-2 mb-6">
-                  <HelpCircle className="w-5 h-5 text-primary" />
-                  <h2 className="text-2xl font-bold">How We Compare</h2>
-                </div>
-                <p className="text-muted-foreground mb-8">
-                  We believe in transparent, fair comparisons. Here's our methodology for evaluating 
-                  international calling services:
-                </p>
+              <div className="max-w-4xl mx-auto space-y-12">
+                <article>
+                  <h2 className="text-2xl font-bold mb-4">How does ZyraCall compare to other international calling services?</h2>
+                  <p className="text-muted-foreground" data-speakable="true">
+                    ZyraCall differentiates from competitors like Skype, Google Voice, and Rebtel by offering 
+                    100% browser-based calling with no app downloads required. Unlike subscription-based services, 
+                    ZyraCall uses transparent pay-as-you-go pricing with no monthly fees, no credit expiration, 
+                    and real-time cost display during every call.
+                  </p>
+                </article>
+                <article>
+                  <h2 className="text-2xl font-bold mb-4">What should you look for in a VoIP calling service?</h2>
+                  <p className="text-muted-foreground" data-speakable="true">
+                    When choosing a VoIP international calling service, evaluate pricing transparency (hidden fees 
+                    and credit expiration policies), country coverage, call quality (HD audio via WebRTC), device 
+                    compatibility (browser vs app-only), and ease of setup. The best services offer pay-as-you-go 
+                    rates with no commitments.
+                  </p>
+                </article>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <CheckCircle className="w-5 h-5 text-primary" />
-                        <h3 className="font-semibold">Features & Functionality</h3>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        We evaluate core features like call quality, country coverage, device compatibility, 
-                        and unique capabilities that matter to users.
-                      </p>
-                    </CardContent>
-                  </Card>
+                {/* Methodology Cards */}
+                <div>
+                  <div className="flex items-center gap-2 mb-6">
+                    <HelpCircle className="w-5 h-5 text-primary" />
+                    <h2 className="text-2xl font-bold">How We Compare</h2>
+                  </div>
+                  <p className="text-muted-foreground mb-8">
+                    We believe in transparent, fair comparisons. Here's our methodology for evaluating 
+                    international calling services:
+                  </p>
 
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <CheckCircle className="w-5 h-5 text-primary" />
-                        <h3 className="font-semibold">Pricing Transparency</h3>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        We analyze pricing models, hidden fees, credit expiration policies, and overall 
-                        value for money across different usage patterns.
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <Card>
+                      <CardContent className="p-6">
+                        <div className="flex items-center gap-3 mb-3">
+                          <CheckCircle className="w-5 h-5 text-primary" />
+                          <h3 className="font-semibold">Features & Functionality</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          We evaluate core features like call quality, country coverage, device compatibility, 
+                          and unique capabilities that matter to users.
+                        </p>
+                      </CardContent>
+                    </Card>
 
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <CheckCircle className="w-5 h-5 text-primary" />
-                        <h3 className="font-semibold">User Experience</h3>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        We consider ease of setup, interface design, cross-device accessibility, 
-                        and the overall calling experience from start to finish.
-                      </p>
-                    </CardContent>
-                  </Card>
+                    <Card>
+                      <CardContent className="p-6">
+                        <div className="flex items-center gap-3 mb-3">
+                          <CheckCircle className="w-5 h-5 text-primary" />
+                          <h3 className="font-semibold">Pricing Transparency</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          We analyze pricing models, hidden fees, credit expiration policies, and overall 
+                          value for money across different usage patterns.
+                        </p>
+                      </CardContent>
+                    </Card>
 
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <CheckCircle className="w-5 h-5 text-primary" />
-                        <h3 className="font-semibold">Real-World Testing</h3>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Our comparisons are based on actual usage, not just marketing claims. We test 
-                        call quality, reliability, and support responsiveness.
-                      </p>
-                    </CardContent>
-                  </Card>
+                    <Card>
+                      <CardContent className="p-6">
+                        <div className="flex items-center gap-3 mb-3">
+                          <CheckCircle className="w-5 h-5 text-primary" />
+                          <h3 className="font-semibold">User Experience</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          We consider ease of setup, interface design, cross-device accessibility, 
+                          and the overall calling experience from start to finish.
+                        </p>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardContent className="p-6">
+                        <div className="flex items-center gap-3 mb-3">
+                          <CheckCircle className="w-5 h-5 text-primary" />
+                          <h3 className="font-semibold">Real-World Testing</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Our comparisons are based on actual usage, not just marketing claims. We test 
+                          call quality, reliability, and support responsiveness.
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
               </div>
             </div>

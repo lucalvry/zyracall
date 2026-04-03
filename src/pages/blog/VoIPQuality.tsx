@@ -36,7 +36,7 @@ const VoIPQuality = () => {
         ogImageSubtitle="Crystal-Clear Calls"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema]}
+        structuredData={[organizationSchema, generateSpeakableSchema("https://zyracall.com/blog/voip-quality-guide", "VoIP Call Quality Guide")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">

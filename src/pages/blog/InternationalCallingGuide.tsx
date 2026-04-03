@@ -104,7 +104,7 @@ const InternationalCallingGuide = () => {
         ogImageType="default"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, articleSchema, faqSchema]}
+        structuredData={[organizationSchema, articleSchema, faqSchema, generateSpeakableSchema("https://zyracall.com/blog/international-calling-guide", "International Calling Guide")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">

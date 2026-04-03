@@ -104,9 +104,9 @@ const BrowserCallingFuture = () => {
                 <article className="prose prose-lg dark:prose-invert max-w-none">
                   <h2 className="flex items-center gap-3">
                     <Globe className="w-6 h-6 text-primary" />
-                    The Rise of WebRTC
+                    What is WebRTC and how does it enable browser calling?
                   </h2>
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground" data-speakable="true">
                     WebRTC (Web Real-Time Communication) is the technology powering browser-based 
                     calling. Built directly into modern browsers like Chrome, Firefox, and Safari, 
                     it enables high-quality voice and video communication without plugins or downloads.

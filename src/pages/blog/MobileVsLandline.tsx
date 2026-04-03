@@ -108,9 +108,9 @@ const MobileVsLandline = () => {
 
                   <h2 className="flex items-center gap-3">
                     <AlertTriangle className="w-6 h-6 text-primary" />
-                    Why the Difference?
+                    Why are mobile calls more expensive than landline calls internationally?
                   </h2>
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground" data-speakable="true">
                     Mobile carriers charge "termination fees" when calls reach mobile phones. These 
                     fees are significantly higher than landline termination costs. VoIP providers 
                     like ZyraCall must pay these fees, which is why mobile rates are higher.

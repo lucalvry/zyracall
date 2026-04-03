@@ -181,9 +181,9 @@ const SaveMoneyCalls = () => {
                   <section id="why-expensive" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <DollarSign className="w-6 h-6 text-primary flex-shrink-0" />
-                      Why International Calls Are Expensive
+                      Why are international calls so expensive?
                     </h2>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground" data-speakable="true">
                       Traditional phone carriers charge premium rates for international calls because 
                       they must pay interconnection fees to foreign carriers. These costs are passed 
                       on to you—often with significant markup.

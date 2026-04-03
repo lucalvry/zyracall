@@ -51,7 +51,7 @@ const BrowserCallingFuture = () => {
         ogImageSubtitle="The Future of Communication"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, articleSchema]}
+        structuredData={[organizationSchema, articleSchema, generateSpeakableSchema("https://zyracall.com/blog/browser-based-calling-future", "Browser-Based Calling")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">

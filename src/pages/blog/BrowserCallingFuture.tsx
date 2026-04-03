@@ -114,7 +114,7 @@ const BrowserCallingFuture = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Zap className="w-6 h-6 text-primary" />
-                    Why Browser Calling is Better
+                    Why is browser-based calling better than traditional apps?
                   </h2>
                   
                   <div className="grid gap-4 my-6 not-prose">

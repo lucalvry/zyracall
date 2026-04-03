@@ -89,7 +89,7 @@ const FreeInternationalCalling = () => {
         ogImageSubtitle="What Really Works?"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, articleSchema]}
+        structuredData={[organizationSchema, articleSchema, generateSpeakableSchema("https://zyracall.com/blog/free-international-calling", "Free International Calling")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">

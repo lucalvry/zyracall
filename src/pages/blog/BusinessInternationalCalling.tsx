@@ -161,7 +161,7 @@ const BusinessInternationalCalling = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Briefcase className="w-6 h-6 text-primary" />
-                    Common Business Calling Challenges
+                    What are the biggest challenges of business international calling?
                   </h2>
 
                   <div className="grid gap-4 my-8 not-prose">

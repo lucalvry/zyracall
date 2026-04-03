@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead, { organizationSchema } from "@/components/seo/SEOHead";
+import SEOHead, { organizationSchema, generateSpeakableSchema } from "@/components/seo/SEOHead";
 import RelatedContent from "@/components/seo/RelatedContent";
 import {
   Breadcrumb,
@@ -51,7 +51,7 @@ const BrowserCallingFuture = () => {
         ogImageSubtitle="The Future of Communication"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, articleSchema]}
+        structuredData={[organizationSchema, articleSchema, generateSpeakableSchema("https://zyracall.com/blog/browser-based-calling-future", "Browser-Based Calling")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">
@@ -104,9 +104,9 @@ const BrowserCallingFuture = () => {
                 <article className="prose prose-lg dark:prose-invert max-w-none">
                   <h2 className="flex items-center gap-3">
                     <Globe className="w-6 h-6 text-primary" />
-                    The Rise of WebRTC
+                    What is WebRTC and how does it enable browser calling?
                   </h2>
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground" data-speakable="true">
                     WebRTC (Web Real-Time Communication) is the technology powering browser-based 
                     calling. Built directly into modern browsers like Chrome, Firefox, and Safari, 
                     it enables high-quality voice and video communication without plugins or downloads.
@@ -114,7 +114,7 @@ const BrowserCallingFuture = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Zap className="w-6 h-6 text-primary" />
-                    Why Browser Calling is Better
+                    Why is browser-based calling better than traditional apps?
                   </h2>
                   
                   <div className="grid gap-4 my-6 not-prose">
@@ -140,7 +140,7 @@ const BrowserCallingFuture = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Shield className="w-6 h-6 text-primary" />
-                    Security Advantages
+                    How secure is browser-based calling?
                   </h2>
                   <p className="text-muted-foreground">
                     Browser-based calling is actually more secure than traditional apps in many ways:
@@ -161,7 +161,7 @@ const BrowserCallingFuture = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <BookOpen className="w-6 h-6 text-primary" />
-                    ZyraCall's Approach
+                    How does ZyraCall use browser-based calling technology?
                   </h2>
                   <p className="text-muted-foreground">
                     ZyraCall leverages WebRTC to deliver crystal-clear international calls directly 

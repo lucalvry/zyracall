@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead, { organizationSchema } from "@/components/seo/SEOHead";
+import SEOHead, { organizationSchema, generateSpeakableSchema } from "@/components/seo/SEOHead";
 import RelatedContent from "@/components/seo/RelatedContent";
 import {
   Breadcrumb,
@@ -101,7 +101,7 @@ const BusinessInternationalCalling = () => {
         ogImageSubtitle="For Small & Medium Businesses"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, articleSchema]}
+        structuredData={[organizationSchema, articleSchema, generateSpeakableSchema("https://zyracall.com/blog/business-international-calling", "Business International Calling")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">
@@ -152,16 +152,16 @@ const BusinessInternationalCalling = () => {
             <div className="container mx-auto px-4">
               <div className="max-w-3xl mx-auto">
                 <article className="prose prose-lg dark:prose-invert max-w-none">
-                  <p className="text-muted-foreground text-lg">
-                    For businesses with international clients, suppliers, or remote teams, 
-                    calling costs can quickly spiral out of control. Traditional carrier 
-                    international plans often charge premium rates that don't make sense 
-                    for modern businesses.
+                  <p className="text-muted-foreground text-lg" data-speakable="true">
+                    For businesses with international clients, suppliers, or remote teams,
+                    calling costs can quickly spiral out of control. VoIP browser-based calling reduces
+                    international calling costs by 70–90% compared to traditional carrier plans,
+                    with no app installs, no per-seat licensing, and pay-as-you-go pricing.
                   </p>
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Briefcase className="w-6 h-6 text-primary" />
-                    Common Business Calling Challenges
+                    What are the biggest challenges of business international calling?
                   </h2>
 
                   <div className="grid gap-4 my-8 not-prose">
@@ -182,7 +182,7 @@ const BusinessInternationalCalling = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <CheckCircle2 className="w-6 h-6 text-primary" />
-                    Modern Solutions for Business Calling
+                    How can VoIP solve business international calling problems?
                   </h2>
                   <p className="text-muted-foreground">
                     VoIP and browser-based calling have transformed business communications:
@@ -211,7 +211,7 @@ const BusinessInternationalCalling = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <DollarSign className="w-6 h-6 text-primary" />
-                    Cost Comparison: Traditional vs VoIP
+                    How much can businesses save with VoIP vs traditional carriers?
                   </h2>
 
                   <div className="my-6 not-prose">
@@ -247,7 +247,7 @@ const BusinessInternationalCalling = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Shield className="w-6 h-6 text-primary" />
-                    Business-Specific Considerations
+                    What should businesses look for in an international calling solution?
                   </h2>
                   <ul className="space-y-2 my-6 not-prose">
                     {[

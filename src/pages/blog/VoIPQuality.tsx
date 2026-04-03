@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead, { organizationSchema } from "@/components/seo/SEOHead";
+import SEOHead, { organizationSchema, generateSpeakableSchema } from "@/components/seo/SEOHead";
 import RelatedContent from "@/components/seo/RelatedContent";
 import {
   Breadcrumb,
@@ -36,7 +36,7 @@ const VoIPQuality = () => {
         ogImageSubtitle="Crystal-Clear Calls"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema]}
+        structuredData={[organizationSchema, generateSpeakableSchema("https://zyracall.com/blog/voip-quality-guide", "VoIP Call Quality Guide")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">
@@ -89,10 +89,10 @@ const VoIPQuality = () => {
                 <article className="prose prose-lg dark:prose-invert max-w-none">
                   <h2 className="flex items-center gap-3">
                     <Wifi className="w-6 h-6 text-primary" />
-                    Bandwidth Requirements
+                    What bandwidth do you need for VoIP calls?
                   </h2>
-                  <p className="text-muted-foreground">
-                    VoIP calls require surprisingly little bandwidth—typically just 100 Kbps for 
+                  <p className="text-muted-foreground" data-speakable="true">
+                    VoIP calls require surprisingly little bandwidth—typically just 100 Kbps for
                     high-quality voice. However, consistency matters more than raw speed:
                   </p>
                   
@@ -125,7 +125,7 @@ const VoIPQuality = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Settings className="w-6 h-6 text-primary" />
-                    What ZyraCall Does for Quality
+                    How does ZyraCall optimize call quality?
                   </h2>
                   <ul className="space-y-2 my-6 not-prose">
                     {[
@@ -144,7 +144,7 @@ const VoIPQuality = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <AlertCircle className="w-6 h-6 text-primary" />
-                    Troubleshooting Poor Quality
+                    How do you fix poor VoIP call quality?
                   </h2>
                   <p className="text-muted-foreground">
                     If you're experiencing issues, try these steps:

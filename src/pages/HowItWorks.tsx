@@ -1,6 +1,5 @@
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { UserPlus, Wallet, Phone, ArrowRight } from "lucide-react";
 import {
@@ -12,62 +11,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-
-const generateHowToSchema = () => ({
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to Make International Calls with ZyraCall",
-  "description": "Get started making affordable international calls in 3 simple steps: sign up, add credit, and start calling worldwide from your browser.",
-  "url": "https://zyracall.com/how-it-works",
-  "totalTime": "PT5M",
-  "estimatedCost": {
-    "@type": "MonetaryAmount",
-    "currency": "USD",
-    "value": "5"
-  },
-  "step": [
-    {
-      "@type": "HowToStep",
-      "position": 1,
-      "name": "Create Your Account",
-      "text": "Sign up for free with just your email address. No credit card required to get started.",
-      "url": "https://zyracall.com/signup"
-    },
-    {
-      "@type": "HowToStep",
-      "position": 2,
-      "name": "Add Credit to Your Wallet",
-      "text": "Add credit to your wallet using any major credit card or debit card. Start with as little as $5.",
-      "url": "https://zyracall.com/wallet"
-    },
-    {
-      "@type": "HowToStep",
-      "position": 3,
-      "name": "Start Calling Worldwide",
-      "text": "Enter any phone number and click call. Your browser handles everything - no app downloads needed.",
-      "url": "https://zyracall.com/dashboard"
-    }
-  ]
-});
-
-const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://zyracall.com"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "How It Works",
-      "item": "https://zyracall.com/how-it-works"
-    }
-  ]
-};
+import SEOHead, { organizationSchema, generateSpeakableSchema, generateHowToSchema } from "@/components/seo/SEOHead";
 
 const steps = [
   {
@@ -91,36 +35,39 @@ const steps = [
 ];
 
 const HowItWorks = () => {
+  const breadcrumbs = [
+    { name: "Home", url: "https://zyracall.com" },
+    { name: "How It Works", url: "https://zyracall.com/how-it-works" },
+  ];
+
+  const howToSchema = generateHowToSchema(
+    "How to Make International Calls with ZyraCall",
+    "Get started making affordable international calls in 3 simple steps: sign up, add credit, and start calling worldwide from your browser.",
+    [
+      { name: "Create Your Account", text: "Sign up for free with just your email address. No credit card required to get started.", url: "https://zyracall.com/signup" },
+      { name: "Add Credit to Your Wallet", text: "Add credit to your wallet using any major credit card or debit card. Start with as little as $5.", url: "https://zyracall.com/wallet" },
+      { name: "Start Calling Worldwide", text: "Enter any phone number and click call. Your browser handles everything - no app downloads needed.", url: "https://zyracall.com/dashboard" },
+    ],
+    "PT5M"
+  );
+
+  const speakableSchema = generateSpeakableSchema(
+    "https://zyracall.com/how-it-works",
+    "How ZyraCall Works"
+  );
+
   return (
     <>
-      <Helmet>
-        <title>How ZyraCall Works - Simple Browser-Based Calling</title>
-        <meta name="description" content="Learn how ZyraCall works. Sign up, add credit, and start calling any phone number worldwide from your browser in minutes. No apps required." />
-        <link rel="canonical" href="https://zyracall.com/how-it-works" />
-        <meta name="keywords" content="how to call internationally, browser calling guide, VoIP setup, international calling tutorial, make cheap calls online, web calling instructions" />
-        
-        {/* Open Graph */}
-        <meta property="og:title" content="How ZyraCall Works - Simple Browser-Based Calling" />
-        <meta property="og:description" content="Learn how ZyraCall works. Sign up, add credit, and start calling any phone number worldwide from your browser in minutes." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://zyracall.com/how-it-works" />
-        <meta property="og:site_name" content="ZyraCall" />
-        <meta property="og:image" content="https://zyracall.com/og-how-it-works.png" />
-        
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="How ZyraCall Works - Simple Browser-Based Calling" />
-        <meta name="twitter:description" content="Learn how ZyraCall works. Sign up, add credit, and start calling any phone number worldwide from your browser in minutes." />
-        <meta name="twitter:image" content="https://zyracall.com/og-how-it-works.png" />
-        
-        {/* JSON-LD Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify(generateHowToSchema())}
-        </script>
-        <script type="application/ld+json">
-          {JSON.stringify(breadcrumbSchema)}
-        </script>
-      </Helmet>
+      <SEOHead
+        title="How ZyraCall Works - Simple Browser-Based Calling"
+        description="Learn how ZyraCall works. Sign up, add credit, and start calling any phone number worldwide from your browser in minutes. No apps required."
+        canonicalUrl="https://zyracall.com/how-it-works"
+        keywords="how to call internationally, browser calling guide, VoIP setup, international calling tutorial, make cheap calls online, web calling instructions"
+        ogImageTitle="How ZyraCall Works"
+        ogImageSubtitle="Simple Browser-Based Calling"
+        breadcrumbs={breadcrumbs}
+        structuredData={[organizationSchema, howToSchema, speakableSchema]}
+      />
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 pt-20">
@@ -143,8 +90,10 @@ const HowItWorks = () => {
 
               <div className="text-center mb-16">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">How ZyraCall Works</h1>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Get started in 3 simple steps: Sign up with email, add credit to your wallet, and start calling worldwide.
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto" data-speakable="true">
+                  ZyraCall uses WebRTC technology to route VoIP calls through your browser.
+                  Sign up with your email, add credit to your wallet, and dial any phone number
+                  in over 200 countries — no app downloads, plugins, or SIM cards needed.
                 </p>
               </div>
 

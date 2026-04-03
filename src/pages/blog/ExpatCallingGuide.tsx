@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead, { organizationSchema } from "@/components/seo/SEOHead";
+import SEOHead, { organizationSchema, generateSpeakableSchema } from "@/components/seo/SEOHead";
 import RelatedContent from "@/components/seo/RelatedContent";
 import {
   Breadcrumb,
@@ -46,7 +46,7 @@ const ExpatCallingGuide = () => {
         ogImageSubtitle="Stay Connected with Family"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, articleSchema]}
+        structuredData={[organizationSchema, articleSchema, generateSpeakableSchema("https://zyracall.com/blog/expat-calling-family-guide", "Expat Calling Guide")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">
@@ -99,9 +99,9 @@ const ExpatCallingGuide = () => {
                 <article className="prose prose-lg dark:prose-invert max-w-none">
                   <h2 className="flex items-center gap-3">
                     <Clock className="w-6 h-6 text-primary" />
-                    Managing Time Zones
+                    How do expats manage time zones for family calls?
                   </h2>
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground" data-speakable="true">
                     The biggest challenge for expats is finding the right time to call. Here are 
                     some strategies that work:
                   </p>
@@ -126,7 +126,7 @@ const ExpatCallingGuide = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Users className="w-6 h-6 text-primary" />
-                    Group Calling Tips
+                    What are the best tips for group calling with family abroad?
                   </h2>
                   <p className="text-muted-foreground">
                     Family gatherings are harder to join remotely, but with the right approach, 
@@ -148,7 +148,7 @@ const ExpatCallingGuide = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Globe className="w-6 h-6 text-primary" />
-                    Calling Older Family Members
+                    How can expats call older family members without smartphones?
                   </h2>
                   <p className="text-muted-foreground">
                     Not everyone has smartphones or reliable internet. For older family members 

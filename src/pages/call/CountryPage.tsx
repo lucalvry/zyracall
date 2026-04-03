@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead, { organizationSchema } from "@/components/seo/SEOHead";
+import SEOHead, { organizationSchema, generateSpeakableSchema } from "@/components/seo/SEOHead";
 import RelatedContent from "@/components/seo/RelatedContent";
 import { useCallRates, getCountryFlag } from "@/hooks/useCallRates";
+import { getRelatedContent } from "@/data/topical-map";
 
 // Convert URL slug back to country name for matching
 const fromSlug = (slug: string) =>
@@ -135,7 +136,7 @@ const CountryPage = () => {
           ogImageSubtitle={`From $${Math.min(rate.mobile_rate, rate.landline_rate)}/min`}
           ogImageType="rates"
           breadcrumbs={breadcrumbs}
-          structuredData={[organizationSchema, countrySchema, faqSchema].filter(Boolean)}
+          structuredData={[organizationSchema, countrySchema, faqSchema, generateSpeakableSchema(`https://zyracall.com/call/${country}`, `Call ${rate.country_name}`)].filter(Boolean)}
         />
       )}
 
@@ -405,19 +406,19 @@ const CountryPage = () => {
                       </div>
                     )}
 
-                    {/* Related Resources Sidebar */}
+                    {/* Related Resources Sidebar — driven by topical map */}
                     <div className="lg:col-span-1">
-                      <RelatedContent
-                        comparisons={[
-                          { title: "vs Skype", href: "/compare/zyracall-vs-skype" },
-                          { title: "vs Google Voice", href: "/compare/zyracall-vs-google-voice" },
-                        ]}
-                        articles={[
-                          { title: "International Calling Guide", href: "/blog/international-calling-guide" },
-                          { title: "Save Money on Calls", href: "/blog/save-money-international-calls-2025" },
-                        ]}
-                        showRateCalculator={true}
-                      />
+                      {(() => {
+                        const related = getRelatedContent(`/call/${country}`);
+                        return (
+                          <RelatedContent
+                            countries={related.countries}
+                            comparisons={related.comparisons}
+                            articles={related.articles}
+                            showRateCalculator={true}
+                          />
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>

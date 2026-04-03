@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead, { organizationSchema } from "@/components/seo/SEOHead";
+import SEOHead, { organizationSchema, generateSpeakableSchema } from "@/components/seo/SEOHead";
 import RelatedContent from "@/components/seo/RelatedContent";
 import {
   Breadcrumb,
@@ -36,7 +36,7 @@ const MobileVsLandline = () => {
         ogImageSubtitle="Which is Cheaper?"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema]}
+        structuredData={[organizationSchema, generateSpeakableSchema("https://zyracall.com/blog/mobile-vs-landline-rates", "Mobile vs Landline Rates")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">
@@ -108,9 +108,9 @@ const MobileVsLandline = () => {
 
                   <h2 className="flex items-center gap-3">
                     <AlertTriangle className="w-6 h-6 text-primary" />
-                    Why the Difference?
+                    Why are mobile calls more expensive than landline calls internationally?
                   </h2>
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground" data-speakable="true">
                     Mobile carriers charge "termination fees" when calls reach mobile phones. These 
                     fees are significantly higher than landline termination costs. VoIP providers 
                     like ZyraCall must pay these fees, which is why mobile rates are higher.
@@ -118,7 +118,7 @@ const MobileVsLandline = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <BookOpen className="w-6 h-6 text-primary" />
-                    Country Examples
+                    How much do mobile vs landline rates differ by country?
                   </h2>
                   <p className="text-muted-foreground">
                     The difference varies by country. Here are some typical examples:
@@ -159,7 +159,7 @@ const MobileVsLandline = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <CheckCircle2 className="w-6 h-6 text-primary" />
-                    When to Call Landlines
+                    When should you call a landline instead of a mobile phone?
                   </h2>
                   <ul className="space-y-2 my-6 not-prose">
                     {[

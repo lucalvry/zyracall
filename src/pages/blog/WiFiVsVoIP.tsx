@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead, { organizationSchema } from "@/components/seo/SEOHead";
+import SEOHead, { organizationSchema, generateSpeakableSchema } from "@/components/seo/SEOHead";
 import RelatedContent from "@/components/seo/RelatedContent";
 import {
   Breadcrumb,
@@ -96,7 +96,7 @@ const WiFiVsVoIP = () => {
         ogImageSubtitle="What's the Difference?"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, articleSchema]}
+        structuredData={[organizationSchema, articleSchema, generateSpeakableSchema("https://zyracall.com/blog/wifi-calling-vs-voip", "WiFi Calling vs VoIP")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">
@@ -150,8 +150,8 @@ const WiFiVsVoIP = () => {
                   {/* Quick Answer */}
                   <Card className="my-8 border-primary/30 bg-primary/5 not-prose">
                     <CardContent className="p-6">
-                      <h2 className="text-lg font-bold mb-3">Quick Answer</h2>
-                      <p className="text-muted-foreground">
+                      <h2 className="text-lg font-bold mb-3">What is the difference between WiFi calling and VoIP?</h2>
+                      <p className="text-muted-foreground" data-speakable="true">
                         <strong>WiFi Calling</strong> is your phone carrier's service that routes calls 
                         over WiFi instead of cell towers—but you still pay carrier rates. 
                         <strong> VoIP</strong> (like ZyraCall) is a separate service that bypasses 
@@ -225,7 +225,7 @@ const WiFiVsVoIP = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Globe className="w-6 h-6 text-primary" />
-                    Side-by-Side Comparison
+                    How do WiFi calling and VoIP compare side by side?
                   </h2>
 
                   <div className="my-6 not-prose">
@@ -259,7 +259,7 @@ const WiFiVsVoIP = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <DollarSign className="w-6 h-6 text-primary" />
-                    The Cost Difference for International Calls
+                    How much cheaper is VoIP than WiFi calling for international calls?
                   </h2>
                   <p className="text-muted-foreground">
                     This is where the difference matters most. With WiFi calling, you're still 
@@ -288,7 +288,7 @@ const WiFiVsVoIP = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Shield className="w-6 h-6 text-primary" />
-                    When to Use Each
+                    When should you use WiFi calling vs VoIP?
                   </h2>
                   <div className="grid md:grid-cols-2 gap-4 my-6 not-prose">
                     <Card>

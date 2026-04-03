@@ -33,7 +33,7 @@ const Hero = () => {
   const currentCountry = countries[currentCountryIndex];
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center overflow-hidden" itemScope itemType="https://schema.org/WebApplication">
       {/* Background Effects */}
       <div className="absolute inset-0 gradient-mesh" />
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
@@ -75,6 +75,8 @@ const Hero = () => {
             <p 
               className="text-lg lg:text-xl text-muted-foreground mb-10 max-w-xl mx-auto lg:mx-0 animate-fade-in"
               style={{ animationDelay: "0.2s" }}
+              data-speakable="true"
+              itemProp="description"
             >
               Simple, reliable international calling without apps or SIM cards. 
               Just open your browser and dial any number in 200+ countries.

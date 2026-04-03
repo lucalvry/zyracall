@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead, { organizationSchema } from "@/components/seo/SEOHead";
+import SEOHead, { organizationSchema, generateSpeakableSchema } from "@/components/seo/SEOHead";
 import RelatedContent from "@/components/seo/RelatedContent";
 import {
   Breadcrumb,
@@ -88,7 +88,7 @@ const SaveMoneyCalls = () => {
         ogImageSubtitle="Proven strategies for 2025"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, articleSchema, faqSchema]}
+        structuredData={[organizationSchema, articleSchema, faqSchema, generateSpeakableSchema("https://zyracall.com/blog/save-money-international-calls-2025", "Save Money on International Calls")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">
@@ -181,9 +181,9 @@ const SaveMoneyCalls = () => {
                   <section id="why-expensive" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <DollarSign className="w-6 h-6 text-primary flex-shrink-0" />
-                      Why International Calls Are Expensive
+                      Why are international calls so expensive?
                     </h2>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground" data-speakable="true">
                       Traditional phone carriers charge premium rates for international calls because 
                       they must pay interconnection fees to foreign carriers. These costs are passed 
                       on to you—often with significant markup.
@@ -198,7 +198,7 @@ const SaveMoneyCalls = () => {
                   <section id="voip-advantage" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Phone className="w-6 h-6 text-primary flex-shrink-0" />
-                      The VoIP Advantage
+                      How does VoIP reduce international calling costs?
                     </h2>
                     <p className="text-muted-foreground">
                       VoIP (Voice over Internet Protocol) sends your calls over the internet instead 
@@ -222,7 +222,7 @@ const SaveMoneyCalls = () => {
                   <section id="landline-vs-mobile" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Smartphone className="w-6 h-6 text-primary flex-shrink-0" />
-                      Landline vs Mobile Rates
+                      Is it cheaper to call landlines or mobile phones internationally?
                     </h2>
                     <p className="text-muted-foreground">
                       One of the easiest ways to save is understanding the difference between 
@@ -254,7 +254,7 @@ const SaveMoneyCalls = () => {
                   <section id="timing-calls" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Clock className="w-6 h-6 text-primary flex-shrink-0" />
-                      Timing Your Calls
+                      Does the time of day affect international calling costs?
                     </h2>
                     <p className="text-muted-foreground">
                       While VoIP services like ZyraCall offer flat rates regardless of time, you can 
@@ -266,7 +266,7 @@ const SaveMoneyCalls = () => {
                   <section id="prepaid-vs-subscription" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Lightbulb className="w-6 h-6 text-primary flex-shrink-0" />
-                      Prepaid vs Subscription
+                      Should you choose prepaid or subscription for international calls?
                     </h2>
                     <p className="text-muted-foreground">
                       Subscriptions can seem like good value, but they often lock you into paying 
@@ -287,7 +287,7 @@ const SaveMoneyCalls = () => {
                   <section id="top-tips" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Zap className="w-6 h-6 text-primary flex-shrink-0" />
-                      Top Money-Saving Tips
+                      What are the best tips to save money on international calls?
                     </h2>
                     <div className="grid gap-4 my-6">
                       {[

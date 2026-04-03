@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead, { organizationSchema } from "@/components/seo/SEOHead";
+import SEOHead, { organizationSchema, generateSpeakableSchema } from "@/components/seo/SEOHead";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -104,7 +104,7 @@ const InternationalCallingGuide = () => {
         ogImageType="default"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, articleSchema, faqSchema]}
+        structuredData={[organizationSchema, articleSchema, faqSchema, generateSpeakableSchema("https://zyracall.com/blog/international-calling-guide", "International Calling Guide")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">
@@ -208,9 +208,9 @@ const InternationalCallingGuide = () => {
                   <section id="what-is" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Globe className="w-6 h-6 text-primary flex-shrink-0" />
-                      What is International Calling?
+                      What is international calling and how does it work?
                     </h2>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground" data-speakable="true">
                       International calling refers to making phone calls from one country to another. 
                       Whether you are calling family abroad, conducting business overseas, or staying 
                       connected with friends around the world, international calling bridges the gap 
@@ -247,7 +247,7 @@ const InternationalCallingGuide = () => {
                   <section id="how-voip-works" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Wifi className="w-6 h-6 text-primary flex-shrink-0" />
-                      How VoIP Technology Works
+                      How does VoIP technology work for international calls?
                     </h2>
                     <p className="text-muted-foreground">
                       VoIP (Voice over Internet Protocol) is the technology that powers modern 
@@ -304,7 +304,7 @@ const InternationalCallingGuide = () => {
                   <section id="understanding-rates" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <DollarSign className="w-6 h-6 text-primary flex-shrink-0" />
-                      Understanding Calling Rates
+                      What factors affect international calling rates?
                     </h2>
                     <p className="text-muted-foreground">
                       International calling rates vary based on several factors. Understanding these 

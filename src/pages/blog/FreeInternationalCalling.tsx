@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead, { organizationSchema } from "@/components/seo/SEOHead";
+import SEOHead, { organizationSchema, generateSpeakableSchema } from "@/components/seo/SEOHead";
 import RelatedContent from "@/components/seo/RelatedContent";
 import {
   Breadcrumb,
@@ -89,7 +89,7 @@ const FreeInternationalCalling = () => {
         ogImageSubtitle="What Really Works?"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, articleSchema]}
+        structuredData={[organizationSchema, articleSchema, generateSpeakableSchema("https://zyracall.com/blog/free-international-calling", "Free International Calling")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">
@@ -146,8 +146,8 @@ const FreeInternationalCalling = () => {
                       <div className="flex items-start gap-3">
                         <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
                         <div>
-                          <h2 className="text-lg font-bold mb-2">The Truth About "Free" Calling</h2>
-                          <p className="text-muted-foreground">
+                          <h2 className="text-lg font-bold mb-2">Can you really make free international calls?</h2>
+                          <p className="text-muted-foreground" data-speakable="true">
                             Most "free" international calling services only work when both parties 
                             use the same app. To call regular phone numbers (mobile or landline), 
                             you'll almost always need a paid service.
@@ -159,7 +159,7 @@ const FreeInternationalCalling = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Gift className="w-6 h-6 text-primary" />
-                    Free Options: An Honest Review
+                    Which free international calling apps actually work?
                   </h2>
                   <p className="text-muted-foreground">
                     Here's what actually works and what doesn't:
@@ -197,7 +197,7 @@ const FreeInternationalCalling = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Phone className="w-6 h-6 text-primary" />
-                    When Free Options Work
+                    When do free calling options work best?
                   </h2>
                   <p className="text-muted-foreground">
                     Free app-to-app calling is great when:
@@ -218,7 +218,7 @@ const FreeInternationalCalling = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <XCircle className="w-6 h-6 text-primary" />
-                    When Free Options Don't Work
+                    When do you need a paid calling service instead?
                   </h2>
                   <p className="text-muted-foreground">
                     You'll need a paid service when:
@@ -240,7 +240,7 @@ const FreeInternationalCalling = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <DollarSign className="w-6 h-6 text-primary" />
-                    The Cost-Effective Middle Ground
+                    What is the most cost-effective alternative to free calling apps?
                   </h2>
                   <p className="text-muted-foreground">
                     Instead of "free" services with major limitations, consider low-cost VoIP:

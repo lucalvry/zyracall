@@ -159,7 +159,7 @@ const FreeInternationalCalling = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Gift className="w-6 h-6 text-primary" />
-                    Free Options: An Honest Review
+                    Which free international calling apps actually work?
                   </h2>
                   <p className="text-muted-foreground">
                     Here's what actually works and what doesn't:

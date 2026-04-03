@@ -222,7 +222,7 @@ const SaveMoneyCalls = () => {
                   <section id="landline-vs-mobile" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Smartphone className="w-6 h-6 text-primary flex-shrink-0" />
-                      Landline vs Mobile Rates
+                      Is it cheaper to call landlines or mobile phones internationally?
                     </h2>
                     <p className="text-muted-foreground">
                       One of the easiest ways to save is understanding the difference between 

@@ -99,9 +99,9 @@ const ExpatCallingGuide = () => {
                 <article className="prose prose-lg dark:prose-invert max-w-none">
                   <h2 className="flex items-center gap-3">
                     <Clock className="w-6 h-6 text-primary" />
-                    Managing Time Zones
+                    How do expats manage time zones for family calls?
                   </h2>
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground" data-speakable="true">
                     The biggest challenge for expats is finding the right time to call. Here are 
                     some strategies that work:
                   </p>

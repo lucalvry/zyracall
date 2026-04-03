@@ -247,7 +247,7 @@ const BusinessInternationalCalling = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Shield className="w-6 h-6 text-primary" />
-                    Business-Specific Considerations
+                    What should businesses look for in an international calling solution?
                   </h2>
                   <ul className="space-y-2 my-6 not-prose">
                     {[

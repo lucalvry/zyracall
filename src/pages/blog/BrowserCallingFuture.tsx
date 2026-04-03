@@ -161,7 +161,7 @@ const BrowserCallingFuture = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <BookOpen className="w-6 h-6 text-primary" />
-                    ZyraCall's Approach
+                    How does ZyraCall use browser-based calling technology?
                   </h2>
                   <p className="text-muted-foreground">
                     ZyraCall leverages WebRTC to deliver crystal-clear international calls directly 

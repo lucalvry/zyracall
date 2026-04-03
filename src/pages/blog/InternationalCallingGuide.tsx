@@ -304,7 +304,7 @@ const InternationalCallingGuide = () => {
                   <section id="understanding-rates" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <DollarSign className="w-6 h-6 text-primary flex-shrink-0" />
-                      Understanding Calling Rates
+                      What factors affect international calling rates?
                     </h2>
                     <p className="text-muted-foreground">
                       International calling rates vary based on several factors. Understanding these 

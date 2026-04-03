@@ -288,7 +288,7 @@ const WiFiVsVoIP = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Shield className="w-6 h-6 text-primary" />
-                    When to Use Each
+                    When should you use WiFi calling vs VoIP?
                   </h2>
                   <div className="grid md:grid-cols-2 gap-4 my-6 not-prose">
                     <Card>

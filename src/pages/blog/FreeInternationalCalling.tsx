@@ -240,7 +240,7 @@ const FreeInternationalCalling = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <DollarSign className="w-6 h-6 text-primary" />
-                    The Cost-Effective Middle Ground
+                    What is the most cost-effective alternative to free calling apps?
                   </h2>
                   <p className="text-muted-foreground">
                     Instead of "free" services with major limitations, consider low-cost VoIP:

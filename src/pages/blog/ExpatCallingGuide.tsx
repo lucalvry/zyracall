@@ -148,7 +148,7 @@ const ExpatCallingGuide = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Globe className="w-6 h-6 text-primary" />
-                    Calling Older Family Members
+                    How can expats call older family members without smartphones?
                   </h2>
                   <p className="text-muted-foreground">
                     Not everyone has smartphones or reliable internet. For older family members 

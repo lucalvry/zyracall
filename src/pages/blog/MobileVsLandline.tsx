@@ -159,7 +159,7 @@ const MobileVsLandline = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <CheckCircle2 className="w-6 h-6 text-primary" />
-                    When to Call Landlines
+                    When should you call a landline instead of a mobile phone?
                   </h2>
                   <ul className="space-y-2 my-6 not-prose">
                     {[

@@ -144,7 +144,7 @@ const VoIPQuality = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <AlertCircle className="w-6 h-6 text-primary" />
-                    Troubleshooting Poor Quality
+                    How do you fix poor VoIP call quality?
                   </h2>
                   <p className="text-muted-foreground">
                     If you're experiencing issues, try these steps:

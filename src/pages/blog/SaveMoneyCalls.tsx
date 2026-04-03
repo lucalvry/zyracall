@@ -287,7 +287,7 @@ const SaveMoneyCalls = () => {
                   <section id="top-tips" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Zap className="w-6 h-6 text-primary flex-shrink-0" />
-                      Top Money-Saving Tips
+                      What are the best tips to save money on international calls?
                     </h2>
                     <div className="grid gap-4 my-6">
                       {[

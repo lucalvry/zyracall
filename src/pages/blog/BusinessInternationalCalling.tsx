@@ -182,7 +182,7 @@ const BusinessInternationalCalling = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <CheckCircle2 className="w-6 h-6 text-primary" />
-                    Modern Solutions for Business Calling
+                    How can VoIP solve business international calling problems?
                   </h2>
                   <p className="text-muted-foreground">
                     VoIP and browser-based calling have transformed business communications:

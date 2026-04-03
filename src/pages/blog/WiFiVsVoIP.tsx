@@ -225,7 +225,7 @@ const WiFiVsVoIP = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Globe className="w-6 h-6 text-primary" />
-                    Side-by-Side Comparison
+                    How do WiFi calling and VoIP compare side by side?
                   </h2>
 
                   <div className="my-6 not-prose">

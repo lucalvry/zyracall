@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead, { organizationSchema } from "@/components/seo/SEOHead";
+import SEOHead, { organizationSchema, generateSpeakableSchema } from "@/components/seo/SEOHead";
 import RelatedContent from "@/components/seo/RelatedContent";
 import { useCallRates, getCountryFlag } from "@/hooks/useCallRates";
+import { getRelatedContent } from "@/data/topical-map";
 
 // Convert URL slug back to country name for matching
 const fromSlug = (slug: string) =>

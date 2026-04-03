@@ -89,10 +89,10 @@ const VoIPQuality = () => {
                 <article className="prose prose-lg dark:prose-invert max-w-none">
                   <h2 className="flex items-center gap-3">
                     <Wifi className="w-6 h-6 text-primary" />
-                    Bandwidth Requirements
+                    What bandwidth do you need for VoIP calls?
                   </h2>
-                  <p className="text-muted-foreground">
-                    VoIP calls require surprisingly little bandwidth—typically just 100 Kbps for 
+                  <p className="text-muted-foreground" data-speakable="true">
+                    VoIP calls require surprisingly little bandwidth—typically just 100 Kbps for
                     high-quality voice. However, consistency matters more than raw speed:
                   </p>
                   

@@ -259,7 +259,7 @@ const WiFiVsVoIP = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <DollarSign className="w-6 h-6 text-primary" />
-                    The Cost Difference for International Calls
+                    How much cheaper is VoIP than WiFi calling for international calls?
                   </h2>
                   <p className="text-muted-foreground">
                     This is where the difference matters most. With WiFi calling, you're still 

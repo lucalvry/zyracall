@@ -118,7 +118,7 @@ const MobileVsLandline = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <BookOpen className="w-6 h-6 text-primary" />
-                    Country Examples
+                    How much do mobile vs landline rates differ by country?
                   </h2>
                   <p className="text-muted-foreground">
                     The difference varies by country. Here are some typical examples:

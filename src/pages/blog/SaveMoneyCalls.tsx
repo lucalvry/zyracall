@@ -254,7 +254,7 @@ const SaveMoneyCalls = () => {
                   <section id="timing-calls" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Clock className="w-6 h-6 text-primary flex-shrink-0" />
-                      Timing Your Calls
+                      Does the time of day affect international calling costs?
                     </h2>
                     <p className="text-muted-foreground">
                       While VoIP services like ZyraCall offer flat rates regardless of time, you can 

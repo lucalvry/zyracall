@@ -75,6 +75,8 @@ const Hero = () => {
             <p 
               className="text-lg lg:text-xl text-muted-foreground mb-10 max-w-xl mx-auto lg:mx-0 animate-fade-in"
               style={{ animationDelay: "0.2s" }}
+              data-speakable="true"
+              itemProp="description"
             >
               Simple, reliable international calling without apps or SIM cards. 
               Just open your browser and dial any number in 200+ countries.

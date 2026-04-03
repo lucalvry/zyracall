@@ -406,19 +406,19 @@ const CountryPage = () => {
                       </div>
                     )}
 
-                    {/* Related Resources Sidebar */}
+                    {/* Related Resources Sidebar — driven by topical map */}
                     <div className="lg:col-span-1">
-                      <RelatedContent
-                        comparisons={[
-                          { title: "vs Skype", href: "/compare/zyracall-vs-skype" },
-                          { title: "vs Google Voice", href: "/compare/zyracall-vs-google-voice" },
-                        ]}
-                        articles={[
-                          { title: "International Calling Guide", href: "/blog/international-calling-guide" },
-                          { title: "Save Money on Calls", href: "/blog/save-money-international-calls-2025" },
-                        ]}
-                        showRateCalculator={true}
-                      />
+                      {(() => {
+                        const related = getRelatedContent(`/call/${country}`);
+                        return (
+                          <RelatedContent
+                            countries={related.countries}
+                            comparisons={related.comparisons}
+                            articles={related.articles}
+                            showRateCalculator={true}
+                          />
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>

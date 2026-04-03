@@ -96,6 +96,22 @@ export const generateComparisonSchema = (
   name: `ZyraCall vs ${competitorName} Comparison`,
   description: `Compare ZyraCall and ${competitorName} for international calling.`,
   url: pageUrl,
+  about: [
+    {
+      "@type": "Thing",
+      name: "Voice over IP",
+      sameAs: "https://en.wikipedia.org/wiki/Voice_over_IP",
+    },
+    {
+      "@type": "Thing",
+      name: "International calling",
+      sameAs: "https://en.wikipedia.org/wiki/International_call",
+    },
+  ],
+  mentions: {
+    "@type": "Thing",
+    name: competitorName,
+  },
   mainEntity: {
     "@type": "ItemList",
     name: "VoIP Service Comparison",

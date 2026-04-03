@@ -198,7 +198,7 @@ const SaveMoneyCalls = () => {
                   <section id="voip-advantage" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Phone className="w-6 h-6 text-primary flex-shrink-0" />
-                      The VoIP Advantage
+                      How does VoIP reduce international calling costs?
                     </h2>
                     <p className="text-muted-foreground">
                       VoIP (Voice over Internet Protocol) sends your calls over the internet instead 

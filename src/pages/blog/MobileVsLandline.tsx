@@ -36,7 +36,7 @@ const MobileVsLandline = () => {
         ogImageSubtitle="Which is Cheaper?"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema]}
+        structuredData={[organizationSchema, generateSpeakableSchema("https://zyracall.com/blog/mobile-vs-landline-rates", "Mobile vs Landline Rates")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">

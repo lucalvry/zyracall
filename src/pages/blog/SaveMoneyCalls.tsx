@@ -88,7 +88,7 @@ const SaveMoneyCalls = () => {
         ogImageSubtitle="Proven strategies for 2025"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, articleSchema, faqSchema]}
+        structuredData={[organizationSchema, articleSchema, faqSchema, generateSpeakableSchema("https://zyracall.com/blog/save-money-international-calls-2025", "Save Money on International Calls")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">

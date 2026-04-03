@@ -96,7 +96,7 @@ const WiFiVsVoIP = () => {
         ogImageSubtitle="What's the Difference?"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, articleSchema]}
+        structuredData={[organizationSchema, articleSchema, generateSpeakableSchema("https://zyracall.com/blog/wifi-calling-vs-voip", "WiFi Calling vs VoIP")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">

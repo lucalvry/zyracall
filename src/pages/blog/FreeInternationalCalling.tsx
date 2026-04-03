@@ -146,8 +146,8 @@ const FreeInternationalCalling = () => {
                       <div className="flex items-start gap-3">
                         <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
                         <div>
-                          <h2 className="text-lg font-bold mb-2">The Truth About "Free" Calling</h2>
-                          <p className="text-muted-foreground">
+                          <h2 className="text-lg font-bold mb-2">Can you really make free international calls?</h2>
+                          <p className="text-muted-foreground" data-speakable="true">
                             Most "free" international calling services only work when both parties 
                             use the same app. To call regular phone numbers (mobile or landline), 
                             you'll almost always need a paid service.

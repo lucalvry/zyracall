@@ -46,7 +46,7 @@ const ExpatCallingGuide = () => {
         ogImageSubtitle="Stay Connected with Family"
         ogType="article"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, articleSchema]}
+        structuredData={[organizationSchema, articleSchema, generateSpeakableSchema("https://zyracall.com/blog/expat-calling-family-guide", "Expat Calling Guide")]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">

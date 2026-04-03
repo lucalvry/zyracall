@@ -136,7 +136,7 @@ const CountryPage = () => {
           ogImageSubtitle={`From $${Math.min(rate.mobile_rate, rate.landline_rate)}/min`}
           ogImageType="rates"
           breadcrumbs={breadcrumbs}
-          structuredData={[organizationSchema, countrySchema, faqSchema].filter(Boolean)}
+          structuredData={[organizationSchema, countrySchema, faqSchema, generateSpeakableSchema(`https://zyracall.com/call/${country}`, `Call ${rate.country_name}`)].filter(Boolean)}
         />
       )}
 

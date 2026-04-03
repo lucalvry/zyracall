@@ -150,8 +150,8 @@ const WiFiVsVoIP = () => {
                   {/* Quick Answer */}
                   <Card className="my-8 border-primary/30 bg-primary/5 not-prose">
                     <CardContent className="p-6">
-                      <h2 className="text-lg font-bold mb-3">Quick Answer</h2>
-                      <p className="text-muted-foreground">
+                      <h2 className="text-lg font-bold mb-3">What is the difference between WiFi calling and VoIP?</h2>
+                      <p className="text-muted-foreground" data-speakable="true">
                         <strong>WiFi Calling</strong> is your phone carrier's service that routes calls 
                         over WiFi instead of cell towers—but you still pay carrier rates. 
                         <strong> VoIP</strong> (like ZyraCall) is a separate service that bypasses 

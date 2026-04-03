@@ -266,7 +266,7 @@ const SaveMoneyCalls = () => {
                   <section id="prepaid-vs-subscription" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Lightbulb className="w-6 h-6 text-primary flex-shrink-0" />
-                      Prepaid vs Subscription
+                      Should you choose prepaid or subscription for international calls?
                     </h2>
                     <p className="text-muted-foreground">
                       Subscriptions can seem like good value, but they often lock you into paying 

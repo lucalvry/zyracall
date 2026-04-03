@@ -140,7 +140,7 @@ const BrowserCallingFuture = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <Shield className="w-6 h-6 text-primary" />
-                    Security Advantages
+                    How secure is browser-based calling?
                   </h2>
                   <p className="text-muted-foreground">
                     Browser-based calling is actually more secure than traditional apps in many ways:

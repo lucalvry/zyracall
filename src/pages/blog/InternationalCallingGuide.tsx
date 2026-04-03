@@ -247,7 +247,7 @@ const InternationalCallingGuide = () => {
                   <section id="how-voip-works" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Wifi className="w-6 h-6 text-primary flex-shrink-0" />
-                      How VoIP Technology Works
+                      How does VoIP technology work for international calls?
                     </h2>
                     <p className="text-muted-foreground">
                       VoIP (Voice over Internet Protocol) is the technology that powers modern 

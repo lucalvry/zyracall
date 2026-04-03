@@ -211,7 +211,7 @@ const BusinessInternationalCalling = () => {
 
                   <h2 className="flex items-center gap-3 mt-12">
                     <DollarSign className="w-6 h-6 text-primary" />
-                    Cost Comparison: Traditional vs VoIP
+                    How much can businesses save with VoIP vs traditional carriers?
                   </h2>
 
                   <div className="my-6 not-prose">

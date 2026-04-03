@@ -33,7 +33,7 @@ const Hero = () => {
   const currentCountry = countries[currentCountryIndex];
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center overflow-hidden" itemScope itemType="https://schema.org/WebApplication">
       {/* Background Effects */}
       <div className="absolute inset-0 gradient-mesh" />
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />

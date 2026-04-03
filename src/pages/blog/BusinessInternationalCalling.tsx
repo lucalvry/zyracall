@@ -152,11 +152,11 @@ const BusinessInternationalCalling = () => {
             <div className="container mx-auto px-4">
               <div className="max-w-3xl mx-auto">
                 <article className="prose prose-lg dark:prose-invert max-w-none">
-                  <p className="text-muted-foreground text-lg">
-                    For businesses with international clients, suppliers, or remote teams, 
-                    calling costs can quickly spiral out of control. Traditional carrier 
-                    international plans often charge premium rates that don't make sense 
-                    for modern businesses.
+                  <p className="text-muted-foreground text-lg" data-speakable="true">
+                    For businesses with international clients, suppliers, or remote teams,
+                    calling costs can quickly spiral out of control. VoIP browser-based calling reduces
+                    international calling costs by 70–90% compared to traditional carrier plans,
+                    with no app installs, no per-seat licensing, and pay-as-you-go pricing.
                   </p>
 
                   <h2 className="flex items-center gap-3 mt-12">

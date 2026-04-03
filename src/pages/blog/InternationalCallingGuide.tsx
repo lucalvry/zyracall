@@ -208,9 +208,9 @@ const InternationalCallingGuide = () => {
                   <section id="what-is" className="scroll-mt-24 mb-12">
                     <h2 className="flex items-center gap-3 text-2xl font-bold mb-4">
                       <Globe className="w-6 h-6 text-primary flex-shrink-0" />
-                      What is International Calling?
+                      What is international calling and how does it work?
                     </h2>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground" data-speakable="true">
                       International calling refers to making phone calls from one country to another. 
                       Whether you are calling family abroad, conducting business overseas, or staying 
                       connected with friends around the world, international calling bridges the gap 

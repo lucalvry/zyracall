@@ -3,7 +3,8 @@ import { ArrowRight, Globe, Phone, Monitor, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead from "@/components/seo/SEOHead";
+import SEOHead, { generateSpeakableSchema, entityDefinitions } from "@/components/seo/SEOHead";
+import RelatedContent from "@/components/seo/RelatedContent";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -51,9 +52,14 @@ const alternatives = [
 const generateAlternativesSchema = () => ({
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": "https://zyracall.com/alternatives#webpage",
   name: "Best Calling App Alternatives",
   description: "Looking for alternatives to Skype, WhatsApp, Viber, or Google Voice? ZyraCall offers browser-based international calling.",
   url: "https://zyracall.com/alternatives",
+  inLanguage: "en",
+  isPartOf: { "@id": "https://zyracall.com/#website" },
+  about: [entityDefinitions.voip, entityDefinitions.internationalCalling],
+  mentions: alternatives.map(a => ({ "@type": "Thing", name: a.name })),
   mainEntity: {
     "@type": "ItemList",
     itemListElement: alternatives.map((a, i) => ({

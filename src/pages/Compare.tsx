@@ -382,13 +382,16 @@ const Compare = () => {
 
                 <Button asChild size="lg" className="mt-10">
                   <Link to="/signup">
-                    Try ZyraCall Free
+                    Create your free ZyraCall account
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
               </div>
             </div>
           </section>
+
+          {/* Topical-map-driven related content */}
+          <RelatedContent currentHref="/compare" variant="footer" />
         </main>
         <Footer />
       </div>

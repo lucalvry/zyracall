@@ -96,13 +96,27 @@ const CallHub = () => {
                   200+ Countries Available
                 </div>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-                  Call Anyone,{" "}
-                  <span className="text-primary">Anywhere</span>
+                  Call any phone number in{" "}
+                  <span className="text-primary">200+ countries</span>{" "}from your browser
                 </h1>
-                <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                  Find the best rates to call any country in the world. 
-                  Crystal-clear quality, transparent pricing, no hidden fees.
+                <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto" data-speakable="true">
+                  International calling lets you reach mobile and landline numbers in another country
+                  using browser-based VoIP. ZyraCall routes calls over WebRTC with transparent
+                  per-minute rates, no app downloads, and no monthly subscription required.
                 </p>
+
+                {/* Definition / Quick-Answer Box (Koray pattern) */}
+                <div
+                  role="definition"
+                  itemProp="description"
+                  data-speakable="true"
+                  className="max-w-2xl mx-auto mb-8 p-4 rounded-xl bg-card border border-border text-left text-sm text-muted-foreground"
+                >
+                  <strong className="text-foreground">International calling</strong> is the act of
+                  placing a phone call from one country to another. ZyraCall delivers it over
+                  Voice over IP (VoIP) directly inside your web browser, billed per minute with
+                  no contracts.
+                </div>
 
                 {/* Search Box */}
                 <div className="relative max-w-xl mx-auto">

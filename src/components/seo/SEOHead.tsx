@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { entityDefinitions } from "@/data/topical-map";
 
 interface BreadcrumbItem {
   name: string;
@@ -38,10 +39,14 @@ export const generateOGImageUrl = (
   return `https://rixpasynhccgkoumpaan.supabase.co/functions/v1/og-image?${params.toString()}`;
 };
 
+// Re-export canonical entities for convenience
+export { entityDefinitions };
+
 // Organization schema for site-wide use
 export const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": "https://zyracall.com/#organization",
   name: "ZyraCall",
   url: "https://zyracall.com",
   logo: "https://zyracall.com/logo.png",
@@ -58,13 +63,17 @@ export const organizationSchema = {
   }
 };
 
-// WebSite schema for site-wide use
+// WebSite schema for site-wide use — includes inLanguage and @id for graph linking
 export const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": "https://zyracall.com/#website",
   name: "ZyraCall",
   url: "https://zyracall.com",
   description: "Make international calls from your browser. No app downloads, transparent pricing, 200+ countries.",
+  inLanguage: "en",
+  publisher: { "@id": "https://zyracall.com/#organization" },
+  about: [entityDefinitions.voip, entityDefinitions.internationalCalling, entityDefinitions.webrtc],
   potentialAction: {
     "@type": "SearchAction",
     target: "https://zyracall.com/rates?search={search_term_string}",
@@ -93,25 +102,17 @@ export const generateComparisonSchema = (
 ) => ({
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": `${pageUrl}#webpage`,
   name: `ZyraCall vs ${competitorName} Comparison`,
   description: `Compare ZyraCall and ${competitorName} for international calling.`,
   url: pageUrl,
-  about: [
-    {
-      "@type": "Thing",
-      name: "Voice over IP",
-      sameAs: "https://en.wikipedia.org/wiki/Voice_over_IP",
-    },
-    {
-      "@type": "Thing",
-      name: "International calling",
-      sameAs: "https://en.wikipedia.org/wiki/International_call",
-    },
+  inLanguage: "en",
+  isPartOf: { "@id": "https://zyracall.com/#website" },
+  about: [entityDefinitions.voip, entityDefinitions.internationalCalling],
+  mentions: [
+    { "@type": "Thing", name: competitorName },
+    entityDefinitions.webrtc,
   ],
-  mentions: {
-    "@type": "Thing",
-    name: competitorName,
-  },
   mainEntity: {
     "@type": "ItemList",
     name: "VoIP Service Comparison",
@@ -147,9 +148,14 @@ export const generateAlternativeSchema = (
 ) => ({
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": `${pageUrl}#webpage`,
   name: `Best ${alternativeTo} Alternative for International Calls`,
   description,
   url: pageUrl,
+  inLanguage: "en",
+  isPartOf: { "@id": "https://zyracall.com/#website" },
+  about: [entityDefinitions.voip, entityDefinitions.internationalCalling],
+  mentions: [{ "@type": "Thing", name: alternativeTo }],
   mainEntity: {
     "@type": "Product",
     name: "ZyraCall",
@@ -171,8 +177,11 @@ export const generateSpeakableSchema = (
 ) => ({
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": `${pageUrl}#speakable`,
   name: pageName,
   url: pageUrl,
+  inLanguage: "en",
+  isPartOf: { "@id": "https://zyracall.com/#website" },
   speakable: {
     "@type": "SpeakableSpecification",
     cssSelector: ["[data-speakable]", "h1", "h2"]
@@ -190,6 +199,7 @@ export const generateHowToSchema = (
   "@type": "HowTo",
   name,
   description,
+  inLanguage: "en",
   ...(totalTime && { totalTime }),
   step: steps.map((step, index) => ({
     "@type": "HowToStep",
@@ -198,6 +208,62 @@ export const generateHowToSchema = (
     text: step.text,
     ...(step.url && { url: step.url }),
   })),
+});
+
+/**
+ * Helper to generate enriched Article/BlogPosting schema with entity disambiguation.
+ * Implements Koray's authorship rules: about, mentions, wordCount, keywords, image, inLanguage, mainEntityOfPage.
+ */
+export const generateArticleSchema = (params: {
+  headline: string;
+  description: string;
+  url: string;
+  datePublished: string;
+  dateModified?: string;
+  image?: string;
+  wordCount?: number;
+  keywords?: string[];
+  about?: object[];
+  mentions?: object[];
+}) => ({
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": `${params.url}#article`,
+  headline: params.headline,
+  description: params.description,
+  url: params.url,
+  inLanguage: "en",
+  datePublished: params.datePublished,
+  dateModified: params.dateModified || params.datePublished,
+  image: params.image || "https://zyracall.com/og-default.png",
+  wordCount: params.wordCount,
+  keywords: params.keywords?.join(", "),
+  about: params.about || [entityDefinitions.voip, entityDefinitions.internationalCalling],
+  mentions: params.mentions || [entityDefinitions.webrtc],
+  author: { "@type": "Organization", name: "ZyraCall", "@id": "https://zyracall.com/#organization" },
+  publisher: { "@id": "https://zyracall.com/#organization" },
+  mainEntityOfPage: { "@type": "WebPage", "@id": params.url },
+  isPartOf: { "@id": "https://zyracall.com/#website" },
+});
+
+/**
+ * Helper to generate WebPage schema with entity annotations for pillar/hub pages.
+ */
+export const generatePillarPageSchema = (params: {
+  name: string;
+  description: string;
+  url: string;
+  about?: object[];
+}) => ({
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${params.url}#webpage`,
+  name: params.name,
+  description: params.description,
+  url: params.url,
+  inLanguage: "en",
+  isPartOf: { "@id": "https://zyracall.com/#website" },
+  about: params.about || [entityDefinitions.voip, entityDefinitions.internationalCalling],
 });
 
 const SEOHead = ({
@@ -250,6 +316,7 @@ const SEOHead = ({
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:site_name" content="ZyraCall" />
       <meta property="og:image" content={finalOgImage} />
+      <meta property="og:locale" content="en_US" />
       
       {/* Twitter Card */}
       <meta name="twitter:card" content={twitterCard} />

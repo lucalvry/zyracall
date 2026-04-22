@@ -33,9 +33,9 @@ const RelatedContent = ({
 }: RelatedContentProps) => {
   // If currentHref is provided, derive related links from the topical map.
   const derived = currentHref ? getRelatedContent(currentHref) : null;
-  const countries = derived?.countries.length ? derived.countries : countriesProp;
-  const comparisons = derived?.comparisons.length ? derived.comparisons : comparisonsProp;
-  const articles = derived?.articles.length ? derived.articles : articlesProp;
+  const countries: RelatedItem[] = derived?.countries.length ? derived.countries : countriesProp;
+  const comparisons: RelatedItem[] = derived?.comparisons.length ? derived.comparisons : comparisonsProp;
+  const articles: RelatedItem[] = derived?.articles.length ? derived.articles : articlesProp;
   const hasContent = countries.length > 0 || comparisons.length > 0 || articles.length > 0;
 
   if (!hasContent && !showRateCalculator && !showSignupCTA) {

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Phone, BarChart3, BookOpen, Calculator, UserPlus } from "lucide-react";
+import { getRelatedContent } from "@/data/topical-map";
 
 interface RelatedItem {
   title: string;
@@ -8,6 +9,11 @@ interface RelatedItem {
 }
 
 interface RelatedContentProps {
+  /**
+   * Provide the current page's pathname (e.g. "/call/india") to auto-populate
+   * related links from the topical map. Overrides any manual props if provided.
+   */
+  currentHref?: string;
   countries?: RelatedItem[];
   comparisons?: RelatedItem[];
   articles?: RelatedItem[];
@@ -17,13 +23,19 @@ interface RelatedContentProps {
 }
 
 const RelatedContent = ({
-  countries = [],
-  comparisons = [],
-  articles = [],
+  currentHref,
+  countries: countriesProp = [],
+  comparisons: comparisonsProp = [],
+  articles: articlesProp = [],
   showRateCalculator = true,
   showSignupCTA = true,
   variant = "sidebar",
 }: RelatedContentProps) => {
+  // If currentHref is provided, derive related links from the topical map.
+  const derived = currentHref ? getRelatedContent(currentHref) : null;
+  const countries: RelatedItem[] = derived?.countries.length ? derived.countries : countriesProp;
+  const comparisons: RelatedItem[] = derived?.comparisons.length ? derived.comparisons : comparisonsProp;
+  const articles: RelatedItem[] = derived?.articles.length ? derived.articles : articlesProp;
   const hasContent = countries.length > 0 || comparisons.length > 0 || articles.length > 0;
 
   if (!hasContent && !showRateCalculator && !showSignupCTA) {

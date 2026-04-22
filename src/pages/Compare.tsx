@@ -7,7 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import CompetitorCard from "@/components/compare/CompetitorCard";
-import SEOHead from "@/components/seo/SEOHead";
+import SEOHead, { generatePillarPageSchema, generateSpeakableSchema, entityDefinitions } from "@/components/seo/SEOHead";
+import RelatedContent from "@/components/seo/RelatedContent";
 import { toast } from "sonner";
 import {
   Breadcrumb,
@@ -65,9 +66,14 @@ const allComparisons = competitors;
 const generateCompareSchema = () => ({
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": "https://zyracall.com/compare#webpage",
   name: "Compare ZyraCall - See How We Stack Up",
   description: "Compare ZyraCall with Skype, Google Voice, Rebtel, and other international calling services.",
   url: "https://zyracall.com/compare",
+  inLanguage: "en",
+  isPartOf: { "@id": "https://zyracall.com/#website" },
+  about: [entityDefinitions.voip, entityDefinitions.internationalCalling],
+  mentions: competitors.map(c => ({ "@type": "Thing", name: c.name })),
   mainEntity: {
     "@type": "ItemList",
     itemListElement: competitors.map((c, i) => ({
@@ -110,7 +116,10 @@ const Compare = () => {
           { name: "Home", url: "https://zyracall.com" },
           { name: "Compare", url: "https://zyracall.com/compare" },
         ]}
-        structuredData={generateCompareSchema()}
+        structuredData={[
+          generateCompareSchema(),
+          generateSpeakableSchema("https://zyracall.com/compare", "Compare ZyraCall with other international calling services"),
+        ]}
       />
 
       <div className="min-h-screen flex flex-col">
@@ -142,13 +151,27 @@ const Compare = () => {
                   Comparisons
                 </span>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight">
-                  How ZyraCall compares to{" "}
-                  <span className="gradient-text-accent">the competition</span>
+                  How does ZyraCall compare to{" "}
+                  <span className="gradient-text-accent">other international calling services?</span>
                 </h1>
-                <p className="text-lg text-muted-foreground">
-                  See detailed comparisons with popular calling services. 
-                  Find out why thousands choose ZyraCall for international calls.
+                <p className="text-lg text-muted-foreground" data-speakable="true">
+                  ZyraCall is a browser-based VoIP calling service that competes with Skype, Google
+                  Voice, Rebtel, Talk360, Vonage, and YadaPhone. The key differentiators are no app
+                  downloads, transparent pay-as-you-go per-minute pricing, real-time cost display,
+                  and credit that never expires.
                 </p>
+
+                {/* Definition / Quick-Answer Box (Koray pattern) */}
+                <div
+                  role="definition"
+                  itemProp="description"
+                  data-speakable="true"
+                  className="mt-6 max-w-2xl mx-auto p-4 rounded-xl bg-card border border-border text-left text-sm text-muted-foreground"
+                >
+                  <strong className="text-foreground">A VoIP comparison</strong> evaluates calling
+                  services across five attributes: country coverage, per-minute pricing
+                  transparency, device compatibility, call quality, and ease of setup.
+                </div>
               </div>
             </div>
           </section>
@@ -359,13 +382,16 @@ const Compare = () => {
 
                 <Button asChild size="lg" className="mt-10">
                   <Link to="/signup">
-                    Try ZyraCall Free
+                    Create your free ZyraCall account
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
               </div>
             </div>
           </section>
+
+          {/* Topical-map-driven related content */}
+          <RelatedContent currentHref="/compare" variant="footer" />
         </main>
         <Footer />
       </div>

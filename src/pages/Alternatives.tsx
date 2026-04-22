@@ -3,7 +3,8 @@ import { ArrowRight, Globe, Phone, Monitor, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead from "@/components/seo/SEOHead";
+import SEOHead, { generateSpeakableSchema, entityDefinitions } from "@/components/seo/SEOHead";
+import RelatedContent from "@/components/seo/RelatedContent";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -51,9 +52,14 @@ const alternatives = [
 const generateAlternativesSchema = () => ({
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": "https://zyracall.com/alternatives#webpage",
   name: "Best Calling App Alternatives",
   description: "Looking for alternatives to Skype, WhatsApp, Viber, or Google Voice? ZyraCall offers browser-based international calling.",
   url: "https://zyracall.com/alternatives",
+  inLanguage: "en",
+  isPartOf: { "@id": "https://zyracall.com/#website" },
+  about: [entityDefinitions.voip, entityDefinitions.internationalCalling],
+  mentions: alternatives.map(a => ({ "@type": "Thing", name: a.name })),
   mainEntity: {
     "@type": "ItemList",
     itemListElement: alternatives.map((a, i) => ({
@@ -99,7 +105,10 @@ const Alternatives = () => {
           { name: "Home", url: "https://zyracall.com" },
           { name: "Alternatives", url: "https://zyracall.com/alternatives" },
         ]}
-        structuredData={generateAlternativesSchema()}
+        structuredData={[
+          generateAlternativesSchema(),
+          generateSpeakableSchema("https://zyracall.com/alternatives", "Best calling app alternatives"),
+        ]}
       />
 
       <div className="min-h-screen bg-background">
@@ -131,13 +140,26 @@ const Alternatives = () => {
                   Alternatives
                 </span>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-                  The Best Alternative to Your{" "}
-                  <span className="text-primary">Current Calling App</span>
+                  What is the best alternative to your{" "}
+                  <span className="text-primary">current calling app?</span>
                 </h1>
-                <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                  Tired of app downloads, subscriptions, and restrictions? Discover why thousands 
-                  are switching to ZyraCall for browser-based international calling.
+                <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto" data-speakable="true">
+                  The best alternative to Skype, WhatsApp, Viber Out, or Google Voice is a browser-based
+                  VoIP service that calls real phone numbers in 200+ countries with no app downloads.
+                  ZyraCall offers transparent pay-as-you-go pricing and credits that never expire.
                 </p>
+
+                {/* Definition / Quick-Answer Box */}
+                <div
+                  role="definition"
+                  itemProp="description"
+                  data-speakable="true"
+                  className="max-w-2xl mx-auto p-4 rounded-xl bg-card border border-border text-left text-sm text-muted-foreground"
+                >
+                  <strong className="text-foreground">A calling app alternative</strong> is a service
+                  that replaces traditional VoIP apps (like Skype or Viber) by offering equivalent or
+                  better international calling without app installs, account lock-in, or subscriptions.
+                </div>
               </div>
             </div>
           </section>
@@ -279,6 +301,9 @@ const Alternatives = () => {
               </div>
             </div>
           </section>
+
+          {/* Topical-map-driven related content */}
+          <RelatedContent currentHref="/alternatives" variant="footer" />
         </main>
 
         <Footer />

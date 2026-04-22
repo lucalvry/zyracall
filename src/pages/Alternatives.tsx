@@ -105,7 +105,10 @@ const Alternatives = () => {
           { name: "Home", url: "https://zyracall.com" },
           { name: "Alternatives", url: "https://zyracall.com/alternatives" },
         ]}
-        structuredData={generateAlternativesSchema()}
+        structuredData={[
+          generateAlternativesSchema(),
+          generateSpeakableSchema("https://zyracall.com/alternatives", "Best calling app alternatives"),
+        ]}
       />
 
       <div className="min-h-screen bg-background">

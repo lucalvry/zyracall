@@ -140,13 +140,26 @@ const Alternatives = () => {
                   Alternatives
                 </span>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-                  The Best Alternative to Your{" "}
-                  <span className="text-primary">Current Calling App</span>
+                  What is the best alternative to your{" "}
+                  <span className="text-primary">current calling app?</span>
                 </h1>
-                <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                  Tired of app downloads, subscriptions, and restrictions? Discover why thousands 
-                  are switching to ZyraCall for browser-based international calling.
+                <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto" data-speakable="true">
+                  The best alternative to Skype, WhatsApp, Viber Out, or Google Voice is a browser-based
+                  VoIP service that calls real phone numbers in 200+ countries with no app downloads.
+                  ZyraCall offers transparent pay-as-you-go pricing and credits that never expire.
                 </p>
+
+                {/* Definition / Quick-Answer Box */}
+                <div
+                  role="definition"
+                  itemProp="description"
+                  data-speakable="true"
+                  className="max-w-2xl mx-auto p-4 rounded-xl bg-card border border-border text-left text-sm text-muted-foreground"
+                >
+                  <strong className="text-foreground">A calling app alternative</strong> is a service
+                  that replaces traditional VoIP apps (like Skype or Viber) by offering equivalent or
+                  better international calling without app installs, account lock-in, or subscriptions.
+                </div>
               </div>
             </div>
           </section>

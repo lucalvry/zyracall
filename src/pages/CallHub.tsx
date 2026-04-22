@@ -310,7 +310,7 @@ const CallHub = () => {
                 <CardContent className="p-8 md:p-12 text-center">
                   <Zap className="w-12 h-12 text-primary mx-auto mb-4" />
                   <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                    Ready to Start Calling?
+                    Start calling 200+ countries from your browser today
                   </h2>
                   <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
                     No downloads, no SIM cards. Just open your browser and call 
@@ -320,17 +320,20 @@ const CallHub = () => {
                     <Button size="lg" asChild>
                       <Link to="/signup">
                         <Phone className="w-4 h-4 mr-2" />
-                        Start Calling Free
+                        Create your free ZyraCall account
                       </Link>
                     </Button>
                     <Button size="lg" variant="outline" asChild>
-                      <Link to="/rates">View All Rates</Link>
+                      <Link to="/rates">Browse all international calling rates</Link>
                     </Button>
                   </div>
                 </CardContent>
               </Card>
             </div>
           </section>
+
+          {/* Topical-map-driven related content */}
+          <RelatedContent currentHref="/call" variant="footer" />
         </main>
 
         <Footer />

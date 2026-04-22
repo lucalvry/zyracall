@@ -116,7 +116,10 @@ const Compare = () => {
           { name: "Home", url: "https://zyracall.com" },
           { name: "Compare", url: "https://zyracall.com/compare" },
         ]}
-        structuredData={generateCompareSchema()}
+        structuredData={[
+          generateCompareSchema(),
+          generateSpeakableSchema("https://zyracall.com/compare", "Compare ZyraCall with other international calling services"),
+        ]}
       />
 
       <div className="min-h-screen flex flex-col">
@@ -148,13 +151,27 @@ const Compare = () => {
                   Comparisons
                 </span>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight">
-                  How ZyraCall compares to{" "}
-                  <span className="gradient-text-accent">the competition</span>
+                  How does ZyraCall compare to{" "}
+                  <span className="gradient-text-accent">other international calling services?</span>
                 </h1>
-                <p className="text-lg text-muted-foreground">
-                  See detailed comparisons with popular calling services. 
-                  Find out why thousands choose ZyraCall for international calls.
+                <p className="text-lg text-muted-foreground" data-speakable="true">
+                  ZyraCall is a browser-based VoIP calling service that competes with Skype, Google
+                  Voice, Rebtel, Talk360, Vonage, and YadaPhone. The key differentiators are no app
+                  downloads, transparent pay-as-you-go per-minute pricing, real-time cost display,
+                  and credit that never expires.
                 </p>
+
+                {/* Definition / Quick-Answer Box (Koray pattern) */}
+                <div
+                  role="definition"
+                  itemProp="description"
+                  data-speakable="true"
+                  className="mt-6 max-w-2xl mx-auto p-4 rounded-xl bg-card border border-border text-left text-sm text-muted-foreground"
+                >
+                  <strong className="text-foreground">A VoIP comparison</strong> evaluates calling
+                  services across five attributes: country coverage, per-minute pricing
+                  transparency, device compatibility, call quality, and ease of setup.
+                </div>
               </div>
             </div>
           </section>

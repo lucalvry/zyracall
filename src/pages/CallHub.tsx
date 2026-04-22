@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
-import SEOHead, { organizationSchema, websiteSchema } from "@/components/seo/SEOHead";
+import SEOHead, { organizationSchema, websiteSchema, generatePillarPageSchema, generateSpeakableSchema, entityDefinitions } from "@/components/seo/SEOHead";
+import RelatedContent from "@/components/seo/RelatedContent";
 import { useCallRates, getCountryFlag } from "@/hooks/useCallRates";
 
 // Convert country name to URL slug
@@ -41,9 +42,14 @@ const CallHub = () => {
   const callHubSchema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
+    "@id": "https://zyracall.com/call#webpage",
     name: "International Calling Guides - Call Any Country",
     description: "Find calling rates and guides for 200+ countries. Make cheap international calls from your browser.",
     url: "https://zyracall.com/call",
+    inLanguage: "en",
+    isPartOf: { "@id": "https://zyracall.com/#website" },
+    about: [entityDefinitions.voip, entityDefinitions.internationalCalling, entityDefinitions.pstn],
+    mentions: [entityDefinitions.webrtc],
     mainEntity: {
       "@type": "ItemList",
       name: "Country Calling Guides",
@@ -57,6 +63,11 @@ const CallHub = () => {
     },
   };
 
+  const speakableSchema = generateSpeakableSchema(
+    "https://zyracall.com/call",
+    "Call Any Country - International Calling Hub"
+  );
+
   return (
     <>
       <SEOHead
@@ -68,7 +79,7 @@ const CallHub = () => {
         ogImageSubtitle="200+ countries • From $0.01/min"
         ogImageType="rates"
         breadcrumbs={breadcrumbs}
-        structuredData={[organizationSchema, websiteSchema, callHubSchema]}
+        structuredData={[organizationSchema, websiteSchema, callHubSchema, speakableSchema]}
       />
 
       <div className="min-h-screen flex flex-col bg-background">

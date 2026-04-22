@@ -7,7 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import CompetitorCard from "@/components/compare/CompetitorCard";
-import SEOHead from "@/components/seo/SEOHead";
+import SEOHead, { generatePillarPageSchema, generateSpeakableSchema, entityDefinitions } from "@/components/seo/SEOHead";
+import RelatedContent from "@/components/seo/RelatedContent";
 import { toast } from "sonner";
 import {
   Breadcrumb,
@@ -65,9 +66,14 @@ const allComparisons = competitors;
 const generateCompareSchema = () => ({
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": "https://zyracall.com/compare#webpage",
   name: "Compare ZyraCall - See How We Stack Up",
   description: "Compare ZyraCall with Skype, Google Voice, Rebtel, and other international calling services.",
   url: "https://zyracall.com/compare",
+  inLanguage: "en",
+  isPartOf: { "@id": "https://zyracall.com/#website" },
+  about: [entityDefinitions.voip, entityDefinitions.internationalCalling],
+  mentions: competitors.map(c => ({ "@type": "Thing", name: c.name })),
   mainEntity: {
     "@type": "ItemList",
     itemListElement: competitors.map((c, i) => ({

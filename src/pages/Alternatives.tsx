@@ -301,6 +301,9 @@ const Alternatives = () => {
               </div>
             </div>
           </section>
+
+          {/* Topical-map-driven related content */}
+          <RelatedContent currentHref="/alternatives" variant="footer" />
         </main>
 
         <Footer />

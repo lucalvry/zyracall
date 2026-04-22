@@ -89,7 +89,7 @@ const HowItWorks = () => {
               </Breadcrumb>
 
               <div className="text-center mb-16">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">How ZyraCall Works</h1>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">How do you call any country from a browser with ZyraCall?</h1>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto" data-speakable="true">
                   ZyraCall uses WebRTC technology to route VoIP calls through your browser.
                   Sign up with your email, add credit to your wallet, and dial any phone number
